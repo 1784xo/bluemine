@@ -1,0 +1,144 @@
+{
+	"id": "387d6189-f01b-4864-83fb-451d84405b5f",
+	"name": "bluemine - dev",
+	"description": "",
+	"auth": null,
+	"events": null,
+	"variables": [],
+	"order": [
+		"7cd3eb49-4e31-43d6-b41d-cda304fc93db",
+		"7d955bdd-475d-4a48-9129-d2d7523cdf64",
+		"8871a33a-f250-4248-927d-16b15261e964",
+		"1c3e431c-1812-4d21-803f-d5c0083c2108",
+		"cd638e75-e0a0-4c54-8c9f-a2c0e57c9a85"
+	],
+	"folders_order": [],
+	"folders": [],
+	"requests": [
+		{
+			"id": "1c3e431c-1812-4d21-803f-d5c0083c2108",
+			"name": "删除规则",
+			"url": "http://www.bluemine.com:8080/service/rule/delete",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelId\":49252889384718336,\n\t\t\"ruleId\":12337091286664192\n\t}\n}",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "7cd3eb49-4e31-43d6-b41d-cda304fc93db",
+			"name": "查找全部标签",
+			"url": "http://www.bluemine.com:8080/service/tag/findAll",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelId\":49252889384718336,\n\t\t\"activated\":true\n\t}\n}",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "7d955bdd-475d-4a48-9129-d2d7523cdf64",
+			"name": "创建标签",
+			"url": "http://www.bluemine.com:8080/service/tag/create",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelId\":49704275516883968,\n\t\t\"tagText\":\"意愿度\",\n\t\t\"parentId\":12333419319264256\n\t}\n}",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "8871a33a-f250-4248-927d-16b15261e964",
+			"name": "创建规则",
+			"url": "http://www.bluemine.com:8080/service/rule/create",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelId\":49252889384718336,\n\t\t\"tagId\":198819304509149184,\n\t\t\"callType\":\"AUD\",\n\t\t\"roleType\":\"ALL\",\n\t\t\"priorityNo\":0,\n\t\t\"ruleExps\":\"试听|(感觉&不错)|(怎么&报名)\"\n\t}\n}",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "cd638e75-e0a0-4c54-8c9f-a2c0e57c9a85",
+			"name": "修盖标签",
+			"url": "http://www.bluemine.com:8080/service/tag/update",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "{\n\t\"data\":{\n\t\t\"tagId\":12333421078250496,\n\t\t\"channelId\":49252889384718336,\n\t\t\"tagText\":\"平板电脑\",\n\t\t\"parentId\":49254048771084289,\n\t\t\"activatedFlag\":true\n\t}\n}",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		}
+	]
+}
