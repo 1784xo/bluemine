@@ -12,12 +12,12 @@ import java.util.Objects;
  * Created by hechao on 2018/7/11.
  */
 @Entity
-@Table(name = "tab_collect")
-public class TabCollectEntity extends PartitionEntity implements Serializable{
+@Table(name = "tag_collect")
+public class TagCollectEntity extends PartitionEntity implements Serializable{
 
     private static final long serialVersionUID = 698779721568670077L;
     @EmbeddedId
-    private TabCollectId id;
+    private TagCollectId id;
 
     @Column(name = "CHANNEL_ID", updatable = false, nullable = false)
     private long channelId;
@@ -37,11 +37,11 @@ public class TabCollectEntity extends PartitionEntity implements Serializable{
     @Column(name = "SUB_TOTAL", nullable = false)
     private Integer subTotal;
 
-    public TabCollectId getId() {
+    public TagCollectId getId() {
         return id;
     }
 
-    public void setId(TabCollectId id) {
+    public void setId(TagCollectId id) {
         this.id = id;
     }
 
@@ -97,7 +97,7 @@ public class TabCollectEntity extends PartitionEntity implements Serializable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TabCollectEntity that = (TabCollectEntity) o;
+        TagCollectEntity that = (TagCollectEntity) o;
         return Objects.equals(id, that.id);
     }
 
@@ -124,37 +124,37 @@ public class TabCollectEntity extends PartitionEntity implements Serializable{
                 "} " + super.toString();
     }
 
-    public TabCollectEntity id(TabCollectId id) {
+    public TagCollectEntity id(TagCollectId id) {
         this.id = id;
         return this;
     }
 
-    public TabCollectEntity channelId(long channelId) {
+    public TagCollectEntity channelId(long channelId) {
         this.channelId = channelId;
         return this;
     }
 
-    public TabCollectEntity seatId(Long seatId) {
+    public TagCollectEntity seatId(Long seatId) {
         this.seatId = seatId;
         return this;
     }
 
-    public TabCollectEntity callDate(LocalDate callDate) {
+    public TagCollectEntity callDate(LocalDate callDate) {
         this.callDate = callDate;
         return this;
     }
 
-    public TabCollectEntity frequency(Integer frequency) {
+    public TagCollectEntity frequency(Integer frequency) {
         this.frequency = frequency;
         return this;
     }
 
-    public TabCollectEntity subFrequency(Integer subFrequency) {
+    public TagCollectEntity subFrequency(Integer subFrequency) {
         this.subFrequency = subFrequency;
         return this;
     }
 
-    public TabCollectEntity subTotal(Integer subTotal) {
+    public TagCollectEntity subTotal(Integer subTotal) {
         this.subTotal = subTotal;
         return this;
     }

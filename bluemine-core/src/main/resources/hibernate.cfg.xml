@@ -14,7 +14,7 @@
     <mapping class="com.bluemine.domain.entity.RuleEntity"/>
     <mapping class="com.bluemine.domain.entity.CallCollectTriggerEntity"/>
     <mapping class="com.bluemine.domain.entity.SeatEntity"/>
-    <mapping class="com.bluemine.domain.entity.TabCollectEntity"/>
+    <mapping class="com.bluemine.domain.entity.TagCollectEntity"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

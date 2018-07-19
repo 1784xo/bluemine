@@ -9,7 +9,7 @@ import java.util.Objects;
  * Created by hechao on 2018/7/11.
  */
 @Embeddable
-public class TabCollectId implements Serializable {
+public class TagCollectId implements Serializable {
     private static final long serialVersionUID = -3651250677217855042L;
 
 
@@ -59,7 +59,7 @@ public class TabCollectId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TabCollectId that = (TabCollectId) o;
+        TagCollectId that = (TagCollectId) o;
         return Objects.equals(callNo, that.callNo) &&
                 Objects.equals(tagId, that.tagId) &&
                 Objects.equals(ruleId, that.ruleId);
@@ -71,17 +71,17 @@ public class TabCollectId implements Serializable {
     }
 
 
-    public TabCollectId callNo(String callNo) {
+    public TagCollectId callNo(String callNo) {
         this.callNo = callNo;
         return this;
     }
 
-    public TabCollectId tagId(Long tagId) {
+    public TagCollectId tagId(Long tagId) {
         this.tagId = tagId;
         return this;
     }
 
-    public TabCollectId ruleId(Long ruleId) {
+    public TagCollectId ruleId(Long ruleId) {
         this.ruleId = ruleId;
         return this;
     }

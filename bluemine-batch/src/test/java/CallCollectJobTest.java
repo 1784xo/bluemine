@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-import java.util.Date;
 
 /**
  * Created by hechao on 2018/7/2.
@@ -34,9 +33,9 @@ public class CallCollectJobTest {
         Job callCollectJob = (Job) applicationContext.getBean("callCollectJob");
         JobParameters params = new JobParametersBuilder()
                 .addString("channelNo", "100001")
-                .addString("seatNo", "1")
-                .addString("callNo",  "13")
-                .addString("callDate", "2018-07-20")
+                .addString("seatNo", "2")
+                .addString("callNo", "14")
+                .addString("callDate", "2018-07-22")
                 .toJobParameters();
         jobLauncher.run(callCollectJob, params);
         this.hashCode();

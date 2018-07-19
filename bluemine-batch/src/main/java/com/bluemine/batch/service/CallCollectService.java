@@ -8,8 +8,8 @@ import com.bluemine.context.SessionContext;
 import com.bluemine.domain.Call;
 import com.bluemine.domain.entity.ChannelEntity;
 import com.bluemine.domain.entity.SeatEntity;
-import com.bluemine.domain.entity.TabCollectEntity;
-import com.bluemine.domain.entity.TabCollectId;
+import com.bluemine.domain.entity.TagCollectEntity;
+import com.bluemine.domain.entity.TagCollectId;
 import com.bluemine.service.TabService;
 import com.bluemine.util.AssertUtils;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class CallCollectService {
     @Inject
     private TabService tabService;
 
-    public Collection<TabCollectEntity> collect(Call call, SessionContext context) {
+    public Collection<TagCollectEntity> collect(Call call, SessionContext context) {
 
         ChannelEntity channel = call.getChannel();
         AssertUtils.notNull(channel, ExceptionMessageEnum.NULL_EXCEPTION);
@@ -41,12 +41,12 @@ public class CallCollectService {
         LocalDate callDate = call.getCallDate();
         AssertUtils.notNull(callDate, ExceptionMessageEnum.NULL_EXCEPTION);
 
-        Set<TabCollectEntity> collects = new HashSet<>();
+        Set<TagCollectEntity> collects = new HashSet<>();
         Map<Long, TagResponse> tagMap = tabService.findAllWithRule(channelId);
         Collection<TagResponse> values = tagMap.values();
 
         int frequency;
-        Stack<TabCollectEntity> venation;
+        Stack<TagCollectEntity> venation;
         List<RuleResponse> rules;
         List<String> messages;
         for (TagResponse tag : values) {
@@ -66,17 +66,17 @@ public class CallCollectService {
         return collects;
     }
 
-    private static Stack<TabCollectEntity> vein(TagResponse tag, Map<Long, TagResponse> tags, Call call
+    private static Stack<TagCollectEntity> vein(TagResponse tag, Map<Long, TagResponse> tags, Call call
             , SessionContext context) {
         if (!tag.getActivatedFlag()) {
             return null;
         }
-        Map<Long, TabCollectEntity> venation = new LinkedHashMap<>();
+        Map<Long, TagCollectEntity> venation = new LinkedHashMap<>();
         long tagId = tag.getTagId();
-        TabCollectEntity tabCollect = createTabCollect(tag, call, context);
-        venation.put(tagId, tabCollect);
+        TagCollectEntity tagCollect = createTabCollect(tag, call, context);
+        venation.put(tagId, tagCollect);
         Long parentId = tag.getParentId();
-        TabCollectEntity parentCollect;
+        TagCollectEntity parentCollect;
         TagResponse parentTag;
         while ((parentId != null) && (parentId.compareTo(0L) > 0)) {
             parentTag = tags.get(parentId);
@@ -89,39 +89,39 @@ public class CallCollectService {
             parentId = parentTag.getParentId();
         }
 
-        Stack<TabCollectEntity> stack = new Stack();
+        Stack<TagCollectEntity> stack = new Stack();
         stack.addAll(venation.values());
         return stack;
     }
 
-    private static List<TabCollectEntity> collect(TagResponse tag, Stack<TabCollectEntity> venation, RuleResponse rule, int frequency) {
-        TabCollectEntity tabCollect;
-        List<TabCollectEntity> collects = new LinkedList<>();
+    private static List<TagCollectEntity> collect(TagResponse tag, Stack<TagCollectEntity> venation, RuleResponse rule, int frequency) {
+        TagCollectEntity tagCollect;
+        List<TagCollectEntity> collects = new LinkedList<>();
         while (!venation.empty()) {
-            tabCollect = venation.pop();
-            TabCollectId id = tabCollect.getId();
+            tagCollect = venation.pop();
+            TagCollectId id = tagCollect.getId();
             id.ruleId(rule.getRuleId());
             if (id.getTagId().compareTo(tag.getTagId()) == 0) {
-                tabCollect.frequency(frequency);
+                tagCollect.frequency(frequency);
             } else {
-                tabCollect.subTotal(tabCollect.getSubTotal() + 1)
-                        .subFrequency(tabCollect.getSubFrequency() + frequency);
+                tagCollect.subTotal(tagCollect.getSubTotal() + 1)
+                        .subFrequency(tagCollect.getSubFrequency() + frequency);
             }
-            collects.add(tabCollect);
+            collects.add(tagCollect);
         }
         return collects;
     }
 
 
-    private static TabCollectEntity createTabCollect(TagResponse tag, Call call, SessionContext context) {
+    private static TagCollectEntity createTabCollect(TagResponse tag, Call call, SessionContext context) {
         SeatEntity seat = call.getSeat();
         ChannelEntity channel = call.getChannel();
         String callNo = call.getCallNo();
-        TabCollectId id = new TabCollectId()
+        TagCollectId id = new TagCollectId()
                 .callNo(callNo)
                 .tagId(tag.getTagId())
                 .ruleId(0L);
-        TabCollectEntity entity = new TabCollectEntity()
+        TagCollectEntity entity = new TagCollectEntity()
                 .id(id)
                 .channelId(channel.getChannelId())
                 .callDate(call.getCallDate())

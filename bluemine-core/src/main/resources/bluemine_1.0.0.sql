@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-07-18 15:44:55
+Date: 2018-07-19 17:45:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -39,18 +39,13 @@ CREATE TABLE `batch_job_execution` (
 -- ----------------------------
 -- Records of batch_job_execution
 -- ----------------------------
-INSERT INTO `batch_job_execution` VALUES ('1', '2', '1', '2018-07-12 11:29:04', '2018-07-12 11:29:04', '2018-07-12 11:30:49', 'COMPLETED', 'COMPLETED', '', '2018-07-12 11:30:49', null);
-INSERT INTO `batch_job_execution` VALUES ('2', '1', '2', '2018-07-12 11:31:25', '2018-07-12 11:31:25', null, 'STARTED', 'UNKNOWN', '', '2018-07-12 11:31:25', null);
-INSERT INTO `batch_job_execution` VALUES ('3', '2', '3', '2018-07-12 11:40:01', '2018-07-12 11:40:01', '2018-07-12 11:40:02', 'FAILED', 'FAILED', 'java.lang.NullPointerException\r\n	at com.bluemine.batch.service.CallCollectService.vein(CallCollectService.java:89)\r\n	at com.bluemine.batch.service.CallCollectService.collect(CallCollectService.java:61)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.process(CallCollectConfiguration.java:105)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.process(CallCollectConfiguration.java:34)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration$$EnhancerBySpringCGLIB$$19d17d97.process(<generated>)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.doProcess(SimpleChunkProcessor.java:126)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.transform(SimpleChunkProcessor.java:293)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.process(SimpleChunkProcessor.java:192)\r\n	at org.springframework.batch.core.step.item.ChunkOrientedTasklet.execute(ChunkOrientedTasklet.java:75)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)\r\n	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:', '2018-07-12 11:40:02', null);
-INSERT INTO `batch_job_execution` VALUES ('4', '1', '4', '2018-07-12 11:42:06', '2018-07-12 11:42:06', null, 'STARTED', 'UNKNOWN', '', '2018-07-12 11:42:06', null);
-INSERT INTO `batch_job_execution` VALUES ('5', '1', '5', '2018-07-12 11:43:06', '2018-07-12 11:43:06', null, 'STARTED', 'UNKNOWN', '', '2018-07-12 11:43:06', null);
-INSERT INTO `batch_job_execution` VALUES ('6', '1', '6', '2018-07-12 11:53:29', '2018-07-12 11:53:29', null, 'STARTED', 'UNKNOWN', '', '2018-07-12 11:53:29', null);
-INSERT INTO `batch_job_execution` VALUES ('7', '1', '7', '2018-07-12 11:58:22', '2018-07-12 11:58:22', null, 'STARTED', 'UNKNOWN', '', '2018-07-12 11:58:22', null);
-INSERT INTO `batch_job_execution` VALUES ('8', '1', '8', '2018-07-12 12:03:34', '2018-07-12 12:03:35', null, 'STARTED', 'UNKNOWN', '', '2018-07-12 12:03:35', null);
-INSERT INTO `batch_job_execution` VALUES ('9', '2', '9', '2018-07-12 12:09:22', '2018-07-12 12:09:22', '2018-07-12 13:30:08', 'COMPLETED', 'COMPLETED', '', '2018-07-12 13:30:08', null);
-INSERT INTO `batch_job_execution` VALUES ('10', '2', '10', '2018-07-12 13:32:00', '2018-07-12 13:32:00', '2018-07-12 13:32:38', 'COMPLETED', 'COMPLETED', '', '2018-07-12 13:32:38', null);
-INSERT INTO `batch_job_execution` VALUES ('11', '1', '11', '2018-07-12 14:34:03', '2018-07-12 14:34:03', null, 'STARTED', 'UNKNOWN', '', '2018-07-12 14:34:03', null);
-INSERT INTO `batch_job_execution` VALUES ('12', '2', '12', '2018-07-12 14:44:16', '2018-07-12 14:44:16', '2018-07-12 14:46:31', 'COMPLETED', 'COMPLETED', '', '2018-07-12 14:46:31', null);
+INSERT INTO `batch_job_execution` VALUES ('1', '2', '1', '2018-07-19 15:57:08', '2018-07-19 15:57:09', '2018-07-19 15:57:10', 'FAILED', 'FAILED', 'java.lang.NumberFormatException: null\r\n	at java.lang.Integer.parseInt(Integer.java:542)\r\n	at java.lang.Integer.<init>(Integer.java:867)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.write(CallCollectConfiguration.java:106)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.writeItems(SimpleChunkProcessor.java:175)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.doWrite(SimpleChunkProcessor.java:151)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.write(SimpleChunkProcessor.java:274)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.process(SimpleChunkProcessor.java:199)\r\n	at org.springframework.batch.core.step.item.ChunkOrientedTasklet.execute(ChunkOrientedTasklet.java:75)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)\r\n	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)\r\n	at org.springframework.aop.support.DelegatingIntroductionInte', '2018-07-19 15:57:10', null);
+INSERT INTO `batch_job_execution` VALUES ('2', '2', '1', '2018-07-19 15:58:15', '2018-07-19 15:58:15', '2018-07-19 15:58:17', 'FAILED', 'FAILED', 'java.lang.NumberFormatException: null\r\n	at java.lang.Integer.parseInt(Integer.java:542)\r\n	at java.lang.Integer.<init>(Integer.java:867)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.write(CallCollectConfiguration.java:106)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.writeItems(SimpleChunkProcessor.java:175)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.doWrite(SimpleChunkProcessor.java:151)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.write(SimpleChunkProcessor.java:274)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.process(SimpleChunkProcessor.java:199)\r\n	at org.springframework.batch.core.step.item.ChunkOrientedTasklet.execute(ChunkOrientedTasklet.java:75)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)\r\n	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)\r\n	at org.springframework.aop.support.DelegatingIntroductionInte', '2018-07-19 15:58:17', null);
+INSERT INTO `batch_job_execution` VALUES ('3', '2', '1', '2018-07-19 16:10:42', '2018-07-19 16:10:42', '2018-07-19 16:10:44', 'FAILED', 'FAILED', 'org.springframework.dao.DataIntegrityViolationException: could not execute statement; SQL [n/a]; constraint [PRIMARY]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement\r\n	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:278)\r\n	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:244)\r\n	at org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:521)\r\n	at org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:761)\r\n	at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:730)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)\r\n	at org.springframework.batch.core.configuration.annotation.SimpleBatchConfiguration$PassthruAdvice.invoke(SimpleBatchConfiguration.java:127)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)\r\n	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:213)\r\n	at com.sun.proxy.$Proxy129.commit(Unknown Source)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:150)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.b', '2018-07-19 16:10:44', null);
+INSERT INTO `batch_job_execution` VALUES ('4', '2', '1', '2018-07-19 16:12:01', '2018-07-19 16:12:01', '2018-07-19 16:12:03', 'COMPLETED', 'COMPLETED', '', '2018-07-19 16:12:03', null);
+INSERT INTO `batch_job_execution` VALUES ('5', '2', '2', '2018-07-19 17:15:35', '2018-07-19 17:15:35', '2018-07-19 17:15:36', 'FAILED', 'FAILED', 'org.springframework.beans.factory.BeanCreationException: Error creating bean with name \'scopedTarget.callCollectStep\' defined in class path resource [com/bluemine/batch/job/cycle/CallCollectConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.batch.core.Step]: Factory method \'callCollectStep\' threw exception; nested exception is com.bluemine.ServerRuntimeException: 不存在的数据\r\n	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:599)\r\n	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1173)\r\n	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1067)\r\n	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513)\r\n	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)\r\n	at org.springframework.beans.factory.support.AbstractBeanFactory$2.getObject(AbstractBeanFactory.java:345)\r\n	at org.springframework.batch.core.scope.JobScope.get(JobScope.java:105)\r\n	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:340)\r\n	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)\r\n	at org.springframework.aop.target.SimpleBeanTargetSource.getTarget(SimpleBeanTargetSource.java:35)\r\n	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:192)\r\n	at com.sun.proxy.$Proxy135.getName(Unknown Source)\r\n	at org.springframework.batch.core.job.SimpleStepHandler.handleStep(SimpleStepHandler.java:115)\r\n	at org.springframework.batch.core.job.AbstractJob.handleStep(AbstractJob.java:392)\r\n	at org.springframework.batch.core.job.SimpleJob.doExecute(SimpleJob.java:135)\r\n	at org.springframework.batch.core.job.AbstractJob.execute(AbstractJob.java:306)\r\n	at org.springframework.batch.core.launch.support.SimpleJobLauncher$1.run(SimpleJobLauncher.java:135)\r\n	at org.springframework.core.task.SyncTaskExecutor.execute(SyncTaskExecutor.java:50)\r\n	at org.springframework.batch.core.launch.support.SimpleJobLauncher.run(SimpleJobLauncher.java:128)\r\n	at s', '2018-07-19 17:15:36', null);
+INSERT INTO `batch_job_execution` VALUES ('6', '2', '2', '2018-07-19 17:17:34', '2018-07-19 17:17:34', '2018-07-19 17:17:36', 'COMPLETED', 'COMPLETED', '', '2018-07-19 17:17:36', null);
+INSERT INTO `batch_job_execution` VALUES ('7', '2', '3', '2018-07-19 17:23:19', '2018-07-19 17:23:19', '2018-07-19 17:23:25', 'COMPLETED', 'COMPLETED', '', '2018-07-19 17:23:25', null);
 
 -- ----------------------------
 -- Table structure for batch_job_execution_context
@@ -74,11 +69,6 @@ INSERT INTO `batch_job_execution_context` VALUES ('4', '{\"map\":[\"\"]}', null)
 INSERT INTO `batch_job_execution_context` VALUES ('5', '{\"map\":[\"\"]}', null);
 INSERT INTO `batch_job_execution_context` VALUES ('6', '{\"map\":[\"\"]}', null);
 INSERT INTO `batch_job_execution_context` VALUES ('7', '{\"map\":[\"\"]}', null);
-INSERT INTO `batch_job_execution_context` VALUES ('8', '{\"map\":[\"\"]}', null);
-INSERT INTO `batch_job_execution_context` VALUES ('9', '{\"map\":[\"\"]}', null);
-INSERT INTO `batch_job_execution_context` VALUES ('10', '{\"map\":[\"\"]}', null);
-INSERT INTO `batch_job_execution_context` VALUES ('11', '{\"map\":[\"\"]}', null);
-INSERT INTO `batch_job_execution_context` VALUES ('12', '{\"map\":[\"\"]}', null);
 
 -- ----------------------------
 -- Table structure for batch_job_execution_params
@@ -102,52 +92,32 @@ CREATE TABLE `batch_job_execution_params` (
 -- ----------------------------
 INSERT INTO `batch_job_execution_params` VALUES ('1', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('1', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('1', 'STRING', 'callNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('1', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('1', 'STRING', 'callNo', '13', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('1', 'STRING', 'callDate', '2018-07-20', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('2', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('2', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('2', 'STRING', 'callNo', '2', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('2', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('2', 'STRING', 'callNo', '13', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('2', 'STRING', 'callDate', '2018-07-20', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('3', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('3', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('3', 'STRING', 'callNo', '3', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('3', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('3', 'STRING', 'callNo', '13', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('3', 'STRING', 'callDate', '2018-07-20', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('4', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('4', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('4', 'STRING', 'callNo', '4', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('4', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('4', 'STRING', 'callNo', '13', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('4', 'STRING', 'callDate', '2018-07-20', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('5', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('5', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('5', 'STRING', 'callNo', '5', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('5', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('5', 'STRING', 'seatNo', '2', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('5', 'STRING', 'callNo', '14', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('5', 'STRING', 'callDate', '2018-07-21', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('6', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('6', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('6', 'STRING', 'callNo', '6', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('6', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('6', 'STRING', 'seatNo', '2', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('6', 'STRING', 'callNo', '14', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('6', 'STRING', 'callDate', '2018-07-21', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'callNo', '7', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('8', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('8', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('8', 'STRING', 'callNo', '8', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('8', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('9', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('9', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('9', 'STRING', 'callNo', '9', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('9', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('10', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('10', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('10', 'STRING', 'callNo', '10', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('10', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('11', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('11', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('11', 'STRING', 'callNo', '12', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('11', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('12', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('12', 'STRING', 'seatNo', '1', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('12', 'STRING', 'callNo', '13', '1970-01-01 08:00:00', '0', '0', 'Y');
-INSERT INTO `batch_job_execution_params` VALUES ('12', 'STRING', 'callDate', '2018-07-11', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'seatNo', '2', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'callNo', '14', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'callDate', '2018-07-22', '1970-01-01 08:00:00', '0', '0', 'Y');
 
 -- ----------------------------
 -- Table structure for batch_job_execution_seq
@@ -162,7 +132,7 @@ CREATE TABLE `batch_job_execution_seq` (
 -- ----------------------------
 -- Records of batch_job_execution_seq
 -- ----------------------------
-INSERT INTO `batch_job_execution_seq` VALUES ('12', '0');
+INSERT INTO `batch_job_execution_seq` VALUES ('7', '0');
 
 -- ----------------------------
 -- Table structure for batch_job_instance
@@ -180,18 +150,9 @@ CREATE TABLE `batch_job_instance` (
 -- ----------------------------
 -- Records of batch_job_instance
 -- ----------------------------
-INSERT INTO `batch_job_instance` VALUES ('1', '0', 'callCollectJob', 'be7689ead061bc8267292f6edcdc0e81');
-INSERT INTO `batch_job_instance` VALUES ('2', '0', 'callCollectJob', '266336d28bf6ba5694dc6b1a69102a3d');
-INSERT INTO `batch_job_instance` VALUES ('3', '0', 'callCollectJob', 'f405017e347d712231d887e73d62bff0');
-INSERT INTO `batch_job_instance` VALUES ('4', '0', 'callCollectJob', 'f6ee120f1d090965f4be51819b7860d3');
-INSERT INTO `batch_job_instance` VALUES ('5', '0', 'callCollectJob', 'af4ea447068f4894410a20096ec4dce1');
-INSERT INTO `batch_job_instance` VALUES ('6', '0', 'callCollectJob', '1b982c2235beb5b995db965d00dfe134');
-INSERT INTO `batch_job_instance` VALUES ('7', '0', 'callCollectJob', '219ba710158fbf7f61c7a19e1a807a06');
-INSERT INTO `batch_job_instance` VALUES ('8', '0', 'callCollectJob', '136033169eef6358e9cb7b692685b12a');
-INSERT INTO `batch_job_instance` VALUES ('9', '0', 'callCollectJob', 'fd3d88009f31f5cc5b16dd3af3a44931');
-INSERT INTO `batch_job_instance` VALUES ('10', '0', 'callCollectJob', '7c0beef2f1ff82c5430f73f35b980d4d');
-INSERT INTO `batch_job_instance` VALUES ('11', '0', 'callCollectJob', 'b1fc2b4edf44bcbd289c1fe26cf90d76');
-INSERT INTO `batch_job_instance` VALUES ('12', '0', 'callCollectJob', 'f76963e1f598665052c253f5b4a40b08');
+INSERT INTO `batch_job_instance` VALUES ('1', '0', 'callCollectJob', '537dc3cd2df1c952736c22d57a786008');
+INSERT INTO `batch_job_instance` VALUES ('2', '0', 'callCollectJob', 'eaba6fed4be204068775f1f178ec0209');
+INSERT INTO `batch_job_instance` VALUES ('3', '0', 'callCollectJob', '8688396a48823a0e39b36d24c8b9f5e6');
 
 -- ----------------------------
 -- Table structure for batch_job_seq
@@ -206,7 +167,7 @@ CREATE TABLE `batch_job_seq` (
 -- ----------------------------
 -- Records of batch_job_seq
 -- ----------------------------
-INSERT INTO `batch_job_seq` VALUES ('12', '0');
+INSERT INTO `batch_job_seq` VALUES ('3', '0');
 
 -- ----------------------------
 -- Table structure for batch_step_execution
@@ -239,18 +200,12 @@ CREATE TABLE `batch_step_execution` (
 -- ----------------------------
 -- Records of batch_step_execution
 -- ----------------------------
-INSERT INTO `batch_step_execution` VALUES ('1', '4', 'callCollectStep', '1', '2018-07-12 11:29:05', '2018-07-12 11:30:49', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-12 11:30:49');
-INSERT INTO `batch_step_execution` VALUES ('2', '1', 'callCollectStep', '2', '2018-07-12 11:31:25', null, 'STARTED', '0', '0', '0', '0', '0', '0', '0', '0', 'EXECUTING', '', '2018-07-12 11:31:25');
-INSERT INTO `batch_step_execution` VALUES ('3', '2', 'callCollectStep', '3', '2018-07-12 11:40:02', '2018-07-12 11:40:02', 'FAILED', '0', '1', '0', '0', '0', '0', '0', '1', 'FAILED', 'java.lang.NullPointerException\r\n	at com.bluemine.batch.service.CallCollectService.vein(CallCollectService.java:89)\r\n	at com.bluemine.batch.service.CallCollectService.collect(CallCollectService.java:61)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.process(CallCollectConfiguration.java:105)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.process(CallCollectConfiguration.java:34)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration$$EnhancerBySpringCGLIB$$19d17d97.process(<generated>)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.doProcess(SimpleChunkProcessor.java:126)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.transform(SimpleChunkProcessor.java:293)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.process(SimpleChunkProcessor.java:192)\r\n	at org.springframework.batch.core.step.item.ChunkOrientedTasklet.execute(ChunkOrientedTasklet.java:75)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)\r\n	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:', '2018-07-12 11:40:02');
-INSERT INTO `batch_step_execution` VALUES ('4', '2', 'callCollectStep', '4', '2018-07-12 11:42:06', null, 'STARTED', '1', '1', '0', '1', '0', '0', '0', '0', 'EXECUTING', '', '2018-07-12 11:42:18');
-INSERT INTO `batch_step_execution` VALUES ('5', '1', 'callCollectStep', '5', '2018-07-12 11:43:07', null, 'STARTED', '0', '0', '0', '0', '0', '0', '0', '0', 'EXECUTING', '', '2018-07-12 11:43:07');
-INSERT INTO `batch_step_execution` VALUES ('6', '1', 'callCollectStep', '6', '2018-07-12 11:53:30', null, 'STARTED', '0', '0', '0', '0', '0', '0', '0', '0', 'EXECUTING', '', '2018-07-12 11:53:30');
-INSERT INTO `batch_step_execution` VALUES ('7', '1', 'callCollectStep', '7', '2018-07-12 11:58:22', null, 'STARTED', '0', '0', '0', '0', '0', '0', '0', '0', 'EXECUTING', '', '2018-07-12 11:58:22');
-INSERT INTO `batch_step_execution` VALUES ('8', '4', 'callCollectStep', '8', '2018-07-12 12:03:35', '2018-07-12 12:08:53', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-12 12:08:53');
-INSERT INTO `batch_step_execution` VALUES ('9', '4', 'callCollectStep', '9', '2018-07-12 12:09:22', '2018-07-12 13:30:08', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-12 13:30:08');
-INSERT INTO `batch_step_execution` VALUES ('10', '4', 'callCollectStep', '10', '2018-07-12 13:32:01', '2018-07-12 13:32:38', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-12 13:32:38');
-INSERT INTO `batch_step_execution` VALUES ('11', '3', 'callCollectStep', '11', '2018-07-12 14:34:04', null, 'STARTED', '2', '1', '0', '1', '0', '0', '0', '0', 'EXECUTING', '', '2018-07-12 14:43:42');
-INSERT INTO `batch_step_execution` VALUES ('12', '4', 'callCollectStep', '12', '2018-07-12 14:44:16', '2018-07-12 14:46:30', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-12 14:46:30');
+INSERT INTO `batch_step_execution` VALUES ('1', '2', 'callCollectStep', '1', '2018-07-19 15:57:10', '2018-07-19 15:57:10', 'FAILED', '0', '1', '0', '0', '0', '0', '0', '1', 'FAILED', 'java.lang.NumberFormatException: null\r\n	at java.lang.Integer.parseInt(Integer.java:542)\r\n	at java.lang.Integer.<init>(Integer.java:867)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.write(CallCollectConfiguration.java:106)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.writeItems(SimpleChunkProcessor.java:175)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.doWrite(SimpleChunkProcessor.java:151)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.write(SimpleChunkProcessor.java:274)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.process(SimpleChunkProcessor.java:199)\r\n	at org.springframework.batch.core.step.item.ChunkOrientedTasklet.execute(ChunkOrientedTasklet.java:75)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)\r\n	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)\r\n	at org.springframework.aop.support.DelegatingIntroductionInte', '2018-07-19 15:57:10');
+INSERT INTO `batch_step_execution` VALUES ('2', '2', 'callCollectStep', '2', '2018-07-19 15:58:16', '2018-07-19 15:58:17', 'FAILED', '0', '1', '0', '0', '0', '0', '0', '1', 'FAILED', 'java.lang.NumberFormatException: null\r\n	at java.lang.Integer.parseInt(Integer.java:542)\r\n	at java.lang.Integer.<init>(Integer.java:867)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.write(CallCollectConfiguration.java:106)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.writeItems(SimpleChunkProcessor.java:175)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.doWrite(SimpleChunkProcessor.java:151)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.write(SimpleChunkProcessor.java:274)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.process(SimpleChunkProcessor.java:199)\r\n	at org.springframework.batch.core.step.item.ChunkOrientedTasklet.execute(ChunkOrientedTasklet.java:75)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)\r\n	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)\r\n	at org.springframework.aop.support.DelegatingIntroductionInte', '2018-07-19 15:58:17');
+INSERT INTO `batch_step_execution` VALUES ('3', '2', 'callCollectStep', '3', '2018-07-19 16:10:43', '2018-07-19 16:10:44', 'FAILED', '0', '1', '0', '0', '0', '0', '0', '1', 'FAILED', 'org.springframework.dao.DataIntegrityViolationException: could not execute statement; SQL [n/a]; constraint [PRIMARY]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement\r\n	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:278)\r\n	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:244)\r\n	at org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:521)\r\n	at org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:761)\r\n	at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:730)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)\r\n	at org.springframework.batch.core.configuration.annotation.SimpleBatchConfiguration$PassthruAdvice.invoke(SimpleBatchConfiguration.java:127)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)\r\n	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:213)\r\n	at com.sun.proxy.$Proxy129.commit(Unknown Source)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:150)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.b', '2018-07-19 16:10:44');
+INSERT INTO `batch_step_execution` VALUES ('4', '4', 'callCollectStep', '4', '2018-07-19 16:12:02', '2018-07-19 16:12:03', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-19 16:12:03');
+INSERT INTO `batch_step_execution` VALUES ('5', '4', 'callCollectStep', '6', '2018-07-19 17:17:36', '2018-07-19 17:17:36', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-19 17:17:36');
+INSERT INTO `batch_step_execution` VALUES ('6', '4', 'callCollectStep', '7', '2018-07-19 17:23:20', '2018-07-19 17:23:25', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-19 17:23:25');
 
 -- ----------------------------
 -- Table structure for batch_step_execution_context
@@ -273,12 +228,6 @@ INSERT INTO `batch_step_execution_context` VALUES ('3', '{\"map\":[{\"entry\":[{
 INSERT INTO `batch_step_execution_context` VALUES ('4', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
 INSERT INTO `batch_step_execution_context` VALUES ('5', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
 INSERT INTO `batch_step_execution_context` VALUES ('6', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
-INSERT INTO `batch_step_execution_context` VALUES ('7', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
-INSERT INTO `batch_step_execution_context` VALUES ('8', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
-INSERT INTO `batch_step_execution_context` VALUES ('9', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
-INSERT INTO `batch_step_execution_context` VALUES ('10', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
-INSERT INTO `batch_step_execution_context` VALUES ('11', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
-INSERT INTO `batch_step_execution_context` VALUES ('12', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
 
 -- ----------------------------
 -- Table structure for batch_step_execution_seq
@@ -293,7 +242,7 @@ CREATE TABLE `batch_step_execution_seq` (
 -- ----------------------------
 -- Records of batch_step_execution_seq
 -- ----------------------------
-INSERT INTO `batch_step_execution_seq` VALUES ('12', '0');
+INSERT INTO `batch_step_execution_seq` VALUES ('6', '0');
 
 -- ----------------------------
 -- Table structure for call_collect_trigger
@@ -437,7 +386,7 @@ CREATE TABLE `rule` (
 -- Records of rule
 -- ----------------------------
 INSERT INTO `rule` VALUES ('49706274247443456', '49252889384718336', 'AUD', 'ALL', '198819111277563904', '0', '(脑子&慢)|傻|没希望|笨', null, 'SYS', '2018-07-03 15:39:57', 'SYS', '2018-07-03 15:39:57', '0', '33000');
-INSERT INTO `rule` VALUES ('49706345314681856', '49252889384718336', 'AUD', 'ALL', '1', '0', '(保证&考过)|(保证&前三)|(保证&考上&大学)', null, 'SYS', '2018-07-03 15:41:05', 'SYS', '2018-07-03 15:41:05', '0', '33000');
+INSERT INTO `rule` VALUES ('49706345314681856', '49252889384718336', 'AUD', 'ALL', '198819179812491264', '0', '(保证&考过)|(保证&前三)|(保证&考上&大学)', null, 'SYS', '2018-07-03 15:41:05', 'SYS', '2018-07-03 15:41:05', '0', '33000');
 INSERT INTO `rule` VALUES ('49706426338149376', '49252889384718336', 'AUD', 'ALL', '198819213316591616', '0', '(老师&不好)|(老师&不&负责)|(投诉&老师)', null, 'SYS', '2018-07-03 15:42:22', 'SYS', '2018-07-03 15:42:22', '0', '33000');
 INSERT INTO `rule` VALUES ('49706454618244096', '49252889384718336', 'AUD', 'ALL', '198819246732611584', '0', '太贵|(学费&高)|优惠|(有没有&活动)|折扣', null, 'SYS', '2018-07-03 15:42:49', 'SYS', '2018-07-03 15:42:49', '0', '33000');
 INSERT INTO `rule` VALUES ('49706479720104960', '49252889384718336', 'AUD', 'ALL', '198819304509149184', '0', '试听|(感觉&不错)|(怎么&报名)', null, 'SYS', '2018-07-03 15:43:13', 'SYS', '2018-07-03 15:43:13', '0', '33000');
@@ -467,6 +416,7 @@ CREATE TABLE `seat` (
 -- Records of seat
 -- ----------------------------
 INSERT INTO `seat` VALUES ('49238845276819456', '49252889384718336', '1', '172.17.23.15', 'Y', null, 'SYS', '2018-06-28 11:51:53', 'SYS', '2018-06-28 11:51:53', '0', '33000');
+INSERT INTO `seat` VALUES ('204647654448304128', '49252889384718336', '2', '172.17.23.16', 'Y', null, 'SYS', '2018-06-28 11:51:53', 'SYS', '2018-06-28 11:51:53', '0', '33000');
 
 -- ----------------------------
 -- Table structure for seat_control
@@ -491,35 +441,6 @@ CREATE TABLE `seat_control` (
 -- Records of seat_control
 -- ----------------------------
 INSERT INTO `seat_control` VALUES ('1', '1', '1', '1', null, 'SYS', '2018-06-28 14:13:40', 'SYS', '2018-06-28 14:13:41', '0', '0');
-
--- ----------------------------
--- Table structure for tab_collect
--- ----------------------------
-DROP TABLE IF EXISTS `tab_collect`;
-CREATE TABLE `tab_collect` (
-  `CHANNEL_ID` bigint(20) NOT NULL COMMENT '渠道ID',
-  `CALL_NO` varchar(64) NOT NULL COMMENT '会话单号',
-  `CALL_DATE` int(8) NOT NULL COMMENT '会话日期',
-  `TAG_ID` bigint(20) NOT NULL COMMENT '标签ID',
-  `RULE_ID` bigint(20) NOT NULL COMMENT '碰撞规则ID',
-  `SEAT_ID` bigint(20) NOT NULL COMMENT '坐席ID',
-  `FREQUENCY` int(11) NOT NULL COMMENT '碰撞发生次数',
-  `SUB_FREQUENCY` int(11) NOT NULL COMMENT '碰撞发生次数',
-  `SUB_TOTAL` int(11) NOT NULL COMMENT '成功碰撞的子级总数',
-  `COLLISIONAL` int(11) NOT NULL COMMENT '碰撞发生标识[0:无碰撞|1:有碰撞;]',
-  `DESC_TEXT` varchar(120) DEFAULT NULL COMMENT '描述',
-  `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
-  `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
-  `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
-  PRIMARY KEY (`CHANNEL_ID`,`CALL_NO`,`CALL_DATE`,`TAG_ID`,`RULE_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签汇总表';
-
--- ----------------------------
--- Records of tab_collect
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for tag
@@ -547,15 +468,61 @@ CREATE TABLE `tag` (
 -- ----------------------------
 -- Records of tag
 -- ----------------------------
-INSERT INTO `tag` VALUES ('198818809124098048', 'Y', '49252889384718336', '1', '业务类', '0', 'Y', null, 'SYS', '2018-06-28 15:53:00', 'SYS', '2018-06-28 15:53:00', '0');
-INSERT INTO `tag` VALUES ('198818923355967488', 'N', '49252889384718336', '2', '产品类', '0', 'Y', null, 'SYS', '2018-06-28 15:54:18', 'SYS', '2018-06-28 15:54:18', '0');
+INSERT INTO `tag` VALUES ('198818809124098048', 'N', '49252889384718336', '1', '业务类', '0', 'Y', null, 'SYS', '2018-06-28 15:53:00', 'SYS', '2018-06-28 15:53:00', '0');
+INSERT INTO `tag` VALUES ('198818923355967488', 'Y', '49252889384718336', '2', '产品类', '0', 'Y', null, 'SYS', '2018-06-28 15:54:18', 'SYS', '2018-06-28 15:54:18', '0');
 INSERT INTO `tag` VALUES ('198818966817345536', 'N', '49252889384718336', '3', '用户类', '0', 'Y', null, 'SYS', '2018-06-28 15:54:18', 'SYS', '2018-06-28 15:54:18', '0');
 INSERT INTO `tag` VALUES ('198819027139825664', 'N', '49252889384718336', '4', '评价类', '0', 'Y', null, 'SYS', '2018-06-28 15:54:18', 'SYS', '2018-06-28 15:54:18', '0');
-INSERT INTO `tag` VALUES ('198819111277563904', 'N', '49252889384718336', '5', '禁忌', '198818809124098048', 'N', null, 'SYS', '2018-06-29 12:00:54', 'SYS', '2018-06-29 12:00:54', '0');
-INSERT INTO `tag` VALUES ('198819179812491264', 'Y', '49252889384718336', '6', '夸大销售', '198818809124098048', 'N', null, 'SYS', '2018-06-29 12:57:41', 'SYS', '2018-06-29 14:27:38', '1');
-INSERT INTO `tag` VALUES ('198819213316591616', 'Y', '49252889384718336', '7', '投诉老师', '198818966817345536', 'N', null, 'SYS', '2018-06-29 12:57:48', 'SYS', '2018-06-29 14:33:43', '2');
-INSERT INTO `tag` VALUES ('198819246732611584', 'Y', '49252889384718336', '8', '价格敏感', '198819179812491264', 'N', null, 'SYS', '2018-07-03 15:08:11', 'SYS', '2018-07-03 15:08:11', '0');
-INSERT INTO `tag` VALUES ('198819304509149184', 'Y', '49252889384718336', '9', '意愿度', '198819213316591616', 'N', null, 'SYS', '2018-07-03 15:09:14', 'SYS', '2018-07-03 15:09:14', '0');
+INSERT INTO `tag` VALUES ('198819111277563904', 'Y', '49252889384718336', '5', '电视', '198818923355967488', 'N', null, 'SYS', '2018-06-29 12:00:54', 'SYS', '2018-06-29 12:00:54', '0');
+INSERT INTO `tag` VALUES ('198819179812491264', 'Y', '49252889384718336', '6', '手机', '198818923355967488', 'N', null, 'SYS', '2018-06-29 12:57:41', 'SYS', '2018-06-29 14:27:38', '1');
+INSERT INTO `tag` VALUES ('198819213316591616', 'Y', '49252889384718336', '7', '三星', '198819179812491264', 'N', null, 'SYS', '2018-06-29 12:57:48', 'SYS', '2018-06-29 14:33:43', '2');
+INSERT INTO `tag` VALUES ('198819246732611584', 'Y', '49252889384718336', '8', '苹果', '198819179812491264', 'N', null, 'SYS', '2018-07-03 15:08:11', 'SYS', '2018-07-03 15:08:11', '0');
+INSERT INTO `tag` VALUES ('198819304509149184', 'Y', '49252889384718336', '9', '夏普', '198819111277563904', 'N', null, 'SYS', '2018-07-03 15:09:14', 'SYS', '2018-07-03 15:09:14', '0');
+
+-- ----------------------------
+-- Table structure for tag_collect
+-- ----------------------------
+DROP TABLE IF EXISTS `tag_collect`;
+CREATE TABLE `tag_collect` (
+  `TAG_ID` bigint(20) NOT NULL COMMENT '标签ID',
+  `RULE_ID` bigint(20) NOT NULL COMMENT '碰撞规则ID',
+  `CALL_NO` varchar(64) NOT NULL COMMENT '会话单号',
+  `CHANNEL_ID` bigint(20) NOT NULL COMMENT '渠道ID',
+  `CALL_DATE` int(8) NOT NULL COMMENT '会话日期',
+  `SEAT_ID` bigint(20) NOT NULL COMMENT '坐席ID',
+  `FREQUENCY` int(11) NOT NULL COMMENT '碰撞发生次数',
+  `SUB_FREQUENCY` int(11) NOT NULL COMMENT '碰撞发生次数',
+  `SUB_TOTAL` int(11) NOT NULL COMMENT '成功碰撞的子级总数',
+  `DESC_TEXT` varchar(120) DEFAULT NULL COMMENT '描述',
+  `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
+  `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
+  `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
+  PRIMARY KEY (`TAG_ID`,`RULE_ID`,`CALL_NO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签汇总表';
+
+-- ----------------------------
+-- Records of tag_collect
+-- ----------------------------
+INSERT INTO `tag_collect` VALUES ('198818809124098048', '49706345314681856', '13', '49252889384718336', '20180720', '49238845276819456', '0', '46', '1', null, 'SYS', '2018-07-19 16:12:02', 'SYS', '2018-07-19 16:12:02', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198818809124098048', '49706454618244096', '13', '49252889384718336', '20180720', '49238845276819456', '0', '49', '1', null, 'SYS', '2018-07-19 16:12:02', 'SYS', '2018-07-19 16:12:02', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198818923355967488', '49706274247443456', '14', '49252889384718336', '20180722', '204647654448304128', '0', '14', '1', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198818923355967488', '49706345314681856', '14', '49252889384718336', '20180722', '204647654448304128', '0', '13', '1', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198818923355967488', '49706426338149376', '14', '49252889384718336', '20180722', '204647654448304128', '0', '32', '1', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198818923355967488', '49706454618244096', '14', '49252889384718336', '20180722', '204647654448304128', '0', '41', '1', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198818923355967488', '49706479720104960', '14', '49252889384718336', '20180722', '204647654448304128', '0', '58', '1', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819111277563904', '49706274247443456', '14', '49252889384718336', '20180722', '204647654448304128', '14', '0', '0', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819111277563904', '49706479720104960', '14', '49252889384718336', '20180722', '204647654448304128', '0', '58', '1', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819179812491264', '49706345314681856', '13', '49252889384718336', '20180720', '49238845276819456', '46', '0', '0', null, 'SYS', '2018-07-19 16:12:02', 'SYS', '2018-07-19 16:12:02', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819179812491264', '49706345314681856', '14', '49252889384718336', '20180722', '204647654448304128', '13', '0', '0', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819179812491264', '49706426338149376', '14', '49252889384718336', '20180722', '204647654448304128', '0', '32', '1', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819179812491264', '49706454618244096', '13', '49252889384718336', '20180720', '49238845276819456', '0', '49', '1', null, 'SYS', '2018-07-19 16:12:02', 'SYS', '2018-07-19 16:12:02', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819179812491264', '49706454618244096', '14', '49252889384718336', '20180722', '204647654448304128', '0', '41', '1', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819213316591616', '49706426338149376', '14', '49252889384718336', '20180722', '204647654448304128', '32', '0', '0', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819246732611584', '49706454618244096', '13', '49252889384718336', '20180720', '49238845276819456', '49', '0', '0', null, 'SYS', '2018-07-19 16:12:02', 'SYS', '2018-07-19 16:12:02', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819246732611584', '49706454618244096', '14', '49252889384718336', '20180722', '204647654448304128', '41', '0', '0', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
+INSERT INTO `tag_collect` VALUES ('198819304509149184', '49706479720104960', '14', '49252889384718336', '20180722', '204647654448304128', '58', '0', '0', null, 'SYS', '2018-07-19 17:23:24', 'SYS', '2018-07-19 17:23:24', '0', '33000');
 
 -- ----------------------------
 -- Table structure for tag_control

@@ -7,7 +7,7 @@ import com.bluemine.context.SessionContext;
 import com.bluemine.domain.Call;
 import com.bluemine.domain.entity.ChannelEntity;
 import com.bluemine.domain.entity.SeatEntity;
-import com.bluemine.domain.entity.TabCollectEntity;
+import com.bluemine.domain.entity.TagCollectEntity;
 import com.bluemine.repository.ChannelRepository;
 import com.bluemine.repository.SeatRepository;
 import com.bluemine.repository.proxy.RepositoryProxy;
@@ -26,9 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.inject.Inject;
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,8 +34,6 @@ import java.util.List;
  */
 @Configuration
 public class CallCollectConfiguration implements ItemProcessor<Call, SessionContext>, ItemWriter<SessionContext> {
-
-    public static final String CONTEXT_COLLECT_NAME = "TAB_COLLECTS";
 
     @Inject
     private JobBuilderFactory jobBuilderFactory;
@@ -58,7 +54,6 @@ public class CallCollectConfiguration implements ItemProcessor<Call, SessionCont
     public Job callCollectJob(Step callCollectStep) throws Exception {
         return jobBuilderFactory.get("callCollectJob")
                 .incrementer(new RunIdIncrementer())
-                .preventRestart()
                 .start(callCollectStep)
                 .build();
     }
@@ -104,12 +99,13 @@ public class CallCollectConfiguration implements ItemProcessor<Call, SessionCont
         for(SessionContext context : list){
             context.getRepository().commit();
         }
+//        new Integer(null);
     }
 
     @Override
     public SessionContext process(Call call) throws Exception {
         SessionContext context = new SessionContext();
-        Collection<TabCollectEntity> collect = callCollectService.collect(call, context);
+        Collection<TagCollectEntity> collect = callCollectService.collect(call, context);
         RepositoryProxy repository = context.getRepository();
         repository.push(collect);
         return context;
