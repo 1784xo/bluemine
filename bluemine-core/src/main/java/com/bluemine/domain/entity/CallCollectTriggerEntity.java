@@ -1,72 +1,109 @@
 package com.bluemine.domain.entity;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Created by hechao on 2018/7/2.
+ * Created by hechao on 2018/7/19.
  */
 @Entity
 @Table(name = "call_collect_trigger")
-public class CallCollectTriggerEntity extends PartitionEntity implements Serializable {
+public class CallCollectTriggerEntity extends PartitionEntity implements Serializable{
 
-    private static final long serialVersionUID = -9216447503053446059L;
-    @EmbeddedId
-    private CallCollectTriggerId id;
+    private static final long serialVersionUID = 546553193863082042L;
 
-    @Column(name = "CHANNEL_NO", updatable = false, nullable = false)
+    @Id
+    @Column(name = "JOB_INSTANCE_ID", nullable = false, updatable = false)
+    private Long jobInstanceId;
+
+    @Column(name = "JOB_EXECUTION_ID", nullable = false)
+    private Long jobExecutionId;
+
+    @Column(name = "CHANNEL_NO", nullable = false, length = 64, updatable = false)
     private String channelNo;
 
-    @Column(name = "SEAT_NO", updatable = false, nullable = false)
-    private Long seatNo;
+    @Column(name = "CALL_NO", nullable = false, length = 64, updatable = false)
+    private String callNo;
 
-    @Column(name = "PROCESSED_FLAG", nullable = false, length = 1)
-    private String processedFlag;
+    @Column(name = "CALL_DATE", nullable = false, updatable = false)
+    private LocalDate callDate;
 
-    @Column(name = "TRIGGER_TYPE", updatable = false, nullable = false, length = 4)
+    @Column(name = "SEAT_NO", nullable = false, length = 64, updatable = false)
+    private String seatNo;
+
+    @Column(name = "TRIGGER_DATE", nullable = false)
+    private LocalDateTime triggerDate;
+
+    @Column(name = "TRIGGER_TYPE", nullable = false, updatable = false, length = 4)
     private String triggerType;
 
-    @Column(name = "REQUEST_TIME", updatable = false, nullable = false)
+    @Column(name = "REQUEST_TIME", nullable = false, updatable = false)
     private LocalDateTime requestTime;
 
-    @Column(name = "PRODUCTION_TIME", updatable = false, nullable = false)
-    private LocalDateTime productionTime;
+    @Column(name = "EXECUTIVE_NO", nullable = false)
+    private Integer executiveNo;
 
-    public CallCollectTriggerId getId() {
-        return id;
+    @Column(name = "STATUS_CODE", nullable = false, length = 255)
+    private String statusCode;
+
+    public Long getJobInstanceId() {
+        return jobInstanceId;
     }
 
-    public void setId(CallCollectTriggerId id) {
-        this.id = id;
+    public void setJobInstanceId(Long jobInstanceId) {
+        this.jobInstanceId = jobInstanceId;
+    }
+
+
+    public Long getJobExecutionId() {
+        return jobExecutionId;
+    }
+
+    public void setJobExecutionId(Long jobExecutionId) {
+        this.jobExecutionId = jobExecutionId;
     }
 
     public String getChannelNo() {
         return channelNo;
     }
 
-    public void setChannelNo(String channelId) {
-        this.channelNo = channelId;
+    public void setChannelNo(String channelNo) {
+        this.channelNo = channelNo;
     }
 
-    public Long getSeatNo() {
+    public String getCallNo() {
+        return callNo;
+    }
+
+    public void setCallNo(String callNo) {
+        this.callNo = callNo;
+    }
+
+    public LocalDate getCallDate() {
+        return callDate;
+    }
+
+    public void setCallDate(LocalDate callDate) {
+        this.callDate = callDate;
+    }
+
+    public String getSeatNo() {
         return seatNo;
     }
 
-    public void setSeatNo(Long seatId) {
-        this.seatNo = seatId;
+    public void setSeatNo(String seatNo) {
+        this.seatNo = seatNo;
     }
 
-    public String getProcessedFlag() {
-        return processedFlag;
+    public LocalDateTime getTriggerDate() {
+        return triggerDate;
     }
 
-    public void setProcessedFlag(String processedFlag) {
-        this.processedFlag = processedFlag;
+    public void setTriggerDate(LocalDateTime triggerDate) {
+        this.triggerDate = triggerDate;
     }
 
     public String getTriggerType() {
@@ -85,17 +122,26 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
         this.requestTime = requestTime;
     }
 
-    public LocalDateTime getProductionTime() {
-        return productionTime;
+    public Integer getExecutiveNo() {
+        return executiveNo;
     }
 
-    public void setProductionTime(LocalDateTime productionTime) {
-        this.productionTime = productionTime;
+    public void setExecutiveNo(Integer executiveNo) {
+        this.executiveNo = executiveNo;
     }
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
 
     @Override
     public Object primaryKey() {
-        return id;
+        return jobInstanceId;
     }
 
     @Override
@@ -103,17 +149,39 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CallCollectTriggerEntity that = (CallCollectTriggerEntity) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(jobInstanceId, that.jobInstanceId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(jobInstanceId);
+    }
+
+    @Override
+    public String toString() {
+        return "CallCollectTriggerEntity{" +
+                "callDate=" + callDate +
+                ", callNo='" + callNo + '\'' +
+                ", channelNo='" + channelNo + '\'' +
+                ", executiveNo=" + executiveNo +
+                ", jobExecutionId=" + jobExecutionId +
+                ", jobInstanceId=" + jobInstanceId +
+                ", requestTime=" + requestTime +
+                ", seatNo='" + seatNo + '\'' +
+                ", statusCode='" + statusCode + '\'' +
+                ", triggerDate=" + triggerDate +
+                ", triggerType='" + triggerType + '\'' +
+                "} " + super.toString();
     }
 
 
-    public CallCollectTriggerEntity id(CallCollectTriggerId id) {
-        this.id = id;
+    public CallCollectTriggerEntity jobInstanceId(Long jobInstanceId) {
+        this.jobInstanceId = jobInstanceId;
+        return this;
+    }
+
+    public CallCollectTriggerEntity jobExecutionId(Long jobExecutionId) {
+        this.jobExecutionId = jobExecutionId;
         return this;
     }
 
@@ -122,13 +190,23 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
         return this;
     }
 
-    public CallCollectTriggerEntity seatNo(long seatNo) {
+    public CallCollectTriggerEntity callNo(String callNo) {
+        this.callNo = callNo;
+        return this;
+    }
+
+    public CallCollectTriggerEntity callDate(LocalDate callDate) {
+        this.callDate = callDate;
+        return this;
+    }
+
+    public CallCollectTriggerEntity seatNo(String seatNo) {
         this.seatNo = seatNo;
         return this;
     }
 
-    public CallCollectTriggerEntity processedFlag(String processedFlag) {
-        this.processedFlag = processedFlag;
+    public CallCollectTriggerEntity triggerDate(LocalDateTime triggerDate) {
+        this.triggerDate = triggerDate;
         return this;
     }
 
@@ -142,8 +220,13 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
         return this;
     }
 
-    public CallCollectTriggerEntity productionTime(LocalDateTime productionTime) {
-        this.productionTime = productionTime;
+    public CallCollectTriggerEntity executiveNo(Integer executiveNo) {
+        this.executiveNo = executiveNo;
+        return this;
+    }
+
+    public CallCollectTriggerEntity statusCode(String statusCode) {
+        this.statusCode = statusCode;
         return this;
     }
 }

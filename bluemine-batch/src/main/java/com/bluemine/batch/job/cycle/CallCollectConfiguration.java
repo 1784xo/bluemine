@@ -13,6 +13,7 @@ import com.bluemine.repository.SeatRepository;
 import com.bluemine.repository.proxy.RepositoryProxy;
 import com.bluemine.util.AssertUtils;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -35,6 +36,12 @@ import java.util.List;
 @Configuration
 public class CallCollectConfiguration implements ItemProcessor<Call, SessionContext>, ItemWriter<SessionContext> {
 
+    public static final String PARAM_CHANNEL_NO = "channelNo";
+    public static final String PARAM_SEAT_NO = "seatNo";
+    public static final String PARAM_CALL_NO = "callNo";
+    public static final String PARAM_CALL_DATE = "callDate";
+    public static final String TRIGGER_TYPE = "CALL";
+
     @Inject
     private JobBuilderFactory jobBuilderFactory;
 
@@ -50,10 +57,14 @@ public class CallCollectConfiguration implements ItemProcessor<Call, SessionCont
     @Inject
     private CallCollectService callCollectService;
 
+    @Inject
+    private JobExecutionListener callCollectListener;
+
     @Bean
     public Job callCollectJob(Step callCollectStep) throws Exception {
         return jobBuilderFactory.get("callCollectJob")
                 .incrementer(new RunIdIncrementer())
+                .listener(callCollectListener)
                 .start(callCollectStep)
                 .build();
     }
@@ -96,10 +107,10 @@ public class CallCollectConfiguration implements ItemProcessor<Call, SessionCont
 
     @Override
     public void write(List<? extends SessionContext> list) throws Exception {
-        for(SessionContext context : list){
+        for (SessionContext context : list) {
             context.getRepository().commit();
         }
-//        new Integer(null);
+        new Integer(null);
     }
 
     @Override

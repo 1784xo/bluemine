@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-07-19 17:45:49
+Date: 2018-07-19 19:38:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -46,6 +46,7 @@ INSERT INTO `batch_job_execution` VALUES ('4', '2', '1', '2018-07-19 16:12:01', 
 INSERT INTO `batch_job_execution` VALUES ('5', '2', '2', '2018-07-19 17:15:35', '2018-07-19 17:15:35', '2018-07-19 17:15:36', 'FAILED', 'FAILED', 'org.springframework.beans.factory.BeanCreationException: Error creating bean with name \'scopedTarget.callCollectStep\' defined in class path resource [com/bluemine/batch/job/cycle/CallCollectConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.batch.core.Step]: Factory method \'callCollectStep\' threw exception; nested exception is com.bluemine.ServerRuntimeException: 不存在的数据\r\n	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:599)\r\n	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1173)\r\n	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1067)\r\n	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513)\r\n	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)\r\n	at org.springframework.beans.factory.support.AbstractBeanFactory$2.getObject(AbstractBeanFactory.java:345)\r\n	at org.springframework.batch.core.scope.JobScope.get(JobScope.java:105)\r\n	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:340)\r\n	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)\r\n	at org.springframework.aop.target.SimpleBeanTargetSource.getTarget(SimpleBeanTargetSource.java:35)\r\n	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:192)\r\n	at com.sun.proxy.$Proxy135.getName(Unknown Source)\r\n	at org.springframework.batch.core.job.SimpleStepHandler.handleStep(SimpleStepHandler.java:115)\r\n	at org.springframework.batch.core.job.AbstractJob.handleStep(AbstractJob.java:392)\r\n	at org.springframework.batch.core.job.SimpleJob.doExecute(SimpleJob.java:135)\r\n	at org.springframework.batch.core.job.AbstractJob.execute(AbstractJob.java:306)\r\n	at org.springframework.batch.core.launch.support.SimpleJobLauncher$1.run(SimpleJobLauncher.java:135)\r\n	at org.springframework.core.task.SyncTaskExecutor.execute(SyncTaskExecutor.java:50)\r\n	at org.springframework.batch.core.launch.support.SimpleJobLauncher.run(SimpleJobLauncher.java:128)\r\n	at s', '2018-07-19 17:15:36', null);
 INSERT INTO `batch_job_execution` VALUES ('6', '2', '2', '2018-07-19 17:17:34', '2018-07-19 17:17:34', '2018-07-19 17:17:36', 'COMPLETED', 'COMPLETED', '', '2018-07-19 17:17:36', null);
 INSERT INTO `batch_job_execution` VALUES ('7', '2', '3', '2018-07-19 17:23:19', '2018-07-19 17:23:19', '2018-07-19 17:23:25', 'COMPLETED', 'COMPLETED', '', '2018-07-19 17:23:25', null);
+INSERT INTO `batch_job_execution` VALUES ('8', '2', '4', '2018-07-19 19:23:17', '2018-07-19 19:23:17', '2018-07-19 19:23:36', 'FAILED', 'FAILED', 'java.lang.NumberFormatException: null\r\n	at java.lang.Integer.parseInt(Integer.java:542)\r\n	at java.lang.Integer.<init>(Integer.java:867)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.write(CallCollectConfiguration.java:107)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.writeItems(SimpleChunkProcessor.java:175)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.doWrite(SimpleChunkProcessor.java:151)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.write(SimpleChunkProcessor.java:274)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.process(SimpleChunkProcessor.java:199)\r\n	at org.springframework.batch.core.step.item.ChunkOrientedTasklet.execute(ChunkOrientedTasklet.java:75)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)\r\n	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)\r\n	at org.springframework.aop.support.DelegatingIntroductionInte', '2018-07-19 19:23:52', null);
 
 -- ----------------------------
 -- Table structure for batch_job_execution_context
@@ -69,6 +70,7 @@ INSERT INTO `batch_job_execution_context` VALUES ('4', '{\"map\":[\"\"]}', null)
 INSERT INTO `batch_job_execution_context` VALUES ('5', '{\"map\":[\"\"]}', null);
 INSERT INTO `batch_job_execution_context` VALUES ('6', '{\"map\":[\"\"]}', null);
 INSERT INTO `batch_job_execution_context` VALUES ('7', '{\"map\":[\"\"]}', null);
+INSERT INTO `batch_job_execution_context` VALUES ('8', '{\"map\":[\"\"]}', null);
 
 -- ----------------------------
 -- Table structure for batch_job_execution_params
@@ -118,6 +120,10 @@ INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'channelNo', '10
 INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'seatNo', '2', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'callNo', '14', '1970-01-01 08:00:00', '0', '0', 'Y');
 INSERT INTO `batch_job_execution_params` VALUES ('7', 'STRING', 'callDate', '2018-07-22', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('8', 'STRING', 'channelNo', '100001', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('8', 'STRING', 'seatNo', '2', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('8', 'STRING', 'callNo', '14', '1970-01-01 08:00:00', '0', '0', 'Y');
+INSERT INTO `batch_job_execution_params` VALUES ('8', 'STRING', 'callDate', '2018-07-23', '1970-01-01 08:00:00', '0', '0', 'Y');
 
 -- ----------------------------
 -- Table structure for batch_job_execution_seq
@@ -132,7 +138,7 @@ CREATE TABLE `batch_job_execution_seq` (
 -- ----------------------------
 -- Records of batch_job_execution_seq
 -- ----------------------------
-INSERT INTO `batch_job_execution_seq` VALUES ('7', '0');
+INSERT INTO `batch_job_execution_seq` VALUES ('8', '0');
 
 -- ----------------------------
 -- Table structure for batch_job_instance
@@ -153,6 +159,7 @@ CREATE TABLE `batch_job_instance` (
 INSERT INTO `batch_job_instance` VALUES ('1', '0', 'callCollectJob', '537dc3cd2df1c952736c22d57a786008');
 INSERT INTO `batch_job_instance` VALUES ('2', '0', 'callCollectJob', 'eaba6fed4be204068775f1f178ec0209');
 INSERT INTO `batch_job_instance` VALUES ('3', '0', 'callCollectJob', '8688396a48823a0e39b36d24c8b9f5e6');
+INSERT INTO `batch_job_instance` VALUES ('4', '0', 'callCollectJob', 'cd95ca7d39ed7797edecfbe9d0ef3f37');
 
 -- ----------------------------
 -- Table structure for batch_job_seq
@@ -167,7 +174,7 @@ CREATE TABLE `batch_job_seq` (
 -- ----------------------------
 -- Records of batch_job_seq
 -- ----------------------------
-INSERT INTO `batch_job_seq` VALUES ('3', '0');
+INSERT INTO `batch_job_seq` VALUES ('4', '0');
 
 -- ----------------------------
 -- Table structure for batch_step_execution
@@ -206,6 +213,7 @@ INSERT INTO `batch_step_execution` VALUES ('3', '2', 'callCollectStep', '3', '20
 INSERT INTO `batch_step_execution` VALUES ('4', '4', 'callCollectStep', '4', '2018-07-19 16:12:02', '2018-07-19 16:12:03', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-19 16:12:03');
 INSERT INTO `batch_step_execution` VALUES ('5', '4', 'callCollectStep', '6', '2018-07-19 17:17:36', '2018-07-19 17:17:36', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-19 17:17:36');
 INSERT INTO `batch_step_execution` VALUES ('6', '4', 'callCollectStep', '7', '2018-07-19 17:23:20', '2018-07-19 17:23:25', 'COMPLETED', '2', '1', '0', '1', '0', '0', '0', '0', 'COMPLETED', '', '2018-07-19 17:23:25');
+INSERT INTO `batch_step_execution` VALUES ('7', '2', 'callCollectStep', '8', '2018-07-19 19:23:36', '2018-07-19 19:23:36', 'FAILED', '0', '1', '0', '0', '0', '0', '0', '1', 'FAILED', 'java.lang.NumberFormatException: null\r\n	at java.lang.Integer.parseInt(Integer.java:542)\r\n	at java.lang.Integer.<init>(Integer.java:867)\r\n	at com.bluemine.batch.job.cycle.CallCollectConfiguration.write(CallCollectConfiguration.java:107)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.writeItems(SimpleChunkProcessor.java:175)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.doWrite(SimpleChunkProcessor.java:151)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.write(SimpleChunkProcessor.java:274)\r\n	at org.springframework.batch.core.step.item.SimpleChunkProcessor.process(SimpleChunkProcessor.java:199)\r\n	at org.springframework.batch.core.step.item.ChunkOrientedTasklet.execute(ChunkOrientedTasklet.java:75)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)\r\n	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:272)\r\n	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)\r\n	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)\r\n	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)\r\n	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)\r\n	at org.springframework.aop.support.DelegatingIntroductionInte', '2018-07-19 19:23:36');
 
 -- ----------------------------
 -- Table structure for batch_step_execution_context
@@ -228,6 +236,7 @@ INSERT INTO `batch_step_execution_context` VALUES ('3', '{\"map\":[{\"entry\":[{
 INSERT INTO `batch_step_execution_context` VALUES ('4', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
 INSERT INTO `batch_step_execution_context` VALUES ('5', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
 INSERT INTO `batch_step_execution_context` VALUES ('6', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
+INSERT INTO `batch_step_execution_context` VALUES ('7', '{\"map\":[{\"entry\":[{\"string\":[\"batch.taskletType\",\"org.springframework.batch.core.step.item.ChunkOrientedTasklet\"]},{\"string\":[\"batch.stepType\",\"org.springframework.batch.core.step.tasklet.TaskletStep\"]}]}]}', null);
 
 -- ----------------------------
 -- Table structure for batch_step_execution_seq
@@ -242,7 +251,7 @@ CREATE TABLE `batch_step_execution_seq` (
 -- ----------------------------
 -- Records of batch_step_execution_seq
 -- ----------------------------
-INSERT INTO `batch_step_execution_seq` VALUES ('6', '0');
+INSERT INTO `batch_step_execution_seq` VALUES ('7', '0');
 
 -- ----------------------------
 -- Table structure for call_collect_trigger
@@ -252,16 +261,15 @@ CREATE TABLE `call_collect_trigger` (
   `CALL_NO` varchar(64) NOT NULL COMMENT '会话单号',
   `TRIGGER_DATE` int(8) NOT NULL COMMENT '触发时间',
   `CHANNEL_NO` varchar(64) NOT NULL COMMENT '渠道标识编号',
-  `SEAT_NO` int(11) NOT NULL COMMENT '坐席编号',
+  `SEAT_NO` varchar(64) NOT NULL COMMENT '坐席编号',
   `PROCESSED_FLAG` char(1) NOT NULL COMMENT '处理标识',
   `TRIGGER_TYPE` char(4) NOT NULL COMMENT '触发类型',
-  `REQUEST_TIME` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '请求时间',
-  `PRODUCTION_TIME` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据生产时间',
+  `REQUEST_TIME` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '请求时间',
   `DESC_TEXT` varchar(120) DEFAULT NULL COMMENT '描述',
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
   PRIMARY KEY (`CALL_NO`)
@@ -270,7 +278,6 @@ CREATE TABLE `call_collect_trigger` (
 -- ----------------------------
 -- Records of call_collect_trigger
 -- ----------------------------
-INSERT INTO `call_collect_trigger` VALUES ('500001', '20170701', '100001', '1', 'N', 'CYCL', '2018-07-02 19:00:49', '2018-07-02 19:00:49', null, 'SYS', '2018-07-02 18:52:15', 'SYS', '2018-07-02 18:52:15', '0', '33000');
 
 -- ----------------------------
 -- Table structure for channel
@@ -286,7 +293,7 @@ CREATE TABLE `channel` (
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
   PRIMARY KEY (`CHANNEL_ID`),
@@ -310,9 +317,9 @@ CREATE TABLE `code_profile` (
   `CODE_TEXT` varchar(255) NOT NULL COMMENT '码明文',
   `DESC_TEXT` varchar(120) DEFAULT NULL COMMENT '描述',
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
-  `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   PRIMARY KEY (`CHANNEL_ID`,`CODE_TYPE`,`CODE_VALUE`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='码表';
@@ -348,7 +355,7 @@ CREATE TABLE `employee` (
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
   PRIMARY KEY (`EMPLOYEE_ID`),
@@ -376,7 +383,7 @@ CREATE TABLE `rule` (
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
   PRIMARY KEY (`RULE_ID`)
@@ -405,7 +412,7 @@ CREATE TABLE `seat` (
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
   PRIMARY KEY (`SEAT_ID`),
@@ -431,7 +438,7 @@ CREATE TABLE `seat_control` (
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
   PRIMARY KEY (`SEAT_ID`)
@@ -458,7 +465,7 @@ CREATE TABLE `tag` (
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   PRIMARY KEY (`TAG_ID`),
   UNIQUE KEY `IU_CHANNEL_TAG` (`CHANNEL_ID`,`TAG_NO`) USING BTREE COMMENT '唯一性',
@@ -496,7 +503,7 @@ CREATE TABLE `tag_collect` (
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   `PARTITION_KEY` mediumint(10) NOT NULL COMMENT '数据库分区Key',
   PRIMARY KEY (`TAG_ID`,`RULE_ID`,`CALL_NO`)
@@ -535,7 +542,7 @@ CREATE TABLE `tag_control` (
   `CREATED_BY` varchar(32) NOT NULL COMMENT '创建用户',
   `CREATED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `MODIFIED_BY` varchar(32) NOT NULL COMMENT '更新用户',
-  `MODIFIED_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `MODIFIED_DATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   `MODIFIED_NO` int(8) NOT NULL DEFAULT '0' COMMENT '更新次数',
   PRIMARY KEY (`CHANNEL_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签控制表';

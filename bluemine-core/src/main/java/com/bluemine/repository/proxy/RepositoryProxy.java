@@ -77,5 +77,6 @@ public abstract class RepositoryProxy<T extends BaseEntity>{
         for(Map.Entry<Class<T>, Map<Object, T>> entry : entrySet){
             commit(entry.getKey(), entry.getValue().values());
         }
+        bigTable.clear();
     }
 }

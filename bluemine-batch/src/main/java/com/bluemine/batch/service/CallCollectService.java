@@ -112,7 +112,6 @@ public class CallCollectService {
         return collects;
     }
 
-
     private static TagCollectEntity createTabCollect(TagResponse tag, Call call, SessionContext context) {
         SeatEntity seat = call.getSeat();
         ChannelEntity channel = call.getChannel();

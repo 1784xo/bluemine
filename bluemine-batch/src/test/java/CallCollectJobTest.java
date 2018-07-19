@@ -1,4 +1,5 @@
 import com.bluemine.Bootstrap;
+import com.bluemine.batch.job.cycle.CallCollectConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.Job;
@@ -32,10 +33,10 @@ public class CallCollectJobTest {
     public void test() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         Job callCollectJob = (Job) applicationContext.getBean("callCollectJob");
         JobParameters params = new JobParametersBuilder()
-                .addString("channelNo", "100001")
-                .addString("seatNo", "2")
-                .addString("callNo", "14")
-                .addString("callDate", "2018-07-22")
+                .addString(CallCollectConfiguration.PARAM_CHANNEL_NO, "100001")
+                .addString(CallCollectConfiguration.PARAM_SEAT_NO, "2")
+                .addString(CallCollectConfiguration.PARAM_CALL_NO, "14")
+                .addString(CallCollectConfiguration.PARAM_CALL_DATE, "2018-07-24")
                 .toJobParameters();
         jobLauncher.run(callCollectJob, params);
         this.hashCode();

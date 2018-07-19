@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:mysql://localhost:3306/bluemine_1.0.0</property>
+    <property name="connection.url">jdbc:mysql://172.17.3.250:3306/bluemine_1.0.0</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <mapping class="com.bluemine.domain.entity.ChannelEntity"/>
     <mapping class="com.bluemine.domain.entity.EmployeeEntity"/>
