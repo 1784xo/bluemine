@@ -1,10 +1,8 @@
 package com.bluemine.batch.service;
 
-import com.bluemine.batch.job.cycle.CallCollectConfiguration;
 import com.bluemine.domain.entity.CallCollectTriggerEntity;
+import com.bluemine.domain.entity.CallCollectTriggerId;
 import com.bluemine.repository.CallCollectTriggerRepository;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -19,34 +17,41 @@ public class CallCollectTriggerService {
     @Inject
     private CallCollectTriggerRepository callCollectTriggerRepository;
 
-    public CallCollectTriggerEntity findOne(long jobId) {
-        return callCollectTriggerRepository.findOne(jobId);
+    public CallCollectTriggerEntity findOne(CallCollectTriggerId id) {
+        return callCollectTriggerRepository.findOne(id);
     }
 
-    public CallCollectTriggerEntity create(JobExecution execution) {
-        JobParameters jobParameters = execution.getJobParameters();
+    public CallCollectTriggerEntity findOne(String channelNo, String callNo, String callDate, String seatNo) {
+        return findOne(channelNo, callNo, LocalDate.parse(callDate), seatNo);
+    }
 
-        String channelNo = jobParameters.getString(CallCollectConfiguration.PARAM_CHANNEL_NO);
-        String seatNo = jobParameters.getString(CallCollectConfiguration.PARAM_SEAT_NO);
-        String callNo = jobParameters.getString(CallCollectConfiguration.PARAM_CALL_NO);
-        String callDate = jobParameters.getString(CallCollectConfiguration.PARAM_CALL_DATE);
-
-        CallCollectTriggerEntity entity = new CallCollectTriggerEntity()
-                .callDate(LocalDate.parse(callDate))
-                .callNo(callNo)
+    public CallCollectTriggerEntity findOne(String channelNo, String callNo, LocalDate callDate, String seatNo) {
+        CallCollectTriggerId triggerId = new CallCollectTriggerId()
                 .channelNo(channelNo)
-                .executiveNo(0)
-                .jobInstanceId(execution.getJobId())
-                .requestTime(LocalDateTime.now())
-                .statusCode(execution.getStatus().name())
-                .seatNo(seatNo)
-                .triggerDate(LocalDateTime.now())
-                .triggerType(CallCollectConfiguration.TRIGGER_TYPE);
+                .callNo(callNo)
+                .callDate(callDate)
+                .seatNo(seatNo);
+        return findOne(triggerId);
+    }
 
+    public CallCollectTriggerEntity createTrigger(CallCollectTriggerId id, LocalDateTime triggerDate) {
+        CallCollectTriggerEntity entity = new CallCollectTriggerEntity().id(id)
+                .triggerDate(triggerDate)
+                .executiveNo(0)
+                .requestTime(LocalDateTime.now());
         return entity;
     }
 
-    public void save(CallCollectTriggerEntity entity){
+    public CallCollectTriggerEntity createTrigger(String channelNo, String callNo, String callDate, String seatNo, LocalDateTime triggerDate) {
+        CallCollectTriggerId id = new CallCollectTriggerId().channelNo(channelNo)
+                .callNo(callNo)
+                .callDate(LocalDate.parse(callDate))
+                .seatNo(seatNo);
+
+        return createTrigger(id, triggerDate);
+    }
+
+    public void save(CallCollectTriggerEntity entity) {
         callCollectTriggerRepository.save(entity);
     }
 }

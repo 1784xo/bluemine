@@ -1,21 +1,31 @@
 package com.bluemine.batch.service;
 
 import com.bluemine.ExceptionMessageEnum;
+import com.bluemine.LogicException;
+import com.bluemine.ServerConstants;
+import com.bluemine.batch.config.BatchApplicationConfiguration;
+import com.bluemine.batch.config.BatchRestartConfiguration;
+import com.bluemine.batch.job.cycle.CallCollectConfiguration;
 import com.bluemine.batch.test.TestCollider;
 import com.bluemine.common.RuleResponse;
 import com.bluemine.common.TagResponse;
 import com.bluemine.context.SessionContext;
 import com.bluemine.domain.Call;
-import com.bluemine.domain.entity.ChannelEntity;
-import com.bluemine.domain.entity.SeatEntity;
-import com.bluemine.domain.entity.TagCollectEntity;
-import com.bluemine.domain.entity.TagCollectId;
+import com.bluemine.domain.entity.*;
+import com.bluemine.repository.ChannelRepository;
 import com.bluemine.service.TabService;
 import com.bluemine.util.AssertUtils;
+import org.springframework.batch.core.*;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -25,7 +35,94 @@ import java.util.*;
 public class CallCollectService {
 
     @Inject
+    private JobLauncher jobLauncher;
+
+    @Inject
+    private ApplicationContext applicationContext;
+
+    @Inject
+    private BatchApplicationConfiguration batchApplicationConfiguration;
+
+    @Inject
     private TabService tabService;
+
+    @Inject
+    private CallCollectTriggerService callCollectTriggerService;
+
+    @Inject
+    private ChannelRepository channelRepository;
+
+    /**
+     *
+     * @param channelNo 商家号
+     * @param callNo 会话号，不能重复
+     * @param callDate 会话日期
+     * @param seatNo 坐席号
+     * @return
+     */
+    public boolean run(String channelNo, String callNo, String callDate, String seatNo) {
+
+        ChannelEntity channel = channelRepository.findOneByChannelNo(channelNo);
+        AssertUtils.notNull(channel, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+
+        LocalDateTime now = LocalDateTime.now();
+        CallCollectTriggerId triggerId = new CallCollectTriggerId()
+                .channelNo(channelNo)
+                .callNo(callNo)
+                .callDate(LocalDate.parse(callDate))
+                .seatNo(seatNo);
+
+        CallCollectTriggerEntity trigger = callCollectTriggerService.findOne(triggerId);
+        if ((trigger != null) && (!BatchStatus.FAILED.name().equals(trigger.getStatusCode()))) {
+            throw new LogicException();
+        }
+
+        if (trigger == null) {
+            trigger = callCollectTriggerService.createTrigger(triggerId, now);
+            trigger.setStatusCode(BatchStatus.FAILED.name());
+            trigger.setTriggerType(CallCollectConfiguration.TRIGGER_TYPE);
+            trigger.setPartitionKey(channel.getPartitionKey());
+        }
+
+        boolean status = true;
+        BatchRestartConfiguration restart = batchApplicationConfiguration.getRestart();
+
+        if (trigger.getExecutiveNo().compareTo(restart.getExecutiveLimit()) > 0) {
+            status = false;
+        } else {
+            try {
+                Job callCollectJob = (Job) applicationContext.getBean("callCollectJob");
+                JobParameters params = new JobParametersBuilder()
+                        .addString(CallCollectConfiguration.PARAM_CHANNEL_NO, channelNo)
+                        .addString(CallCollectConfiguration.PARAM_CALL_NO, callNo)
+                        .addString(CallCollectConfiguration.PARAM_CALL_DATE, callDate)
+                        .addString(CallCollectConfiguration.PARAM_SEAT_NO, seatNo)
+                        .toJobParameters();
+                JobExecution jobExecution = jobLauncher.run(callCollectJob, params);
+                trigger.setDescText(jobExecution.getAllFailureExceptions().toString());
+                if (BatchStatus.COMPLETED.equals(jobExecution.getStatus())) {
+                    trigger.setStatusCode(jobExecution.getStatus().name());
+                } else {
+                    status = false;
+                }
+            } catch (Exception e) {
+                status = false;
+            } finally {
+                if (!status) {
+                    trigger.setTriggerDate(now.plusSeconds(restart.getDelayTime()));
+                }
+                trigger.setExecutiveNo(trigger.getExecutiveNo() + 1);
+                SessionContext context = new SessionContext();
+                context.getRepository().commit(trigger);
+            }
+        }
+
+        return status;
+    }
+
+    public void run(String channelNo, String callNo, LocalDate callDate, String seatNo) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+        run(channelNo, callNo, callDate.format(ServerConstants.YYYY_MM_DD_FORMATTER), seatNo);
+    }
 
     public Collection<TagCollectEntity> collect(Call call, SessionContext context) {
 

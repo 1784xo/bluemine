@@ -15,24 +15,8 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
 
     private static final long serialVersionUID = 546553193863082042L;
 
-    @Id
-    @Column(name = "JOB_INSTANCE_ID", nullable = false, updatable = false)
-    private Long jobInstanceId;
-
-    @Column(name = "JOB_EXECUTION_ID", nullable = false)
-    private Long jobExecutionId;
-
-    @Column(name = "CHANNEL_NO", nullable = false, length = 64, updatable = false)
-    private String channelNo;
-
-    @Column(name = "CALL_NO", nullable = false, length = 64, updatable = false)
-    private String callNo;
-
-    @Column(name = "CALL_DATE", nullable = false, updatable = false)
-    private LocalDate callDate;
-
-    @Column(name = "SEAT_NO", nullable = false, length = 64, updatable = false)
-    private String seatNo;
+    @EmbeddedId
+    private CallCollectTriggerId id;
 
     @Column(name = "TRIGGER_DATE", nullable = false)
     private LocalDateTime triggerDate;
@@ -49,53 +33,12 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
     @Column(name = "STATUS_CODE", nullable = false, length = 255)
     private String statusCode;
 
-    public Long getJobInstanceId() {
-        return jobInstanceId;
+    public CallCollectTriggerId getId() {
+        return id;
     }
 
-    public void setJobInstanceId(Long jobInstanceId) {
-        this.jobInstanceId = jobInstanceId;
-    }
-
-
-    public Long getJobExecutionId() {
-        return jobExecutionId;
-    }
-
-    public void setJobExecutionId(Long jobExecutionId) {
-        this.jobExecutionId = jobExecutionId;
-    }
-
-    public String getChannelNo() {
-        return channelNo;
-    }
-
-    public void setChannelNo(String channelNo) {
-        this.channelNo = channelNo;
-    }
-
-    public String getCallNo() {
-        return callNo;
-    }
-
-    public void setCallNo(String callNo) {
-        this.callNo = callNo;
-    }
-
-    public LocalDate getCallDate() {
-        return callDate;
-    }
-
-    public void setCallDate(LocalDate callDate) {
-        this.callDate = callDate;
-    }
-
-    public String getSeatNo() {
-        return seatNo;
-    }
-
-    public void setSeatNo(String seatNo) {
-        this.seatNo = seatNo;
+    public void setId(CallCollectTriggerId id) {
+        this.id = id;
     }
 
     public LocalDateTime getTriggerDate() {
@@ -138,36 +81,30 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
         this.statusCode = statusCode;
     }
 
-
-    @Override
-    public Object primaryKey() {
-        return jobInstanceId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CallCollectTriggerEntity that = (CallCollectTriggerEntity) o;
-        return Objects.equals(jobInstanceId, that.jobInstanceId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(jobInstanceId);
+        return Objects.hash(id);
+    }
+
+    @Override
+    public Object primaryKey() {
+        return id;
     }
 
     @Override
     public String toString() {
         return "CallCollectTriggerEntity{" +
-                "callDate=" + callDate +
-                ", callNo='" + callNo + '\'' +
-                ", channelNo='" + channelNo + '\'' +
-                ", executiveNo=" + executiveNo +
-                ", jobExecutionId=" + jobExecutionId +
-                ", jobInstanceId=" + jobInstanceId +
+                "executiveNo=" + executiveNo +
+                ", id=" + id +
                 ", requestTime=" + requestTime +
-                ", seatNo='" + seatNo + '\'' +
                 ", statusCode='" + statusCode + '\'' +
                 ", triggerDate=" + triggerDate +
                 ", triggerType='" + triggerType + '\'' +
@@ -175,33 +112,8 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
     }
 
 
-    public CallCollectTriggerEntity jobInstanceId(Long jobInstanceId) {
-        this.jobInstanceId = jobInstanceId;
-        return this;
-    }
-
-    public CallCollectTriggerEntity jobExecutionId(Long jobExecutionId) {
-        this.jobExecutionId = jobExecutionId;
-        return this;
-    }
-
-    public CallCollectTriggerEntity channelNo(String channelNo) {
-        this.channelNo = channelNo;
-        return this;
-    }
-
-    public CallCollectTriggerEntity callNo(String callNo) {
-        this.callNo = callNo;
-        return this;
-    }
-
-    public CallCollectTriggerEntity callDate(LocalDate callDate) {
-        this.callDate = callDate;
-        return this;
-    }
-
-    public CallCollectTriggerEntity seatNo(String seatNo) {
-        this.seatNo = seatNo;
+    public CallCollectTriggerEntity id(CallCollectTriggerId id) {
+        this.id = id;
         return this;
     }
 

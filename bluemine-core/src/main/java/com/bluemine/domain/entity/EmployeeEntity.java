@@ -37,8 +37,8 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
     @Column(name = "EMPLOYEE_NAME", nullable = false, length = 32)
     private String employeeName;
 
-    @Column(name = "SEAT_NO", nullable = true, length = 16)
-    private String seatNo;
+    @Column(name = "SEAT_ID", nullable = true)
+    private Long seatId;
 
     @Column(name = "EMAIL", nullable = true, length = 64)
     private String email;
@@ -99,12 +99,12 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
         this.employeeName = employeeName;
     }
 
-    public String getSeatNo() {
-        return seatNo;
+    public Long getSeatId() {
+        return seatId;
     }
 
-    public void setSeatNo(String seatNo) {
-        this.seatNo = seatNo;
+    public void setSeatId(Long seatNo) {
+        this.seatId = seatNo;
     }
 
     public String getEmail() {
@@ -144,7 +144,7 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
                 ", employeeNo='" + employeeNo + '\'' +
                 ", leadId=" + leadId +
                 ", roleId=" + roleId +
-                ", seatNo=" + seatNo +
+                ", seatId=" + seatId +
                 "} " + super.toString();
     }
 
@@ -184,8 +184,8 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
         return this;
     }
 
-    public EmployeeEntity seatNo(String seatNo) {
-        this.seatNo = seatNo;
+    public EmployeeEntity seatId(Long seatId) {
+        this.seatId = seatId;
         return this;
     }
 

@@ -13,7 +13,6 @@ import com.bluemine.repository.SeatRepository;
 import com.bluemine.repository.proxy.RepositoryProxy;
 import com.bluemine.util.AssertUtils;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -37,9 +36,13 @@ import java.util.List;
 public class CallCollectConfiguration implements ItemProcessor<Call, SessionContext>, ItemWriter<SessionContext> {
 
     public static final String PARAM_CHANNEL_NO = "channelNo";
+
     public static final String PARAM_SEAT_NO = "seatNo";
+
     public static final String PARAM_CALL_NO = "callNo";
+
     public static final String PARAM_CALL_DATE = "callDate";
+
     public static final String TRIGGER_TYPE = "CALL";
 
     @Inject
@@ -49,22 +52,18 @@ public class CallCollectConfiguration implements ItemProcessor<Call, SessionCont
     private StepBuilderFactory stepBuilderFactory;
 
     @Inject
+    private CallCollectService callCollectService;
+
+    @Inject
     private ChannelRepository channelRepository;
 
     @Inject
     private SeatRepository seatRepository;
 
-    @Inject
-    private CallCollectService callCollectService;
-
-    @Inject
-    private JobExecutionListener callCollectListener;
-
     @Bean
     public Job callCollectJob(Step callCollectStep) throws Exception {
         return jobBuilderFactory.get("callCollectJob")
                 .incrementer(new RunIdIncrementer())
-                .listener(callCollectListener)
                 .start(callCollectStep)
                 .build();
     }
@@ -73,11 +72,12 @@ public class CallCollectConfiguration implements ItemProcessor<Call, SessionCont
     @JobScope
     public Step callCollectStep(@Value("#{jobParameters[channelNo]}") String channelNo
             , @Value("#{jobParameters[callNo]}") String callNo
-            , @Value("#{jobParameters[seatNo]}") String seatNo
-            , @Value("#{jobParameters[callDate]}") String callDate) throws Exception {
+            , @Value("#{jobParameters[callDate]}") String callDate
+            , @Value("#{jobParameters[seatNo]}") String seatNo) throws Exception {
+
         return stepBuilderFactory.get("callCollectStep")
                 .chunk(1)
-                .reader(callCollectReader(channelNo, callNo, seatNo, callDate))
+                .reader(callCollectReader(channelNo, callNo, callDate, seatNo))
                 .processor((ItemProcessor) this)
                 .writer((ItemWriter) this)
                 .build();
@@ -85,8 +85,8 @@ public class CallCollectConfiguration implements ItemProcessor<Call, SessionCont
 
     public ItemReader<Call> callCollectReader(@Value("#{jobParameters[channelNo]}") String channelNo
             , @Value("#{jobParameters[callNo]}") String callNo
-            , @Value("#{jobParameters[seatNo]}") String seatNo
-            , @Value("#{jobParameters[callDate]}") String callDate) throws Exception {
+            , @Value("#{jobParameters[callDate]}") String callDate
+            , @Value("#{jobParameters[seatNo]}") String seatNo) throws Exception {
 
         ChannelEntity channelEntity = channelRepository.findOneByChannelNo(channelNo);
         AssertUtils.notNull(channelEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
@@ -110,7 +110,7 @@ public class CallCollectConfiguration implements ItemProcessor<Call, SessionCont
         for (SessionContext context : list) {
             context.getRepository().commit();
         }
-        new Integer(null);
+//        new Integer(null);
     }
 
     @Override
