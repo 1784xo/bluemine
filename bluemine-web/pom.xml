@@ -24,6 +24,11 @@
 			<version>1.0.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
 		<!--database-->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -42,6 +47,13 @@
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<finalName>bluemine-web</finalName>
 		<resources>
+			<!--<resource>-->
+				<!--<directory>src/main/webapp</directory>-->
+				<!--<targetPath>META-INF</targetPath>-->
+				<!--<includes>-->
+					<!--<include>**/**</include>-->
+				<!--</includes>-->
+			<!--</resource>-->
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
@@ -49,8 +61,9 @@
 					<include>**/*.xml</include>
 					<include>**/*.yml</include>
 					<include>**/*.properties</include>
-					<include>banner.txt</include>
 					<include>**/*.html</include>
+					<include>**/*.css</include>
+					<include>banner.txt</include>
 				</includes>
 			</resource>
 		</resources>

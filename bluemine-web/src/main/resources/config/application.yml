@@ -50,12 +50,17 @@ spring:
 #        favicon:
 #            enabled: false
 #        view:
-#            prefix: /WEB-INF/resources/
+#            prefix: classpath:/view/
 #            suffix: .jsp
 #        static-path-pattern: /**
 
     thymeleaf:
-        mode: XHTML
+        cache: false
+        mode: HTML5
+        prefix: classpath:/templates/
+        suffix: .html
+        encoding: UTF-8
+        content-type: text/html
 
 security:
     basic:
