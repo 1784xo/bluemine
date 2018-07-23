@@ -43,8 +43,8 @@ spring:
 
 #    resources:
 #        add-mappings: true
-#        static-locations: /
-#
+#        static-locations: classpath:/webapp/WEB-INF/resources
+
 #    mvc:
 #        throw-exception-if-no-handler-found: true
 #        favicon:
