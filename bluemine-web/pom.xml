@@ -58,12 +58,7 @@
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
-					<include>**/*.xml</include>
-					<include>**/*.yml</include>
-					<include>**/*.properties</include>
-					<include>**/*.html</include>
-					<include>**/*.css</include>
-					<include>banner.txt</include>
+					<include>**/**</include>
 				</includes>
 			</resource>
 		</resources>

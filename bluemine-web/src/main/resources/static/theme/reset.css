@@ -1,8 +1,12 @@
 @charset "utf-8";
 
-html{height: 100%; width: 100%}
+html {
+    height: 100%;
+    width: 100%;
+}
+
 body {
-    font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,simsun,"宋体";
+    font-family: "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体";
     margin: 0px;
     padding: 0px;
     font-size: 12px;
@@ -10,11 +14,29 @@ body {
     height: 100%;
 }
 
-h1, h2, h3, h4{ padding: 0px; margin: 0px;}
-OL,UL,LI,input{ list-style: none; margin: 0px; padding: 0px;}
+h1, h2, h3, h4 {
+    padding: 0px;
+    margin: 0px;
+}
 
-.lf{float: left;}
-.rh{float: right;}
+OL, UL, LI, input {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
 
-a:link {text-decoration:none;}
-a:hover{ text-decoration: underline;}
+.lf {
+    float: left;
+}
+
+.rh {
+    float: right;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
