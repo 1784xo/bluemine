@@ -4,10 +4,16 @@
     <title>Title</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <script src="/theme/jquery-ui/jquery.js"></script>
+    <script src="/theme/jquery-ui/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="/theme/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery-ui/css/jquery-ui.css"/>
+
     <style>
         /*index.css*/
         header {
+            display: block;
             border-bottom-style: solid;
             border-bottom-width: 4px;
             position: absolute;
@@ -20,7 +26,9 @@
         }
 
         header nav {
+            display: block;
             margin: 0 70px;
+            zoom: 1;
         }
 
         header nav .logo {
@@ -37,25 +45,102 @@
             zoom: 1;
         }
 
+        /*dark-blue/style.css*/
         header {
             background-color: #293547;
             border-bottom-color: #007CFF;
         }
 
-        /*dark-blue/style.css*/
         .west {
             background-color: #293547;
+        }
+
+        /*jquery-reset.css*/
+        .dark-blue.ui-accordion .ui-accordion-header {
+            font-size: 1.2em;
+            outline: none;
+        }
+
+        .dark-blue.ui-accordion .ui-accordion-icons{
+            padding-left:3em;
+        }
+
+        .dark-blue.ui-accordion .ui-accordion-header span.ui-accordion-header-icon{
+            left:auto;
+            right: .5em;
+        }
+
+        .dark-blue.ui-accordion .ui-accordion-header img.ui-accordion-header-icon{
+            left:1em;
+            margin-top: -10px;
+        }
+
+        .dark-blue.ui-accordion .ui-accordion-content {
+            padding: 0 0 0 1em;
+        }
+
+        .dark-blue.ui-accordion .ui-state-default {
+            background: transparent;
+            border: none;
+            color: #FFF;
+        }
+
+        .dark-blue.ui-accordion .ui-state-active {
+            background: #007CFF;
+            border: none;
+        }
+
+        .dark-blue.ui-accordion .ui-widget-content {
+            background: transparent;
+            border: none;
+            color: #FFF;
+        }
+
+        .dark-blue.ui-accordion .ui-corner-top {
+            border-radius: 0px;
         }
     </style>
 </head>
 <body>
+
 <header>
     <nav>
-        <div class="logo"><a href="javascript:;"><img src="/theme/dark-blue/images/logo.png" width="146"
-                                                      height="31"/></a></div>
+        <div class="logo">
+            <a href="javascript:;">
+                <!--<img src="/theme/dark-blue/images/logo.png" width="146" height="31"/>-->
+            </a>
+        </div>
     </nav>
 </header>
-<div class="west"></div>
+
+<div class="west">
+    <div class="accordion dark-blue">
+        <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-omsc.png" />智慧运营</h3>
+        <div>
+            无
+        </div>
+        <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-znzj.png" />智能质检</h3>
+        <div>
+            无
+        </div>
+        <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-yyfx.png" />语义分析</h3>
+        <div>
+            无
+        </div>
+        <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-gzpz.png" />规则配置</h3>
+        <div>
+            标签管理
+        </div>
+    </div>
+</div>
 <div class="center"></div>
+<script>
+    $(function () {
+        $(".accordion").accordion({
+            heightStyle: "content",
+            animate: 100
+        });
+    });
+</script>
 </body>
 </html>
