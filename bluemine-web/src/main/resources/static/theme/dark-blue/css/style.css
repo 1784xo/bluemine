@@ -1,0 +1,30 @@
+header {
+    background-color: #293547;
+    border-bottom-color: #006ee3;
+}
+
+.main-west {
+    background-color: #293547;
+}
+
+.main-center {
+    margin: 1em;
+    width: auto;
+    zoom: 1;
+}
+
+.main-center .main-center-box{
+    width: 100%;
+    zoom: 1;
+}
+
+.main-center .main-center-box .main-center-row{
+    width: 100%;
+    zoom: 1;
+    margin: 1em 0 0 0;
+    color: #333333;
+}
+
+.main-center .main-center-box .main-center-row h2{
+    font-size: 14px;
+}

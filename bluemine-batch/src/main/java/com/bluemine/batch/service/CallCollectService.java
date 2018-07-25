@@ -15,6 +15,7 @@ import com.bluemine.domain.entity.*;
 import com.bluemine.repository.ChannelRepository;
 import com.bluemine.service.TabService;
 import com.bluemine.util.AssertUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -26,6 +27,9 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.*;
 
 /**
@@ -99,7 +103,7 @@ public class CallCollectService {
                         .addString(CallCollectConfiguration.PARAM_SEAT_NO, seatNo)
                         .toJobParameters();
                 JobExecution jobExecution = jobLauncher.run(callCollectJob, params);
-                trigger.setDescText(jobExecution.getAllFailureExceptions().toString());
+                trigger.setDescText(StringUtils.abbreviate(jobExecution.getAllFailureExceptions().toString(),100));
                 if (BatchStatus.COMPLETED.equals(jobExecution.getStatus())) {
                     trigger.setStatusCode(jobExecution.getStatus().name());
                 } else {
@@ -212,15 +216,22 @@ public class CallCollectService {
     private static TagCollectEntity createTabCollect(TagResponse tag, Call call, SessionContext context) {
         SeatEntity seat = call.getSeat();
         ChannelEntity channel = call.getChannel();
+        Long channelId = channel.getChannelId();
         String callNo = call.getCallNo();
+        LocalDate callDate = call.getCallDate();
+
         TagCollectId id = new TagCollectId()
+                .channelId(channelId)
                 .callNo(callNo)
                 .tagId(tag.getTagId())
                 .ruleId(0L);
         TagCollectEntity entity = new TagCollectEntity()
                 .id(id)
-                .channelId(channel.getChannelId())
-                .callDate(call.getCallDate())
+                .callDate(callDate)
+                .callYear(callDate.getYear())
+                .callMonth(callDate.getMonthValue())
+                .callDay(callDate.getDayOfMonth())
+                .callWeek(callDate.get(WeekFields.ISO.weekOfMonth()))
                 .seatId(seat.getSeatId())
                 .frequency(0)
                 .subFrequency(0)

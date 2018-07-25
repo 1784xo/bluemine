@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>语义分析 - 标签分析</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="/theme/jquery-ui/jquery.js"></script>
+    <script src="/theme/jquery-ui/jquery-ui.js"></script>
+    <script src="/theme/js/bulemine-core.js"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/index.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery-ui/css/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
+
+    <style>
+        /*index.css*/
+
+        /*dark-blue/css/style.css*/
+
+        /*dark-blue/css/jquery-reset.css*/
+
+    </style>
+</head>
+<body>
+
+<div th:replace="/common/header::header"></div>
+<div th:replace="/common/main-west::main-west"></div>
+
+<div class="main-center">
+    <div class="main-center-box">
+        <div class="main-center-row">
+            <h2>标签分析</h2>
+        </div>
+        <div class="main-center-row">
+            <div class="dark-blue" id="tabs">
+                <ul>
+                    <li><a href="#tabs-1">按标签</a></li>
+                    <li><a href="#tabs-2">按日期</a></li>
+                </ul>
+                <div id="tabs-1" class="control-group">
+                    <ul class="main-center-filter">
+                        <li>
+                            <label>起始日：</label><input type="text" class="form"/><label>结束日：</label><input type="text" class="to"/>
+                        </li>
+                        <li>
+                            <button>查询</button>
+                        </li>
+                    </ul>
+
+                    <div class="main-center-panel">
+                        <div class="main-center-panel-header">
+                            趋势图
+                        </div>
+                        <div class="main-center-panel-container">
+                            <div>曲线图</div>
+                        </div>
+                    </div>
+                    <div class="main-center-panel">
+                        <div class="main-center-panel-header">
+                            子标签分布
+                        </div>
+                        <div class="main-center-panel-container">
+                            <div>饼状图</div>
+                        </div>
+                    </div>
+                    <div class="main-center-panel">
+                        <div class="main-center-panel-header">
+                            会话内容
+                        </div>
+                        <div class="main-center-panel-container">
+                            <div>会话列表</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tabs-2">
+                    <p><strong>Click this tab again to close the content pane.</strong></p>
+                    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus
+                        id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus
+                        eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse
+                        sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing.
+                        Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla.
+                        Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium
+                        posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et
+                        purus.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    bulemine.loader(function () {
+        $("#tabs").tabs();
+        $(".form").datepicker({
+            dayNamesMin: ["一", "二", "三", "四", "五", "六", "日"],
+            monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true
+        });
+
+        $(".to").datepicker({
+            dayNamesMin: ["一", "二", "三", "四", "五", "六", "日"],
+            monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true
+        });
+
+    });
+</script>
+</body>
+</html>

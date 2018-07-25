@@ -19,14 +19,24 @@ public class TagCollectEntity extends PartitionEntity implements Serializable{
     @EmbeddedId
     private TagCollectId id;
 
-    @Column(name = "CHANNEL_ID", updatable = false, nullable = false)
-    private long channelId;
-
     @Column(name = "SEAT_ID", nullable = false)
     private Long seatId;
 
     @Column(name = "CALL_DATE", nullable = false)
     private LocalDate callDate;
+
+    @Column(name = "CALL_YEAR", nullable = false)
+    private Integer callYear;
+
+    @Column(name = "CALL_MONTH", nullable = false)
+    private Integer callMonth;
+
+    @Column(name = "CALL_DAY", nullable = false)
+    private Integer callDay;
+
+    @Column(name = "CALL_WEEK", nullable = false)
+    private Integer callWeek;
+
 
     @Column(name = "FREQUENCY", nullable = false)
     private Integer frequency;
@@ -45,14 +55,6 @@ public class TagCollectEntity extends PartitionEntity implements Serializable{
         this.id = id;
     }
 
-    public long getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(long channelId) {
-        this.channelId = channelId;
-    }
-
     public Long getSeatId() {
         return seatId;
     }
@@ -67,6 +69,38 @@ public class TagCollectEntity extends PartitionEntity implements Serializable{
 
     public void setCallDate(LocalDate callDate) {
         this.callDate = callDate;
+    }
+
+    public Integer getCallYear() {
+        return callYear;
+    }
+
+    public void setCallYear(Integer callYear) {
+        this.callYear = callYear;
+    }
+
+    public Integer getCallMonth() {
+        return callMonth;
+    }
+
+    public void setCallMonth(Integer callMonth) {
+        this.callMonth = callMonth;
+    }
+
+    public Integer getCallDay() {
+        return callDay;
+    }
+
+    public void setCallDay(Integer callDay) {
+        this.callDay = callDay;
+    }
+
+    public Integer getCallWeek() {
+        return callWeek;
+    }
+
+    public void setCallWeek(Integer callWeek) {
+        this.callWeek = callWeek;
     }
 
     public Integer getFrequency() {
@@ -113,9 +147,12 @@ public class TagCollectEntity extends PartitionEntity implements Serializable{
 
     @Override
     public String toString() {
-        return "TabCollectEntity{" +
+        return "TagCollectEntity{" +
                 "callDate=" + callDate +
-                ", channelId=" + channelId +
+                ", callDay=" + callDay +
+                ", callMonth=" + callMonth +
+                ", callWeek=" + callWeek +
+                ", callYear=" + callYear +
                 ", frequency=" + frequency +
                 ", id=" + id +
                 ", seatId=" + seatId +
@@ -124,13 +161,9 @@ public class TagCollectEntity extends PartitionEntity implements Serializable{
                 "} " + super.toString();
     }
 
+
     public TagCollectEntity id(TagCollectId id) {
         this.id = id;
-        return this;
-    }
-
-    public TagCollectEntity channelId(long channelId) {
-        this.channelId = channelId;
         return this;
     }
 
@@ -141,6 +174,26 @@ public class TagCollectEntity extends PartitionEntity implements Serializable{
 
     public TagCollectEntity callDate(LocalDate callDate) {
         this.callDate = callDate;
+        return this;
+    }
+
+    public TagCollectEntity callYear(Integer callYear) {
+        this.callYear = callYear;
+        return this;
+    }
+
+    public TagCollectEntity callMonth(Integer callMonth) {
+        this.callMonth = callMonth;
+        return this;
+    }
+
+    public TagCollectEntity callDay(Integer callDay) {
+        this.callDay = callDay;
+        return this;
+    }
+
+    public TagCollectEntity callWeek(Integer callWeek) {
+        this.callWeek = callWeek;
         return this;
     }
 

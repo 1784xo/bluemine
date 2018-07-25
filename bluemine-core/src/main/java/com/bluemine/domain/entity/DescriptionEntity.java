@@ -12,7 +12,7 @@ public abstract class DescriptionEntity extends BaseEntity implements Serializab
 
     private static final long serialVersionUID = 6447564684929633256L;
 
-    @Column(name = "DESC_TEXT", nullable = true, length = 200)
+    @Column(name = "DESC_TEXT", nullable = true, length = 120)
     private String descText;
 
     public String getDescText() {

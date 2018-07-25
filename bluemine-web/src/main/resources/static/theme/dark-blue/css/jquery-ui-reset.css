@@ -1,0 +1,81 @@
+.ui-corner-all{
+    border-radius: 0;
+}
+
+.dark-blue.ui-accordion .ui-accordion-header {
+    font-size: 1.2em;
+}
+
+.dark-blue.ui-accordion .ui-accordion-icons {
+    padding-left: 3em;
+}
+
+.dark-blue.ui-accordion .ui-accordion-header span.ui-accordion-header-icon {
+    left: auto;
+    right: .5em;
+}
+
+.dark-blue.ui-accordion .ui-accordion-header img.ui-accordion-header-icon {
+    left: 1em;
+    margin-top: -10px;
+}
+
+.dark-blue.ui-accordion .ui-accordion-content {
+    padding: 0;
+}
+
+.dark-blue.ui-accordion .ui-state-default {
+    background: transparent;
+    border: none;
+    color: #FFF;
+}
+
+.dark-blue.ui-accordion .ui-state-active {
+    background: #006ee3;
+    border: none;
+}
+
+.dark-blue.ui-accordion .ui-widget-content {
+    background: transparent;
+    border: none;
+    color: #FFF;
+}
+
+.dark-blue.ui-accordion .ui-corner-top {
+    border-radius: 0px;
+}
+
+.dark-blue.ui-accordion .ui-corner-bottom {
+    border-radius: 0px;
+}
+
+.dark-blue.ui-accordion .ui-selectable {
+
+}
+
+.dark-blue.ui-accordion .ui-selectable a {
+    padding-left: 3.5em;
+    line-height: 2.5;
+    color: #FFF;
+}
+
+.dark-blue.ui-accordion .ui-selectable li {
+    line-height: 2.5;
+    background-color: transparent;
+    transition: background-color .2s;
+    -moz-transition: background-color .2s; /* Firefox 4 */
+    -webkit-transition: background-color .2s; /* Safari and Chrome */
+    -o-transition: background-color .2s; /* Opera */
+}
+
+.dark-blue.ui-accordion .ui-selectable li:hover {
+    background-color: #007CFF;
+}
+
+.dark-blue.ui-tabs.ui-widget-content{
+    border: none;
+}
+
+.dark-blue.ui-tabs .ui-tabs-panel{
+    padding: 0;
+}

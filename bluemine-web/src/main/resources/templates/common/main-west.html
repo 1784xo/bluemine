@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<div th:fragment="main-west" class="main-west">
+    <div class="accordion dark-blue">
+        <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-omsc.png"/>智慧运营</h3>
+        <div>
+        </div>
+        <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-znzj.png"/>智能质检</h3>
+        <div>
+        </div>
+        <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-yyfx.png"/>语义分析</h3>
+        <div>
+            <ol class="ui-selectable">
+                <li><a href="javascript:;">标签分析</a></li>
+            </ol>
+        </div>
+        <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-gzpz.png"/>规则配置</h3>
+        <div>
+            <ol class="ui-selectable">
+                <li><a href="javascript:;">标签管理</a></li>
+                <li><a href="javascript:;">业务词配置</a></li>
+            </ol>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $(".accordion").accordion({
+                heightStyle: "content",
+                animate: 100
+            });
+        });
+    </script>
+</div>
+</body>
+</html>
