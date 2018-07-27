@@ -1,0 +1,17 @@
+.treetable-container {
+    position: relative;
+}
+
+.treetable {
+    width: 100%;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.treetable td span{
+    display: block;
+    overflow: hidden;
+    padding: 0px;
+    margin: 0px;
+}

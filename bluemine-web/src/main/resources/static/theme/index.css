@@ -38,13 +38,13 @@ header nav .logo {
 }
 
 /*panel*/
-.main-center-panel{
+.main-center-panel {
     margin: 10px 0;
     border: 1px solid #DEDEDE;
     border-radius: 3px;
 }
 
-.main-center-panel-header{
+.main-center-panel-header {
     font-size: 14px;
     height: 30px;
     line-height: 30px;
@@ -52,30 +52,44 @@ header nav .logo {
     border-bottom: 1px solid #DEDEDE;
 }
 
-.main-center-panel-container{
+.main-center-panel-container {
     width: auto;
     padding: 10px;
+    position: relative;
+}
+
+.panel-gadget {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    clear: both;
+}
+
+.panel-gadget-col{
+    float: left;
 }
 
 /*filter*/
-.main-center-filter{
+.main-center-filter {
     width: 100%;
     overflow: auto;
     clear: both;
     margin: 10px 0;
 }
 
-.main-center-filter input{
+.main-center-filter input {
     padding: 0 5px;
-    height:22px;
+    height: 22px;
     border: 1px solid #cccccc;
 }
 
-.main-center-filter button{
-    height:24px;
+.main-center-filter button {
+    height: 24px;
 }
 
-
-.control-group li{
+.control-group li {
     float: left;
 }
+
+
+

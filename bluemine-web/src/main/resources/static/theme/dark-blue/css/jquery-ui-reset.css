@@ -2,6 +2,7 @@
     border-radius: 0;
 }
 
+/*accordion*/
 .dark-blue.ui-accordion .ui-accordion-header {
     font-size: 1.2em;
 }
@@ -72,10 +73,19 @@
     background-color: #007CFF;
 }
 
+/*tabs*/
 .dark-blue.ui-tabs.ui-widget-content{
     border: none;
 }
 
 .dark-blue.ui-tabs .ui-tabs-panel{
     padding: 0;
+}
+
+.dark-blue.ui-tabs .ui-tabs-anchor{
+    padding: 1em 2em;
+}
+
+.dark-blue.ui-tabs .ui-state-active{
+    background-color: #2796FF;
 }

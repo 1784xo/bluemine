@@ -4,14 +4,16 @@
     <title>语义分析 - 标签分析</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script src="/theme/jquery-ui/jquery.js"></script>
-    <script src="/theme/jquery-ui/jquery-ui.js"></script>
+    <script src="/theme/jquery-ui/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery-ui/jquery-ui-1.11.4.js"></script>
     <script src="/theme/js/bulemine-core.js"></script>
+    <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery-ui/css/jquery-ui.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/index.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery-ui/css/jquery-ui.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery-treetable/jquery-treetable.css"/>
 
     <style>
         /*index.css*/
@@ -23,9 +25,50 @@
     </style>
 </head>
 <body>
-
 <div th:replace="/common/header::header"></div>
 <div th:replace="/common/main-west::main-west"></div>
+
+<div id="tags-dialog" style="display: none;" title="选择标签">
+    <div id="tags-tree">
+
+    </div>
+</div>
+<script>
+    bulemine.loader(function () {
+        $("#tags-dialog").dialog({
+            width: 500,
+            autoOpen: true,
+            resizable: false,
+            height: "auto",
+            modal: true,
+            buttons: {
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        $("#tags-tree").treetable({
+            data: TAGTREE_DATA,
+            treeWidth: 100,
+            width: '100%',
+            height: 200,
+            nodeTextField: 'tagText',
+            rowHeight: 30,
+            expand: true,
+            fields: [{
+                name: 'tagId',
+                text: '标签ID'
+            }, {
+                name: 'rules',
+                text: '规则数'
+            }, {
+                name: 'activatedFlag',
+                text: '有效'
+            }]
+        });
+    });
+
+</script>
 
 <div class="main-center">
     <div class="main-center-box">
@@ -41,21 +84,63 @@
                 <div id="tabs-1" class="control-group">
                     <ul class="main-center-filter">
                         <li>
-                            <label>起始日：</label><input type="text" class="form"/><label>结束日：</label><input type="text" class="to"/>
+                            <label>起始日：</label><input type="text" class="form"/><label>结束日：</label><input type="text"
+                                                                                                          class="to"/>
                         </li>
                         <li>
                             <button>查询</button>
                         </li>
+                        <li>
+                            <button id="open-tags-dialog">选择标签</button>
+                        </li>
                     </ul>
 
+                    <script>
+                        bulemine.loader(function () {
+                            $('#open-tags-dialog').on('click', function () {
+                                $("#tags-dialog").dialog('open');
+                            });
+                        });
+                    </script>
                     <div class="main-center-panel">
                         <div class="main-center-panel-header">
                             趋势图
                         </div>
                         <div class="main-center-panel-container">
-                            <div>曲线图</div>
+                            <ui class="panel-gadget">
+                                <li class="panel-gadget-col">
+                                    <select id="trend-gradient-date" name="trend-gradient-date" style="width:50px;">
+                                        <option selected="selected">日</option>
+                                        <option>周</option>
+                                        <option>月</option>
+                                    </select>
+                                </li>
+                                <li class="panel-gadget-col">
+                                    <button>导出</button>
+                                </li>
+                            </ui>
+                            <div class="panel-canvas" style="width: 100%; height: 300px;">
+
+                            </div>
                         </div>
                     </div>
+                    <script>
+                        bulemine.loader(function () {
+                            bulemine.charts({
+                                export: null,
+                                gradientDate: $("#trend-gradient-date"),
+                                init: function () {
+
+                                },
+                                reset: function () {
+
+                                },
+                                change: function (name, val) {
+
+                                }
+                            });
+                        });
+                    </script>
                     <div class="main-center-panel">
                         <div class="main-center-panel-header">
                             子标签分布
@@ -73,6 +158,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div id="tabs-2">
                     <p><strong>Click this tab again to close the content pane.</strong></p>
                     <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus
@@ -106,7 +193,6 @@
             changeMonth: true,
             changeYear: true
         });
-
     });
 </script>
 </body>

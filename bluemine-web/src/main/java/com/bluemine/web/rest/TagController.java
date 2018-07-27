@@ -9,10 +9,7 @@ import com.bluemine.service.TabService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -29,18 +26,18 @@ public class TagController extends AbstractController {
     @Inject
     private TabService tabService;
 
-    @PostMapping("findAll")
-    public ResponseEntity findAll(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest){
+    @ResponseBody
+    @RequestMapping(value = "findAll/{channelId}")
+    public ResponseEntity findAll(@PathVariable("channelId") Long channelId) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
-        List<TagResponse> responses = tabService.findTreeWithRule(restfulRequest);
+        List<TagResponse> responses = tabService.findTreeWithRule(channelId);
         restfulResponse.setResult(responses);
-
-        return ResponseEntity.ok().body(restfulResponse);
+        return ResponseEntity.accepted().body(restfulResponse);
     }
 
     @PostMapping("create")
-    public ResponseEntity create(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest){
+    public ResponseEntity create(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         TagResponse response = tabService.create(restfulRequest);
@@ -50,7 +47,7 @@ public class TagController extends AbstractController {
     }
 
     @PostMapping("update")
-    public ResponseEntity update(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest){
+    public ResponseEntity update(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         TagResponse response = tabService.update(restfulRequest);
