@@ -9,9 +9,17 @@
     margin: 0px;
 }
 
+.treetable td button.expand-icon{
+
+}
+
 .treetable td span{
     display: block;
     overflow: hidden;
     padding: 0px;
     margin: 0px;
+}
+
+.treetable .selected{
+    background-color: #8c8c8c;
 }

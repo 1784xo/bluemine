@@ -4,16 +4,15 @@
     <title>语义分析 - 标签分析</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script src="/theme/jquery-ui/jquery-2.2.4.js"></script>
-    <script src="/theme/jquery-ui/jquery-ui-1.11.4.js"></script>
-    <script src="/theme/js/bulemine-core.js"></script>
+    <script src="/theme/jquery/jquery-ui/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery/jquery-ui/jquery-ui-1.11.4.js"></script>
+    <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery-ui/css/jquery-ui.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/reset.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/index.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery-treetable/jquery-treetable.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
+
 
     <style>
         /*index.css*/
@@ -53,6 +52,7 @@
             width: '100%',
             height: 200,
             nodeTextField: 'tagText',
+            rootText:'全部',
             rowHeight: 30,
             expand: true,
             fields: [{
@@ -64,7 +64,11 @@
             }, {
                 name: 'activatedFlag',
                 text: '有效'
-            }]
+            }],
+            onSelect:function(row, e, data){
+                $('#open-tags-dialog').data('select', data).val(data.tagText);
+                var list = $("#tags-tree").treetable('crumbs', row);
+            }
         });
     });
 
@@ -84,14 +88,13 @@
                 <div id="tabs-1" class="control-group">
                     <ul class="main-center-filter">
                         <li>
-                            <label>起始日：</label><input type="text" class="form"/><label>结束日：</label><input type="text"
-                                                                                                          class="to"/>
+                            <label>起始日：</label><input type="text" class="form"/><label>结束日：</label><input type="text" class="to"/>
+                        </li>
+                        <li>
+                            <label>标签：</label><input readonly="true" id="open-tags-dialog"/>
                         </li>
                         <li>
                             <button>查询</button>
-                        </li>
-                        <li>
-                            <button id="open-tags-dialog">选择标签</button>
                         </li>
                     </ul>
 
