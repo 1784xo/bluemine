@@ -36,6 +36,7 @@ $.default = function (a, b) {
         expanderLeft: 20,
         nodeTextField: 'nodeText',
         rootText: 'root',
+        treeTitle: 'tree',
         expand: false,
         onSelect: function () {
         }
@@ -45,13 +46,27 @@ $.default = function (a, b) {
         crumbs: function (table, row) {
             var list = [];
             var parentId;
-            var parent = row;
+            var parent = $(row);
             while (parent.size() > 0) {
-                list.push(parent.data('originData'));
+                list.push({
+                    target: parent[0],
+                    record: parent.data('originData')
+                });
                 parentId = parent.data('parent');
                 parent = table.find('tr[data-level="' + parentId + '"]');
             }
             return list;
+        },
+        selected: function (table) {
+            var sel = table.find('tr.selected');
+            var data;
+            if (!!sel[0]) {
+                data = sel.data('originData');
+            }
+            return {
+                target: sel[0],
+                record: data
+            }
         },
         expand: function (tr, e) {
             tr.data('expand', true);
@@ -94,7 +109,7 @@ $.default = function (a, b) {
     }
 
     function renderHeader(table, opts) {
-        var tr = $('<tr><th>树</th></tr>');
+        var tr = $('<tr><th>' + opts.treeTitle + '</th></tr>');
         table.append(tr);
         var fields = opts.fields;
         for (var i = 0, l = fields.length; i < l; i++) {
@@ -105,8 +120,6 @@ $.default = function (a, b) {
     }
 
     function renderNode(index, uid, pid, data, table, box, opts) {
-        // if (index > 0) {
-
         var tr = $('<tr data-level="' + uid + '" data-parent="' + pid + '"></tr>');
         tr.data({
             expand: opts.expand,
@@ -118,11 +131,17 @@ $.default = function (a, b) {
             '<span><button class="expand-icon">+</button>' + data[opts.nodeTextField] + '</span></td>');
 
         var fields = opts.fields;
-        for (var i = 0, l = fields.length; i < l; i++) {
-            var dd = $('<td><span class="expand">' + $.default(data[fields[i].name], '') + '</span></td>');
+        for (var field, val, i = 0, l = fields.length; i < l; i++) {
+            field = fields[i];
+            val = data[field.name];
+            if (!field.format) {
+                val = $.default(val, '');
+            } else {
+                val = field.format(val, data);
+            }
+            var dd = $('<td><span class="expand">' + val + '</span></td>');
             tr.append(dd);
         }
-        // }
 
         var childs = data.childrens;
         for (var child, i = 0, l = childs.length; i < l; i++) {
