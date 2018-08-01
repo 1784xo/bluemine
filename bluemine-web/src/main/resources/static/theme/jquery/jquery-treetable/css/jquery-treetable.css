@@ -10,21 +10,21 @@
     font-size: 14px;
 }
 
-.treetable tr{
+.treetable tr {
     transition: background-color .1s;
     -moz-transition: background-color .1s; /* Firefox 4 */
     -webkit-transition: background-color .1s; /* Safari and Chrome */
     -o-transition: background-color .1s; /* Opera */
 }
 
-.treetable th{
+.treetable th {
     background: #F9F9F9;
     height: 3em;
     text-align: left;
     padding: 0 0 0 10px;
 }
 
-.treetable td{
+.treetable td {
     border-top-style: solid;
     border-top-width: 1px;
     border-top-color: #E1E6EB;
@@ -33,21 +33,67 @@
     padding: 0 0 0 10px;
 }
 
-.treetable td button.expand-icon{
+.treetable td button.expand-icon {
 
 }
 
-.treetable td span{
+.treetable>tbody>tr>td>span{
     display: block;
     overflow: hidden;
     padding: 0px;
     margin: 0px;
+    height: 24px;
+    line-height: 24px;
+    clear: both;
 }
 
-.treetable .selected-state{
+.treetable>tbody>tr>td>span>a.column-item {
+    display: block;
+    float: left;
+    margin-right: 1em;
+}
+
+.treetable .selected-state {
     background-color: #75CAFF;
 }
 
-.treetable .default-state{
+.treetable .default-state {
     background-color: transparent;
+}
+
+
+
+.treetable .column-item-icon {
+    height: 24px;
+    padding-left: 1.3em;
+    transition: background-image .1s;
+    -moz-transition: background-image .1s; /* Firefox 4 */
+    -webkit-transition: background-image .1s; /* Safari and Chrome */
+    -o-transition: background-image .1s; /* Opera */
+}
+
+.treetable .icon-new {
+    background-image: url("/theme/dark-blue/images/icons/doc_plus.png");
+    background-repeat: no-repeat;
+    background-position: 0 4px;
+}
+
+.treetable .icon-edit {
+    background-image: url("/theme/dark-blue/images/icons/doc_edit.png");
+    background-repeat: no-repeat;
+    background-position: 0 4px;
+}
+
+.treetable .icon-enable {
+    background-image: url("/theme/dark-blue/images/icons/icon-enable.png");
+    background-repeat: no-repeat;
+    background-position: 0 1px;
+    width: 60px;
+}
+
+.treetable .icon-disabled {
+    background-image: url("/theme/dark-blue/images/icons/icon-disabled.png");
+    background-repeat: no-repeat;
+    background-position: 0 1px;
+    width: 60px;
 }

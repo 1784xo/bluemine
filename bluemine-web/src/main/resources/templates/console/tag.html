@@ -72,21 +72,36 @@
                                 return val.length;
                             }
                         }, {
-                            name: 'activatedFlag',
                             text: '有效',
-                            width: 80,
-                            format: function (val, record) {
-                                if (val == undefined)
-                                    return '';
-                                return val ? '是' : '否';
-                            }
+                            width: 100,
+                            items:[{
+                                iconCls: true,
+                                format: function (table, tr, item, data, opts) {
+                                    item.addClass(data.activatedFlag ? 'icon-enable' : 'icon-disabled');
+                                },
+                                handler:function (table, tr, item, data, opts) {
+                                    if(item.hasClass('icon-enable')){
+                                        item.removeClass('icon-enable').addClass('icon-disabled');
+                                    }else{
+                                        item.removeClass('icon-disabled').addClass('icon-enable');
+                                    }
+                                    console.log(arguments);
+                                }
+                            }]
                         }, {
                             text: '操作',
+                            width: 100,
                             items: [{
-                                iconCls: 'doc_lines',  // Use a URL in the icon config
+//                                iconCls: 'icon-new',  // Use a URL in the icon config
                                 text: '添加',
-                                handler: function (grid, rowIndex, colIndex) {
-
+                                handler: function (table, tr, item, data, opts) {
+                                    console.log(arguments);
+                                }
+                            }, {
+//                                iconCls: 'icon-edit',  // Use a URL in the icon config
+                                text: '配置',
+                                handler: function (table, tr, item, data, opts) {
+                                    console.log(arguments);
                                 }
                             }]
                         }],

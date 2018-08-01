@@ -103,11 +103,11 @@ $.default = function (a, b) {
             var name = el.prop("tagName");
             if ((name == 'BUTTON') && (el.hasClass('expand-icon'))) {
                 this.toggle(el.parents('tr[data-level]'), el);
-            } else if((name == "A") && (el.hasClass('column-item'))){
+            } else if ((name == "A") && (el.hasClass('column-item'))) {
 
             } else if (name == "TR") {
 
-            }else {
+            } else {
                 this.onSelect(el.parents('tr[data-level]'), el, opts);
             }
         }
@@ -117,14 +117,11 @@ $.default = function (a, b) {
         var tr = $('<tr><th>' + opts.treeTitle + '</th></tr>');
         tr.find('th').css('minWidth', opts.treeMinWidth).width(opts.treeWidth);
         table.append(tr);
-        var columns = opts.columns;
-        for (var col, i = 0, l = columns.length; i < l; i++) {
-            col = columns[i];
-            var dt = $('<th>' + col.text + '</th>');
-            dt.width(col.width);
-            //TODO:+列宽
+        $.each(opts.columns, function (i) {
+            var dt = $('<th>' + this.text + '</th>');
+            dt.width(this.width);
             tr.append(dt);
-        }
+        });
     }
 
     function renderNode(index, uid, pid, data, table, box, opts) {
@@ -134,26 +131,36 @@ $.default = function (a, b) {
             tr.append('<td style="padding-left: ' + (Math.max(index, 0) * opts.expanderLeft + opts.treeLeft) + 'px;">' +
                 '<span><button class="expand-icon">+</button>' + data[opts.nodeTextField] + '</span></td>');
 
-            var columns = opts.columns;
-            for (var td, col, val, i = 0, l = columns.length; i < l; i++) {
-                col = columns[i];
-                td = $('<td></td>');
+            $.each(opts.columns, function (i) {
+                var col = this;
+                var td = $('<td><span></span></td>');
                 if (!!col.items) {
                     $.each(col.items, function (j) {
-                        console.log(this);
-                        td.append('<a class="column-item">' + this.text + '</a>');
+                        var me = this;
+                        var item = $('<a class="column-item"></a>')
+                        if (!!me.iconCls) {
+                            item.attr('title', me.title).addClass(me.iconCls).addClass('column-item-icon');
+                        }
+                        if (!!me.format) {
+                            me.format(table, tr, item, data, me);
+                        }
+                        item.html(me.text);
+                        item.bind('click', function () {
+                            me.handler(table, tr, item, data, me);
+                        });
+                        td.find('span:first-child').append(item);
                     });
                 } else {
-                    val = data[col.name];
+                    var val = data[col.name];
                     if (!col.format) {
-                        val = $.default(val, '');
+                        val = $.default(val, '&nbsp;');
                     } else {
                         val = col.format(val, data);
                     }
-                    td.append('<span>' + val + '</span>');
+                    td.find('span:first-child').html(val);
                 }
                 tr.append(td);
-            }
+            });
 
             tr.data({
                 expand: opts.expand,
