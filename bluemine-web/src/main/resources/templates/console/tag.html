@@ -59,8 +59,8 @@
                         width: '100%',
                         nodeTextField: 'tagText',
                         rootText: '全部',
-                        rowHeight: 30,
                         rootVisible: false,
+                        rowHeight: 30,
                         expand: true,
                         columns: [{
                             name: 'rules',
@@ -72,23 +72,6 @@
                                 return val.length;
                             }
                         }, {
-                            text: '有效',
-                            width: 100,
-                            items:[{
-                                iconCls: true,
-                                format: function (table, tr, item, data, opts) {
-                                    item.addClass(data.activatedFlag ? 'icon-enable' : 'icon-disabled');
-                                },
-                                handler:function (table, tr, item, data, opts) {
-                                    if(item.hasClass('icon-enable')){
-                                        item.removeClass('icon-enable').addClass('icon-disabled');
-                                    }else{
-                                        item.removeClass('icon-disabled').addClass('icon-enable');
-                                    }
-                                    console.log(arguments);
-                                }
-                            }]
-                        }, {
                             text: '操作',
                             width: 100,
                             items: [{
@@ -97,10 +80,21 @@
                                 handler: function (table, tr, item, data, opts) {
                                     console.log(arguments);
                                 }
-                            }, {
-//                                iconCls: 'icon-edit',  // Use a URL in the icon config
-                                text: '配置',
-                                handler: function (table, tr, item, data, opts) {
+                            }]
+                        }, {
+                            text: '有效',
+                            width: 100,
+                            items:[{
+                                iconCls: true,
+                                format: function (table, tr, item, data, opts) {
+                                    item.addClass(data.activatedFlag ? 'icon-enable' : 'icon-disable');
+                                },
+                                handler:function (table, tr, item, data, opts) {
+                                    if(item.hasClass('icon-enable')){
+                                        item.removeClass('icon-enable').addClass('icon-disable');
+                                    }else{
+                                        item.removeClass('icon-disable').addClass('icon-enable');
+                                    }
                                     console.log(arguments);
                                 }
                             }]

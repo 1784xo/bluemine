@@ -28,19 +28,22 @@ $.default = function (a, b) {
 };
 
 (function ($) {
+    var editor =$('<div><input /><button>N</button></div>');
+
     var def_options = {
+        expand: false,
+        expanderLeft: 20,
         width: '100%',
         height: 'auto',
         treeLeft: 0,
         treeWidth: 'auto',
         treeTitle: 'tree',
         treeMinWidth: 'auto',
-        expanderLeft: 20,
+        treeEditor: true,
         nodeTextField: 'nodeText',
         rootVisible: true,
         rootText: 'root',
         rowHeight: '2em',
-        expand: false,
         onSelect: function () {
         }
     };
@@ -128,8 +131,16 @@ $.default = function (a, b) {
 
         if (((!!opts.rootVisible) && (index == -1)) || (index >= 0)) {
             var tr = $('<tr class="default-state" data-level="' + uid + '" data-parent="' + pid + '"></tr>');
-            tr.append('<td style="padding-left: ' + (Math.max(index, 0) * opts.expanderLeft + opts.treeLeft) + 'px;">' +
-                '<span><button class="expand-icon">+</button>' + data[opts.nodeTextField] + '</span></td>');
+            var node = $('<td style="padding-left: ' + (Math.max(index, 0) * opts.expanderLeft + opts.treeLeft) + 'px;">' +
+                '<button class="expand-icon">+</button><span>' + data[opts.nodeTextField] + '</span></td>');
+            tr.append(node);
+
+            if(!!opts.treeEditor){
+                node.find('span').bind('dblclick', function () {
+                    $(this).html('').append(editor);
+                    editor.find('input').focus().val(tr.data('originData')[opts.nodeTextField]);
+                })
+            }
 
             $.each(opts.columns, function (i) {
                 var col = this;

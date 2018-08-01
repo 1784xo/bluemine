@@ -30,11 +30,13 @@
     border-top-color: #E1E6EB;
     height: 2.5em;
     cursor: pointer;
+    clear: both;
     padding: 0 0 0 10px;
 }
 
 .treetable td button.expand-icon {
-
+    display: block;
+    float: left;
 }
 
 .treetable>tbody>tr>td>span{
@@ -44,13 +46,13 @@
     margin: 0px;
     height: 24px;
     line-height: 24px;
-    clear: both;
 }
 
 .treetable>tbody>tr>td>span>a.column-item {
     display: block;
     float: left;
     margin-right: 1em;
+    color: #006FFF;
 }
 
 .treetable .selected-state {
@@ -91,7 +93,7 @@
     width: 60px;
 }
 
-.treetable .icon-disabled {
+.treetable .icon-disable {
     background-image: url("/theme/dark-blue/images/icons/icon-disabled.png");
     background-repeat: no-repeat;
     background-position: 0 1px;
