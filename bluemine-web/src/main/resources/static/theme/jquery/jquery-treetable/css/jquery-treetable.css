@@ -10,23 +10,27 @@
     font-size: 14px;
 }
 
+.treetable tr{
+    transition: background-color .1s;
+    -moz-transition: background-color .1s; /* Firefox 4 */
+    -webkit-transition: background-color .1s; /* Safari and Chrome */
+    -o-transition: background-color .1s; /* Opera */
+}
+
 .treetable th{
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #E1E6EB;
     background: #F9F9F9;
     height: 3em;
     text-align: left;
-    padding: 0 0 0 4px;
+    padding: 0 0 0 10px;
 }
 
 .treetable td{
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #E1E6EB;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #E1E6EB;
     height: 2.5em;
     cursor: pointer;
-    padding: 0 0 0 4px;
+    padding: 0 0 0 10px;
 }
 
 .treetable td button.expand-icon{
@@ -40,6 +44,10 @@
     margin: 0px;
 }
 
-.treetable .selected{
+.treetable .selected-state{
     background-color: #75CAFF;
+}
+
+.treetable .default-state{
+    background-color: transparent;
 }

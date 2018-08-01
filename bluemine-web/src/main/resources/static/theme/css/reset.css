@@ -21,7 +21,12 @@ h1, h2, h3, h4 {
     margin: 0px;
 }
 
-a, ol, ul, li, input, span, select, button{
+input, button {
+    list-style: none;
+    outline: none;
+}
+
+a, ol, ul, li, span, select {
     list-style: none;
     outline: none;
     margin: 0px;

@@ -47,9 +47,9 @@ header nav .logo {
 
 /*panel*/
 .main-center-panel {
-    margin: 10px 0;
+    margin: 0 0 10px 0;
     border: 1px solid #DEDEDE;
-    border-radius: 3px;
+    border-radius: 0px;
 }
 
 .main-center-panel-header {
@@ -79,7 +79,7 @@ header nav .logo {
 
 .control-group li {
     float: left;
-    margin: 4px 6px 0 0;
+    margin: 4px 0 0 10px;
 }
 
 .main-center .main-center-box {
@@ -104,7 +104,7 @@ header nav .logo {
     width: 100%;
     overflow: auto;
     clear: both;
-    margin: 6px 0 10px 0;
+    padding: 9px 0 13px 0;
 }
 
 .main-center-filter button {
@@ -113,12 +113,4 @@ header nav .logo {
 
 .main-center-filter label {
     color: #888888;
-}
-
-.tag-select {
-    padding: 4px 4px;
-    line-height: 16px;
-    background-color: #E6F3FB;
-    border: 1px solid #B4CBE7;
-    color: #666666;
 }

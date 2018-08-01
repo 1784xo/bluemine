@@ -99,6 +99,15 @@
     background-color: #007CFF;
 }
 
+/*input*/
+input{
+    padding: 4px 4px;
+    line-height: 16px;
+    background-color: #E6F3FB;
+    border: 1px solid #B4CBE7;
+    color: #666666;
+}
+
 /*tabs*/
 .ui-tabs.ui-widget-content{
     border: none;
@@ -122,6 +131,7 @@
 
 .ui-widget-header{
     background: #F9F9F9;
+    border: 1px solid #DEDEDE;
 }
 
 /*datepicker*/

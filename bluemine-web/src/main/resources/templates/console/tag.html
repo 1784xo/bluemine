@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>规则配置 - 标签管理</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="/theme/jquery/jquery-ui/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery/jquery-ui/jquery-ui-1.11.4.js"></script>
+    <script src="/theme/jquery/bulemine-core.js"></script>
+    <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
+
+    <style>
+        .main-center-filter {
+            border: 1px solid #DEDEDE;
+        }
+
+        #tags-tree {
+            border-left: 1px solid #DEDEDE;
+            border-right: 1px solid #DEDEDE;
+            border-bottom: 1px solid #DEDEDE;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/common/header::header"></div>
+<div th:replace="/common/main-west::main-west"></div>
+
+<div class="main-center">
+    <div class="main-center-box">
+        <div class="main-center-row">
+            <h2>标签管理</h2>
+        </div>
+        <div class="main-center-row control-group">
+            <ul class="main-center-filter">
+                <li>
+                    <input style="width: 300px;" class="tag-select"/>
+                </li>
+                <li>
+                    <button>查询</button>
+                </li>
+            </ul>
+            <div id="tags-tree">
+
+            </div>
+
+            <script type="text/javascript" th:inline="JavaScript">
+                //    <![CDATA[
+                bulemine.loader(function () {
+                    $("#tags-tree").treetable({
+                        data: TAGTREE_DATA,
+                        treeTitle: '所有标签',
+                        treeMinWidth: 200,
+                        treeLeft: 10,
+                        expanderLeft: 20,
+                        width: '100%',
+                        nodeTextField: 'tagText',
+                        rootText: '全部',
+                        rowHeight: 30,
+                        rootVisible: false,
+                        expand: true,
+                        columns: [{
+                            name: 'rules',
+                            text: '规则数',
+                            width: 100,
+                            format: function (val, record) {
+                                if (val == undefined)
+                                    return '';
+                                return val.length;
+                            }
+                        }, {
+                            name: 'activatedFlag',
+                            text: '有效',
+                            width: 80,
+                            format: function (val, record) {
+                                if (val == undefined)
+                                    return '';
+                                return val ? '是' : '否';
+                            }
+                        }, {
+                            text: '操作',
+                            items: [{
+                                iconCls: 'doc_lines',  // Use a URL in the icon config
+                                text: '添加',
+                                handler: function (grid, rowIndex, colIndex) {
+
+                                }
+                            }]
+                        }],
+                        onSelect: function (row, e, data) {
+                            var list = $("#tags-tree").treetable('crumbs', row);
+                            var txt = '';
+                            for (var i = 0, l = list.length; i < l; i++) {
+                                txt = list[i].record.tagText + ' / ' + txt;
+                            }
+                            $('#open-tags-dialog').data('select', data).val(txt);
+                        }
+                    });
+                });
+                //    ]]>
+            </script>
+        </div>
+    </div>
+</div>
+</body>
+</html>

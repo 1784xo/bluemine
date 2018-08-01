@@ -31,12 +31,15 @@ $.default = function (a, b) {
     var def_options = {
         width: '100%',
         height: 'auto',
-        treeWidth: 200,
-        rowHeight: '2em',
+        treeLeft: 0,
+        treeWidth: 'auto',
+        treeTitle: 'tree',
+        treeMinWidth: 'auto',
         expanderLeft: 20,
         nodeTextField: 'nodeText',
+        rootVisible: true,
         rootText: 'root',
-        treeTitle: 'tree',
+        rowHeight: '2em',
         expand: false,
         onSelect: function () {
         }
@@ -91,8 +94,8 @@ $.default = function (a, b) {
         },
         onSelect: function (tr, e, opts) {
             if (tr.size() != 0) {
-                tr.siblings('tr.selected').removeClass('selected');
-                opts.onSelect(tr, e, tr.addClass('selected').data('originData'));
+                tr.siblings('tr.selected-state').removeClass('selected-state').addClass('default-state');
+                opts.onSelect(tr, e, tr.removeClass('default-state').addClass('selected-state').data('originData'));
             }
         },
         onClick: function (e, opts) {
@@ -100,9 +103,11 @@ $.default = function (a, b) {
             var name = el.prop("tagName");
             if ((name == 'BUTTON') && (el.hasClass('expand-icon'))) {
                 this.toggle(el.parents('tr[data-level]'), el);
+            } else if((name == "A") && (el.hasClass('column-item'))){
+
             } else if (name == "TR") {
 
-            } else {
+            }else {
                 this.onSelect(el.parents('tr[data-level]'), el, opts);
             }
         }
@@ -110,37 +115,60 @@ $.default = function (a, b) {
 
     function renderHeader(table, opts) {
         var tr = $('<tr><th>' + opts.treeTitle + '</th></tr>');
+        tr.find('th').css('minWidth', opts.treeMinWidth).width(opts.treeWidth);
         table.append(tr);
-        var fields = opts.fields;
-        for (var i = 0, l = fields.length; i < l; i++) {
-            var dt = $('<th>' + fields[i].text + '</th>');
+        var columns = opts.columns;
+        for (var col, i = 0, l = columns.length; i < l; i++) {
+            col = columns[i];
+            var dt = $('<th>' + col.text + '</th>');
+            dt.width(col.width);
             //TODO:+列宽
             tr.append(dt);
         }
     }
 
     function renderNode(index, uid, pid, data, table, box, opts) {
-        var tr = $('<tr data-level="' + uid + '" data-parent="' + pid + '"></tr>');
-        tr.data({
-            expand: opts.expand,
-            originData: data
-        });
-        table.append(tr);
 
-        tr.append('<td style="padding-left: ' + (index * opts.expanderLeft) + 'px;">' +
-            '<span><button class="expand-icon">+</button>' + data[opts.nodeTextField] + '</span></td>');
+        if (((!!opts.rootVisible) && (index == -1)) || (index >= 0)) {
+            var tr = $('<tr class="default-state" data-level="' + uid + '" data-parent="' + pid + '"></tr>');
+            tr.append('<td style="padding-left: ' + (Math.max(index, 0) * opts.expanderLeft + opts.treeLeft) + 'px;">' +
+                '<span><button class="expand-icon">+</button>' + data[opts.nodeTextField] + '</span></td>');
 
-        var fields = opts.fields;
-        for (var field, val, i = 0, l = fields.length; i < l; i++) {
-            field = fields[i];
-            val = data[field.name];
-            if (!field.format) {
-                val = $.default(val, '');
-            } else {
-                val = field.format(val, data);
+            var columns = opts.columns;
+            for (var td, col, val, i = 0, l = columns.length; i < l; i++) {
+                col = columns[i];
+                td = $('<td></td>');
+                if (!!col.items) {
+                    $.each(col.items, function (j) {
+                        console.log(this);
+                        td.append('<a class="column-item">' + this.text + '</a>');
+                    });
+                } else {
+                    val = data[col.name];
+                    if (!col.format) {
+                        val = $.default(val, '');
+                    } else {
+                        val = col.format(val, data);
+                    }
+                    td.append('<span>' + val + '</span>');
+                }
+                tr.append(td);
             }
-            var dd = $('<td><span class="expand">' + val + '</span></td>');
-            tr.append(dd);
+
+            tr.data({
+                expand: opts.expand,
+                originData: data
+            });
+
+            if (index > 0) {
+                if (tr.data('expand')) {
+                    tr.show();
+                } else {
+                    tr.hide();
+                }
+            }
+
+            table.append(tr);
         }
 
         var childs = data.childrens;
@@ -162,7 +190,7 @@ $.default = function (a, b) {
             childrens: opts.data
         };
         data[opts.nodeTextField] = opts.rootText;
-        renderNode(0, 0, -1, data, table, box, opts);
+        renderNode(opts.rootVisible ? 0 : -1, '0', 'null', data, table, box, opts);
     }
 
     function prepare(opts) {
