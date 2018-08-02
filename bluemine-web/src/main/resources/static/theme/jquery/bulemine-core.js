@@ -28,7 +28,7 @@ $.default = function (a, b) {
 };
 
 (function ($) {
-    var editor =$('<div><input /><button>N</button></div>');
+    var _editor = $('<div class="editor"><input /><button class="editor-ok">Y</button><button class="editor-cancel">N</button></div>');
 
     var def_options = {
         expand: false,
@@ -49,6 +49,16 @@ $.default = function (a, b) {
     };
 
     var METHODS = {
+        onCancelEditor: function (e, opts) {
+            var tr = e.data('selected');
+            if (!!tr) {
+                e.detach();
+                tr.find('.tree-node-text:first').html(tr.data('originData')[opts.nodeTextField]);
+            }
+        },
+        onOkEditor: function (e, opts) {
+            console.log(arguments);
+        },
         crumbs: function (table, row) {
             var list = [];
             var parentId;
@@ -132,13 +142,14 @@ $.default = function (a, b) {
         if (((!!opts.rootVisible) && (index == -1)) || (index >= 0)) {
             var tr = $('<tr class="default-state" data-level="' + uid + '" data-parent="' + pid + '"></tr>');
             var node = $('<td style="padding-left: ' + (Math.max(index, 0) * opts.expanderLeft + opts.treeLeft) + 'px;">' +
-                '<button class="expand-icon">+</button><span>' + data[opts.nodeTextField] + '</span></td>');
+                '<button class="expand-icon">+</button><span class="tree-node-text" >' + data[opts.nodeTextField] + '</span></td>');
             tr.append(node);
 
-            if(!!opts.treeEditor){
-                node.find('span').bind('dblclick', function () {
-                    $(this).html('').append(editor);
-                    editor.find('input').focus().val(tr.data('originData')[opts.nodeTextField]);
+            if (!!opts.treeEditor) {
+                node.find('.tree-node-text').bind('dblclick', function () {
+                    METHODS.onCancelEditor(_editor, opts);
+                    $(this).html('').append(_editor);
+                    _editor.data('selected', tr).find('input').focus().val(tr.data('originData')[opts.nodeTextField]);
                 })
             }
 
@@ -212,6 +223,15 @@ $.default = function (a, b) {
     }
 
     function prepare(opts) {
+
+        _editor.find('.editor-cancel').bind('click', function () {
+            METHODS.onCancelEditor(_editor, opts);
+        });
+
+        _editor.find('.editor-ok').bind('click', function () {
+            METHODS.onOkEditor(_editor, opts);
+        });
+
         opts = $.extend({}, opts);
         opts.rowHeight = $.isNumeric(opts.rowHeight) ? (opts.rowHeight + 'px') : opts.rowHeight;
         return opts;

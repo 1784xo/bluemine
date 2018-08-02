@@ -1,3 +1,15 @@
+.editor{
+
+}
+
+.editor .editor-ok{
+
+}
+
+.editor .editor-cancel{
+
+}
+
 .treetable-container {
     position: relative;
 }
@@ -8,6 +20,10 @@
     padding: 0px;
     margin: 0px;
     font-size: 14px;
+}
+
+.tree-node-text{
+
 }
 
 .treetable tr {
