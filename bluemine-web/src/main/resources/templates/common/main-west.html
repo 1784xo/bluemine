@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
-<div th:fragment="main-west" class="main-west">
+<div th:fragment="main-west(first, second)" class="main-west">
     <div class="accordion dark-blue">
         <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-omsc.png"/>智慧运营</h3>
         <div>
@@ -16,22 +16,23 @@
         <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-yyfx.png"/>语义分析</h3>
         <div>
             <ol class="ui-selectable">
-                <li><a href="javascript:;">标签分析</a></li>
+                <li th:class="${second} eq '3-1'?'selected-state':'default-state'"><a href="javascript:;">标签分析</a></li>
             </ol>
         </div>
         <h3><img class="ui-accordion-header-icon" src="/theme/dark-blue/images/icons/icon-gzpz.png"/>规则配置</h3>
         <div>
             <ol class="ui-selectable">
-                <li><a href="javascript:;">标签管理</a></li>
-                <li><a href="javascript:;">业务词配置</a></li>
+                <li th:class="${second} eq '3-1'?'selected-state':'default-state'"><a href="javascript:;">标签管理</a></li>
+                <li th:class="${second} eq '3-2'?'selected-state':'default-state'"><a href="javascript:;">业务词配置</a></li>
             </ol>
         </div>
     </div>
-    <script>
+    <script type="text/javascript" th:inline="javascript">
         $(function () {
             $(".accordion").accordion({
                 heightStyle: "content",
-                animate: 100
+                animate: 100,
+                active: [[${first}]]
             });
         });
     </script>

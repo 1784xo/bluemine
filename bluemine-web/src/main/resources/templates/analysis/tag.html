@@ -24,14 +24,14 @@
 </head>
 <body>
 <div th:replace="/common/header::header"></div>
-<div th:replace="/common/main-west::main-west"></div>
+<div th:replace="/common/main-west::main-west(2, '2-1')"></div>
 
 <div id="tags-dialog" style="display: none;" title="选择标签">
     <div id="tags-tree">
 
     </div>
 </div>
-<script type="text/javascript" th:inline="JavaScript">
+<script type="text/javascript" th:inline="javascript">
 //    <![CDATA[
     bulemine.loader(function () {
         $("#tags-dialog").dialog({
@@ -118,12 +118,14 @@
                         </li>
                     </ul>
 
-                    <script>
+                    <script type="text/javascript" th:inline="javascript">
+                        //    <![CDATA[
                         bulemine.loader(function () {
                             $('#open-tags-dialog').on('click', function () {
                                 $("#tags-dialog").dialog('open');
                             });
                         });
+                        //    ]]>
                     </script>
                     <div class="main-center-panel">
                         <div class="main-center-panel-header">
@@ -147,7 +149,8 @@
                             </div>
                         </div>
                     </div>
-                    <script>
+                    <script type="text/javascript" th:inline="javascript">
+                        //    <![CDATA[
                         bulemine.loader(function () {
                             bulemine.charts({
                                 export: null,
@@ -163,6 +166,7 @@
                                 }
                             });
                         });
+                        //    ]]>
                     </script>
                     <div class="main-center-panel">
                         <div class="main-center-panel-header">
@@ -198,7 +202,8 @@
         </div>
     </div>
 </div>
-<script>
+<script type="text/javascript" th:inline="javascript">
+    //    <![CDATA[
     bulemine.loader(function () {
         $("#tabs").tabs();
         $(".form").datepicker({
@@ -217,6 +222,7 @@
             changeYear: true
         });
     });
+    //    ]]>
 </script>
 </body>
 </html>

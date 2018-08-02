@@ -27,6 +27,17 @@ public class TagController extends AbstractController {
     private TabService tabService;
 
     @ResponseBody
+    @RequestMapping(value = "test/{channelId}")
+    public ResponseEntity test(@PathVariable("channelId") Long channelId) {
+        HttpRestfulResponse restfulResponse = createRestfulResponse();
+
+        List<TagResponse> responses = tabService.findTreeWithRule(channelId);
+        restfulResponse.setResult(responses);
+        new Integer(null);
+        return ResponseEntity.accepted().body(restfulResponse);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "findAll/{channelId}")
     public ResponseEntity findAll(@PathVariable("channelId") Long channelId) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();

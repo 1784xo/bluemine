@@ -3,6 +3,17 @@
  */
 var bulemine = (function () {
     var LOAD_QUEUE = [];
+
+    var _mask_count = 200;
+    var _def_json = {
+        dataType: 'JSON',
+        contentType: 'application/json',
+        masking: false,
+        type: "POST",
+        success: function () {
+        }
+    }
+
     var me = {
         loader: function (init) {
             var len = LOAD_QUEUE.length;
@@ -13,6 +24,36 @@ var bulemine = (function () {
             if (!!opts.gradientDate) {
                 opts.gradientDate.selectmenu();
             }
+        },
+        ajaxJson: function (opts) {
+            var params = $.extend({}, _def_json, opts);
+
+            if (!!params.masking) {
+                var mask = $('<div class="ui-widget-overlay ui-front" z-index="' + (_mask_count++) + '"><img src="/theme/dark-blue/images/loading2.gif"/></div>');
+                params.mask = mask;
+                $(document.body).append(mask);
+            }
+
+            params = $.extend(params, {
+                data: JSON.stringify(opts.data),
+                callback: function (status, data, msg) {
+                    if (!!params.mask) {
+                        params.mask.remove();
+                    }
+                    opts.callback(status == 'success', data, msg, params);
+                },
+                success: function (data, status, jqXHR) {
+                    if (data.status == '200') {
+                        params.callback(status, data.result, data.message);
+                    } else {
+                        params.error(jqXHR, 'error', data.message);
+                    }
+                },
+                error: function (request, status, error) {
+                    params.callback(status, null, error);
+                }
+            });
+            return $.ajax(params);
         }
     };
     $(function () {
@@ -30,22 +71,22 @@ $.default = function (a, b) {
 (function ($) {
     var _editor = $('<div class="editor"><input /><button class="editor-ok">Y</button><button class="editor-cancel">N</button></div>');
 
-    var def_options = {
+    var _def_options = {
         expand: false,
         expanderLeft: 20,
         width: '100%',
         height: 'auto',
+        nodeTextField: 'nodeText',
         treeLeft: 0,
         treeWidth: 'auto',
         treeTitle: 'tree',
         treeMinWidth: 'auto',
-        treeEditor: true,
-        nodeTextField: 'nodeText',
+        treeEditor: false,
         rootVisible: true,
         rootText: 'root',
         rowHeight: '2em',
-        onSelect: function () {
-        }
+        afteredit: function () {},
+        onSelect: function () {}
     };
 
     var METHODS = {
@@ -54,10 +95,21 @@ $.default = function (a, b) {
             if (!!tr) {
                 e.detach();
                 tr.find('.tree-node-text:first').html(tr.data('originData')[opts.nodeTextField]);
+                opts.afteredit(tr, tr.data('originData'), null, e, opts);
             }
         },
         onOkEditor: function (e, opts) {
-            console.log(arguments);
+            var tr = e.data('selected');
+            if (!!tr) {
+                e.detach();
+                var val = e.find('input').val();
+                tr.find('.tree-node-text:first').html(val);
+                var origin = tr.data('originData');
+                origin[opts.nodeTextField] = val;
+                var record = tr.data('recordData');
+                record[opts.nodeTextField] = val;
+                opts.afteredit(tr, origin, record, e, opts);
+            }
         },
         crumbs: function (table, row) {
             var list = [];
@@ -74,15 +126,11 @@ $.default = function (a, b) {
             return list;
         },
         selected: function (table) {
-            var sel = table.find('tr.selected');
-            var data;
-            if (!!sel[0]) {
-                data = sel.data('originData');
-            }
+            var sel = table.find('tr.selected-state');
             return {
-                target: sel[0],
-                record: data
-            }
+                target: sel,
+                data: sel.data()
+            };
         },
         expand: function (tr, e) {
             tr.data('expand', true);
@@ -186,7 +234,8 @@ $.default = function (a, b) {
 
             tr.data({
                 expand: opts.expand,
-                originData: data
+                originData: data,
+                recordData: {}
             });
 
             if (index > 0) {
@@ -242,7 +291,7 @@ $.default = function (a, b) {
         if (METHODS[opts]) {
             return METHODS[opts](me, val);
         } else {
-            var options = prepare($.extend({}, def_options, opts));
+            var options = prepare($.extend({}, _def_options, opts));
             me.addClass('treetable-container');
             me.css('height', options.height).css('width', options.width);
             render(me, options);

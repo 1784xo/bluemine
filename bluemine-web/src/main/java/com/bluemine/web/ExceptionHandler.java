@@ -29,6 +29,6 @@ public class ExceptionHandler {
         return new HttpRestfulResponse()
                 .success(false)
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .message(e.getMessage());
+                .message(e.getClass().getName()+" : "+e.getMessage());
     }
 }

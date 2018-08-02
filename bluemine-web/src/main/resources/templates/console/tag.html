@@ -27,7 +27,7 @@
 </head>
 <body>
 <div th:replace="/common/header::header"></div>
-<div th:replace="/common/main-west::main-west"></div>
+<div th:replace="/common/main-west::main-west(3, '3-1')"></div>
 
 <div class="main-center">
     <div class="main-center-box">
@@ -47,14 +47,15 @@
 
             </div>
 
-            <script type="text/javascript" th:inline="JavaScript">
-                //    <![CDATA[
+            <script type="text/javascript" th:inline="javascript">
+                //                <![CDATA[
                 bulemine.loader(function () {
                     $("#tags-tree").treetable({
                         data: TAGTREE_DATA,
                         treeTitle: '所有标签',
                         treeMinWidth: 200,
                         treeLeft: 10,
+                        treeEditor: true,
                         expanderLeft: 20,
                         width: '100%',
                         nodeTextField: 'tagText',
@@ -62,6 +63,20 @@
                         rootVisible: false,
                         rowHeight: 30,
                         expand: true,
+                        afteredit: function (target, origin, record, editer, opts) {
+                            if (!$.isEmptyObject(record)) {
+                                bulemine.ajaxJson({
+                                    url: "/service/tag/findAll/49252889384718336",
+//                                url: "/service/tag/test/49252889384718336",
+                                    masking: true,
+                                    data: record,
+                                    callback: function (ok, data, msg, opts) {
+                                        console.log(arguments);
+                                    }
+                                });
+                            }
+                            console.log(arguments);
+                        },
                         columns: [{
                             name: 'rules',
                             text: '规则数',
@@ -84,29 +99,21 @@
                         }, {
                             text: '有效',
                             width: 100,
-                            items:[{
+                            items: [{
                                 iconCls: true,
                                 format: function (table, tr, item, data, opts) {
                                     item.addClass(data.activatedFlag ? 'icon-enable' : 'icon-disable');
                                 },
-                                handler:function (table, tr, item, data, opts) {
-                                    if(item.hasClass('icon-enable')){
+                                handler: function (table, tr, item, data, opts) {
+                                    if (item.hasClass('icon-enable')) {
                                         item.removeClass('icon-enable').addClass('icon-disable');
-                                    }else{
+                                    } else {
                                         item.removeClass('icon-disable').addClass('icon-enable');
                                     }
                                     console.log(arguments);
                                 }
                             }]
-                        }],
-                        onSelect: function (row, e, data) {
-                            var list = $("#tags-tree").treetable('crumbs', row);
-                            var txt = '';
-                            for (var i = 0, l = list.length; i < l; i++) {
-                                txt = list[i].record.tagText + ' / ' + txt;
-                            }
-                            $('#open-tags-dialog').data('select', data).val(txt);
-                        }
+                        }]
                     });
                 });
                 //    ]]>
