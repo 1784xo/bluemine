@@ -79,7 +79,7 @@ public class ChannelEntity extends PartitionEntity implements Serializable {
     @Override
     public String toString() {
         return "ChannelEntity{" +
-                "activatedFlag=" + activatedFlag +
+                "activated=" + activatedFlag +
                 ", channelCode='" + channelCode + '\'' +
                 ", channelNo=" + channelId +
                 ", channelNo='" + channelNo + '\'' +

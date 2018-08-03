@@ -55,7 +55,9 @@
                         treeTitle: '所有标签',
                         treeMinWidth: 200,
                         treeLeft: 10,
-                        treeEditor: true,
+                        treeEditor: function (table, tr, data, opts) {
+                            return data.customizable;
+                        },
                         expanderLeft: 20,
                         width: '100%',
                         nodeTextField: 'tagText',

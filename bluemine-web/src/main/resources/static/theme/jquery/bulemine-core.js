@@ -204,12 +204,12 @@ $.default = function (a, b) {
                 '<button class="expand-icon">+</button><span class="tree-node-text" >' + data[opts.nodeTextField] + '</span></td>');
             tr.append(node);
 
-            if (!!opts.treeEditor) {
+            if (($.isFunction(opts.treeEditor) && opts.treeEditor(table, tr, data, opts)) || (opts.treeEditor === true)) {
                 node.find('.tree-node-text').bind('dblclick', function () {
                     METHODS.onCancelEditor(_editor, opts);
                     $(this).html('').append(_editor);
                     _editor.data('selected', tr).find('input').focus().val(tr.data('originData')[opts.nodeTextField]);
-                })
+                });
             }
 
             $.each(opts.columns, function (i) {

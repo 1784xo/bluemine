@@ -117,10 +117,10 @@ public class TagEntity extends DescriptionEntity implements Serializable {
     @Override
     public String toString() {
         return "TagEntity{" +
-                "activatedFlag=" + activated +
+                "activated=" + activated +
                 ", channelId=" + channelId +
                 ", parentId=" + parentId +
-                ", propertyFlag=" + customizable +
+                ", customizable=" + customizable +
                 ", tagId=" + tagId +
                 ", tagNo=" + tagNo +
                 ", tagText='" + tagText + '\'' +
@@ -133,8 +133,8 @@ public class TagEntity extends DescriptionEntity implements Serializable {
         return this;
     }
 
-    public TagEntity activatedFlag(Boolean activatedFlag) {
-        this.activated = activatedFlag;
+    public TagEntity activated(Boolean activated) {
+        this.activated = activated;
         return this;
     }
 
@@ -158,8 +158,8 @@ public class TagEntity extends DescriptionEntity implements Serializable {
         return this;
     }
 
-    public TagEntity propertyFlag(Boolean propertyFlag) {
-        this.customizable = propertyFlag;
+    public TagEntity customizable(Boolean customizable) {
+        this.customizable = customizable;
         return this;
     }
 }

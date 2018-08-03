@@ -23,7 +23,7 @@ public class TagResponse implements Serializable {
 
     private long parentId;
 
-    private boolean propertyFlag;
+    private boolean customizable;
 
     private List<TagResponse> childrens = new ArrayList<TagResponse>();
 
@@ -77,12 +77,12 @@ public class TagResponse implements Serializable {
         this.parentId = parentId;
     }
 
-    public boolean getPropertyFlag() {
-        return propertyFlag;
+    public boolean getCustomizable() {
+        return customizable;
     }
 
-    public void setPropertyFlag(boolean propertyFlag) {
-        this.propertyFlag = propertyFlag;
+    public void setCustomizable(boolean customizable) {
+        this.customizable = customizable;
     }
 
     public void addChildren(TagResponse children){
@@ -116,7 +116,7 @@ public class TagResponse implements Serializable {
                 ", channelId=" + channelId +
                 ", childrens=" + childrens +
                 ", parentId=" + parentId +
-                ", propertyFlag=" + propertyFlag +
+                ", customizable=" + customizable +
                 ", rules=" + rules +
                 ", tagCode='" + tagCode + '\'' +
                 ", tagId=" + tagId +

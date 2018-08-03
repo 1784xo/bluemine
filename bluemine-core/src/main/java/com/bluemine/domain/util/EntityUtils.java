@@ -72,7 +72,7 @@ public abstract class EntityUtils {
         response.setActivated(tag.getActivated());
         response.setChannelId(tag.getChannelId());
         response.setParentId(tag.getParentId());
-        response.setPropertyFlag(tag.getCustomizable());
+        response.setCustomizable(tag.getCustomizable());
         response.setTagCode(tag.getTagNo());
         response.setTagId(tag.getTagId());
         response.setTagText(tag.getTagText());

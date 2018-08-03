@@ -96,10 +96,10 @@ public class TabService {
                 .tagNo(tagNo)
                 .tagId(idWorker.nextId())
                 .tagText(tagText)
-                .activatedFlag(true)
+                .activated(true)
                 .channelId(channelId)
                 .parentId(parentId)
-                .propertyFlag(false);
+                .customizable(false);
 
         TagResponse response = EntityUtils.toResponse(tagEntity);
 
@@ -121,7 +121,7 @@ public class TabService {
 
         TagEntity tagEntity = tagRepository.findOneByChannelIdAndTagId(channelId, tagId);
         AssertUtils.notNull(tagEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
-        AssertUtils.notTrue(tagEntity.getCustomizable(), ExceptionMessageEnum.LOGIC_EXCEPTION);
+        AssertUtils.isTrue(tagEntity.getCustomizable(), ExceptionMessageEnum.LOGIC_EXCEPTION);
 
         if (tagText != null) {
             tagEntity.setTagText(tagText);
