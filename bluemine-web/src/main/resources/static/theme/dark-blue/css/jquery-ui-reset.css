@@ -29,7 +29,8 @@
     background-image: url("/theme/jquery/jquery-ui/images/ui-icons_cc0000_256x240.png");
 }
 
-.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr{
+
+.ui-corner-all{
     border-radius: 0;
 }
 
@@ -106,7 +107,7 @@
 
 /*input*/
 input{
-    padding: 3px;
+    padding: 4px 4px;
     line-height: 16px;
     background-color: #E6F3FB;
     border: 1px solid #B4CBE7;
@@ -234,14 +235,4 @@ input.hasDatepicker {
     border-top: none;
     border-left: none;
     border-right: none;
-}
-
-/*menu*/
-.ui-selectmenu-menu.ui-front{
-    z-index: 102;
-}
-
-.treetable .ui-selectmenu-button span.ui-selectmenu-text{
-    padding:3px;
-    line-height: 16px;
 }
