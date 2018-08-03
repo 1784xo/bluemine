@@ -23,77 +23,11 @@
             border-right: 1px solid #DEDEDE;
             border-bottom: 1px solid #DEDEDE;
         }
-
-        .treetable > tbody > tr > td > span {
-            overflow: inherit;
-        }
     </style>
 </head>
 <body>
 <div th:replace="/common/header::header"></div>
 <div th:replace="/common/main-west::main-west(3, '3-1')"></div>
-
-<div id="rules-dialog" style="display: none;" title="配置规则">
-    <table class="treetable" cellpadding="0" cellspacing="0" border="0">
-        <tbody>
-        <tr>
-            <th style="width: 100px;">会话类型</th>
-            <th style="width: 100px;">数据角色</th>
-            <th>规则</th>
-            <th style="width: 100px;"></th>
-        </tr>
-        <tr>
-            <td>
-                <span>
-                    <select name="callType">
-                        <option value="ALL">全部</option>
-                        <option value="AUD">语音</option>
-                        <option value="CMT">评论</option>
-                        <option value="OL">在线</option>
-                    </select>
-                </span>
-            </td>
-            <td>
-                <span>
-                    <select name="roleType">
-                        <option value="ALL">全部</option>
-                        <option value="CSC">客服</option>
-                        <option value="CUST">客户</option>
-                    </select>
-                </span>
-            </td>
-            <td>
-                <span>
-                <input name="ruleExps" style="width: 90%;"/>
-                </span>
-            </td>
-            <td>
-                <span>
-                    <button>创建</button>
-                </span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<script type="text/javascript" th:inline="javascript">
-    //    <![CDATA[
-    bulemine.loader(function () {
-        $("#rules-dialog").dialog({
-            width: 800,
-            height: 500,
-            autoOpen: false,
-            resizable: false,
-            modal: true,
-            buttons: {
-                '关闭': function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-    });
-    //    ]]>
-</script>
 
 <div class="main-center">
     <div class="main-center-box">
@@ -116,58 +50,6 @@
             <script type="text/javascript" th:inline="javascript">
                 //                <![CDATA[
                 bulemine.loader(function () {
-
-
-                    function saveRule(btn, call, role, exps, rule) {
-                        var params = {
-                            channelId: rule.channelId,
-                            ruleId: rule.ruleId,
-                            callType: call.val(),
-                            roleType: role.val(),
-                            ruleExps: exps.val()
-                        };
-                        bulemine.ajaxJson({
-                            url: "/service/rule/update",
-                            masking: true,
-                            payload: 'data',
-                            params: params,
-                            callback: function (ok, data, msg, opts) {
-                                if (!ok) {
-                                    alert('[ERROR]' + msg);
-                                }
-                                console.log(arguments);
-                            }
-                        });
-                    }
-
-                    function initRuleDialog(table, tr, item, data, opts) {
-                        var dialog = $('#rules-dialog');
-                        dialog.find('tr.default-state').remove();
-                        $.each(data.rules, function (i) {
-                            console.log(this);
-                            var rule = this;
-                            var tr = $('<tr class="default-state" data-ruleId="' + this.ruleId + '">' +
-                                    '<td><span><select name="callType" style="width:80px;"><option value="ALL">全部</option><option value="AUD">语音</option><option value="CMT">评论</option><option value="OL">在线</option></select></span></td>' +
-                                    '<td><span><select name="roleType" style="width:80px;"><option value="ALL">全部</option><option value="CSC">客服</option><option value="CUST">客户</option></select></span></td>' +
-                                    '<td><span><input name="ruleExps" style="width: 90%;"/></span></td>' +
-                                    '<td><span><button class="rule-save">保存</button><button class="rule-remove">删除</button></span></td>' +
-                                    '</tr>');
-                            dialog.find('table').append(tr);
-
-                            var call = tr.find('select[name="callType"]').val(this.callType).selectmenu();
-                            var role = tr.find('select[name="roleType"]').val(this.roleType).selectmenu();
-                            var exps = tr.find('input[name="ruleExps"]').val(this.ruleExps);
-                            tr.find('button.rule-save').bind('click', function () {
-                                saveRule(this, call, role, exps, rule);
-                            });
-                            tr.find('button.rule-remove').bind('click', function () {
-                                console.log('remove');
-                            });
-                        });
-                        dialog.dialog('open');
-//                        console.log(arguments);
-                    };
-
                     $("#tags-tree").treetable({
                         data: TAGTREE_DATA,
                         treeTitle: '所有标签',
@@ -214,18 +96,12 @@
                             }
                         }, {
                             text: '操作',
-                            width: 150,
+                            width: 100,
                             items: [{
 //                                iconCls: 'icon-new',  // Use a URL in the icon config
-                                text: '添加子级',
+                                text: '添加',
                                 handler: function (table, tr, item, data, opts) {
                                     console.log(arguments);
-                                }
-                            }, {
-//                                iconCls: 'icon-new',  // Use a URL in the icon config
-                                text: '配置规则',
-                                handler: function (table, tr, item, data, opts) {
-                                    initRuleDialog(table, tr, item, data, opts);
                                 }
                             }]
                         }, {

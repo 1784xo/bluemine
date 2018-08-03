@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>语义分析 - 标签分析1</title>
+    <title>语义分析 - 标签分析</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="/theme/jquery/jquery-ui/jquery-2.2.4.js"></script>
     <script src="/theme/jquery/jquery-ui/jquery-ui-1.11.4.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
+    <script src="/theme/echarts.min.js"></script>
+    <script src="/theme/tag/options.js"></script>
+    <script src="/theme/tag/index.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
     <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
@@ -105,16 +108,13 @@
                 <div id="tabs-1" class="control-group">
                     <ul class="main-center-filter">
                         <li>
-                            <label>起始日：</label><input type="text" class="form"/>
+                            <label>日期：</label><input type="text" class="to" />
                         </li>
                         <li>
-                            <label>结束日：</label><input type="text" class="to"/>
+                            <label>标签：</label><input readonly="true" style="width: 300px;" class="tag-select" id="open-tags-dialog" value="全部 / "/>
                         </li>
                         <li>
-                            <label>标签：</label><input readonly="true" style="width: 300px;" class="tag-select" id="open-tags-dialog"/>
-                        </li>
-                        <li>
-                            <button>查询</button>
+                            <button id="subBtn">查询</button>
                         </li>
                     </ul>
 
@@ -129,22 +129,28 @@
                     </script>
                     <div class="main-center-panel">
                         <div class="main-center-panel-header">
-                            趋势图
+                            近30天趋势图
                         </div>
                         <div class="main-center-panel-container">
                             <ui class="panel-gadget">
-                                <li class="panel-gadget-col">
+                                <!--<li class="panel-gadget-col">
                                     <select id="trend-gradient-date" name="trend-gradient-date" style="width:50px;">
                                         <option selected="selected">日</option>
                                         <option>周</option>
                                         <option>月</option>
                                     </select>
-                                </li>
+                                </li>-->
                                 <li class="panel-gadget-col">
-                                    <button>导出</button>
+                                    <button id="exportbtn">导出</button>
                                 </li>
                             </ui>
-                            <div class="panel-canvas" style="width: 100%; height: 300px;">
+                            <div id="kind" class="panel-canvas" style="width: 100%; height: 30px;z-index: 1;">
+                                <div style="width: 120px;line-height: 27px;;text-align: center;margin: 0 auto;">
+                                    <div id="led1" class="led-enable">次数</div>
+                                    <div id="led2" class="led-disable" style="margin-left: 10px;">会话数</div>
+                                </div>
+                            </div>
+                            <div id="main" class="panel-canvas" style="width: 100%; height: 300px;z-index: 1;">
 
                             </div>
                         </div>
@@ -173,7 +179,10 @@
                             子标签分布
                         </div>
                         <div class="main-center-panel-container">
-                            <div>饼状图</div>
+                            <div style="height: 300px;">
+                                <div id="fdiv" style="float: left;width: 50%; height: 300px;z-index: 1;">aaa</div>
+                                <div id="cdiv" style="float: left;width: 50%; height: 300px;z-index: 1;">bbb</div>
+                            </div>
                         </div>
                     </div>
                     <div class="main-center-panel">

@@ -114,3 +114,22 @@ header nav .logo {
 .main-center-filter label {
     color: #888888;
 }
+
+.led-enable {
+    float: left;
+    width: 55px;
+    line-height: 27px;
+    color: #fff;
+    background-color: #003eff;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.led-disable {
+    float: left;
+    width: 55px;
+    line-height: 27px;
+    background-color: #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
