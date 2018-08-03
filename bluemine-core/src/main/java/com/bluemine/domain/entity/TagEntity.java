@@ -21,8 +21,8 @@ public class TagEntity extends DescriptionEntity implements Serializable {
     private Long tagId;
 
     @Type(type = "yes_no")
-    @Column(name = "ACTIVATED_FLAG", nullable = false, length = 1)
-    private Boolean activatedFlag;
+    @Column(name = "ACTIVATED", nullable = false, length = 1)
+    private Boolean activated;
 
     @Column(name = "CHANNEL_ID", updatable = false, nullable = false)
     private Long channelId;
@@ -37,8 +37,8 @@ public class TagEntity extends DescriptionEntity implements Serializable {
     private Long parentId;
 
     @Type(type = "yes_no")
-    @Column(name = "PROPERTY_FLAG", nullable = false, length = 1)
-    private Boolean propertyFlag;
+    @Column(name = "CUSTOMIZABLE", nullable = false, length = 1)
+    private Boolean customizable;
 
     public Long getTagId() {
         return tagId;
@@ -48,12 +48,12 @@ public class TagEntity extends DescriptionEntity implements Serializable {
         this.tagId = tagId;
     }
 
-    public Boolean getActivatedFlag() {
-        return activatedFlag;
+    public Boolean getActivated() {
+        return activated;
     }
 
-    public void setActivatedFlag(Boolean activatedFlag) {
-        this.activatedFlag = activatedFlag;
+    public void setActivated(Boolean activatedFlag) {
+        this.activated = activatedFlag;
     }
 
     public Long getChannelId() {
@@ -88,12 +88,12 @@ public class TagEntity extends DescriptionEntity implements Serializable {
         this.parentId = parentId;
     }
 
-    public Boolean getPropertyFlag() {
-        return propertyFlag;
+    public Boolean getCustomizable() {
+        return customizable;
     }
 
-    public void setPropertyFlag(Boolean propertyFlag) {
-        this.propertyFlag = propertyFlag;
+    public void setCustomizable(Boolean propertyFlag) {
+        this.customizable = propertyFlag;
     }
 
     @Override
@@ -117,10 +117,10 @@ public class TagEntity extends DescriptionEntity implements Serializable {
     @Override
     public String toString() {
         return "TagEntity{" +
-                "activatedFlag=" + activatedFlag +
+                "activatedFlag=" + activated +
                 ", channelId=" + channelId +
                 ", parentId=" + parentId +
-                ", propertyFlag=" + propertyFlag +
+                ", propertyFlag=" + customizable +
                 ", tagId=" + tagId +
                 ", tagNo=" + tagNo +
                 ", tagText='" + tagText + '\'' +
@@ -134,7 +134,7 @@ public class TagEntity extends DescriptionEntity implements Serializable {
     }
 
     public TagEntity activatedFlag(Boolean activatedFlag) {
-        this.activatedFlag = activatedFlag;
+        this.activated = activatedFlag;
         return this;
     }
 
@@ -159,7 +159,7 @@ public class TagEntity extends DescriptionEntity implements Serializable {
     }
 
     public TagEntity propertyFlag(Boolean propertyFlag) {
-        this.propertyFlag = propertyFlag;
+        this.customizable = propertyFlag;
         return this;
     }
 }

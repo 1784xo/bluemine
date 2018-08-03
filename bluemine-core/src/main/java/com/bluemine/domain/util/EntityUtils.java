@@ -69,10 +69,10 @@ public abstract class EntityUtils {
 
     public static TagResponse toResponse(TagEntity tag) {
         TagResponse response = new TagResponse();
-        response.setActivatedFlag(tag.getActivatedFlag());
+        response.setActivated(tag.getActivated());
         response.setChannelId(tag.getChannelId());
         response.setParentId(tag.getParentId());
-        response.setPropertyFlag(tag.getPropertyFlag());
+        response.setPropertyFlag(tag.getCustomizable());
         response.setTagCode(tag.getTagNo());
         response.setTagId(tag.getTagId());
         response.setTagText(tag.getTagText());

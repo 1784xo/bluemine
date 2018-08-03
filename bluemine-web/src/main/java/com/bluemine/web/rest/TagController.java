@@ -47,6 +47,7 @@ public class TagController extends AbstractController {
         return ResponseEntity.accepted().body(restfulResponse);
     }
 
+    @ResponseBody
     @PostMapping("create")
     public ResponseEntity create(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
@@ -57,6 +58,7 @@ public class TagController extends AbstractController {
         return ResponseEntity.ok().body(restfulResponse);
     }
 
+    @ResponseBody
     @PostMapping("update")
     public ResponseEntity update(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();

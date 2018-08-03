@@ -14,10 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/view")
 public class ViewResolver {
-
-    private static final ModelAndView INDEX = new ModelAndView("/index");
-
-    @RequestMapping(value = "/**", method = RequestMethod.GET)
+    @RequestMapping(value = "**")
     public String view(HttpServletRequest request) {
         return request.getRequestURI().substring(5);
     }

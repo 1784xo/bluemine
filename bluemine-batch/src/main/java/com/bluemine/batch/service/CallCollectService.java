@@ -27,8 +27,6 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
@@ -169,7 +167,7 @@ public class CallCollectService {
 
     private static Stack<TagCollectEntity> vein(TagResponse tag, Map<Long, TagResponse> tags, Call call
             , SessionContext context) {
-        if (!tag.getActivatedFlag()) {
+        if (!tag.getActivated()) {
             return null;
         }
         Map<Long, TagCollectEntity> venation = new LinkedHashMap<>();
@@ -181,7 +179,7 @@ public class CallCollectService {
         TagResponse parentTag;
         while ((parentId != null) && (parentId.compareTo(0L) > 0)) {
             parentTag = tags.get(parentId);
-            if ((parentTag == null) || (!parentTag.getActivatedFlag())) {
+            if ((parentTag == null) || (!parentTag.getActivated())) {
                 venation.clear();
                 return null;
             }

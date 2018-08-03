@@ -13,7 +13,7 @@ public class TagResponse implements Serializable {
 
     private long tagId;
 
-    private boolean activatedFlag;
+    private boolean activated;
 
     private long channelId;
 
@@ -37,12 +37,12 @@ public class TagResponse implements Serializable {
         this.tagId = tagId;
     }
 
-    public boolean getActivatedFlag() {
-        return activatedFlag;
+    public boolean getActivated() {
+        return activated;
     }
 
-    public void setActivatedFlag(boolean activatedFlag) {
-        this.activatedFlag = activatedFlag;
+    public void setActivated(boolean activated) {
+        this.activated = activated;
     }
 
     public long getChannelId() {
@@ -112,7 +112,7 @@ public class TagResponse implements Serializable {
     @Override
     public String toString() {
         return "TagResponse{" +
-                "activatedFlag=" + activatedFlag +
+                "activated=" + activated +
                 ", channelId=" + channelId +
                 ", childrens=" + childrens +
                 ", parentId=" + parentId +

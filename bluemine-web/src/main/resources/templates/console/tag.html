@@ -66,11 +66,17 @@
                         afteredit: function (target, origin, record, editer, opts) {
                             if (!$.isEmptyObject(record)) {
                                 bulemine.ajaxJson({
-                                    url: "/service/tag/findAll/49252889384718336",
-//                                url: "/service/tag/test/49252889384718336",
+                                    url: "/service/tag/update",
                                     masking: true,
-                                    data: record,
+                                    payload: 'data',
+                                    params: $.extend({
+                                        channelId: origin.channelId,
+                                        tagId: origin.tagId
+                                    }, record),
                                     callback: function (ok, data, msg, opts) {
+                                        if (!ok) {
+                                            alert('[ERROR]' + msg);
+                                        }
                                         console.log(arguments);
                                     }
                                 });
@@ -102,14 +108,32 @@
                             items: [{
                                 iconCls: true,
                                 format: function (table, tr, item, data, opts) {
-                                    item.addClass(data.activatedFlag ? 'icon-enable' : 'icon-disable');
+                                    item.addClass(data.activated ? 'icon-enable' : 'icon-disable');
                                 },
                                 handler: function (table, tr, item, data, opts) {
                                     if (item.hasClass('icon-enable')) {
+                                        data.activated = false;
                                         item.removeClass('icon-enable').addClass('icon-disable');
                                     } else {
+                                        data.activated = true;
                                         item.removeClass('icon-disable').addClass('icon-enable');
                                     }
+                                    bulemine.ajaxJson({
+                                        url: "/service/tag/update",
+                                        masking: true,
+                                        payload: 'data',
+                                        params: {
+                                            channelId: data.channelId,
+                                            tagId: data.tagId,
+                                            activated: data.activated
+                                        },
+                                        callback: function (ok, data, msg, opts) {
+                                            if (!ok) {
+                                                alert('[ERROR]' + msg);
+                                            }
+                                            console.log(arguments);
+                                        }
+                                    });
                                     console.log(arguments);
                                 }
                             }]

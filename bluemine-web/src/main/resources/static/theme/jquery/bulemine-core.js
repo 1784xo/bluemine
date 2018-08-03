@@ -7,8 +7,9 @@ var bulemine = (function () {
     var _mask_count = 200;
     var _def_json = {
         dataType: 'JSON',
-        contentType: 'application/json',
+        contentType: 'application/json;charset=UTF-8',
         masking: false,
+        payload: null,
         type: "POST",
         success: function () {
         }
@@ -33,9 +34,8 @@ var bulemine = (function () {
                 params.mask = mask;
                 $(document.body).append(mask);
             }
-
             params = $.extend(params, {
-                data: JSON.stringify(opts.data),
+                data: opts.params,
                 callback: function (status, data, msg) {
                     if (!!params.mask) {
                         params.mask.remove();
@@ -53,6 +53,15 @@ var bulemine = (function () {
                     params.callback(status, null, error);
                 }
             });
+
+            if (!!opts.payload) {
+                var req = {};
+                req[opts.payload] = params.data;
+                params.data = req;
+            }
+
+            params.data = JSON.stringify(params.data);
+
             return $.ajax(params);
         }
     };
@@ -85,8 +94,10 @@ $.default = function (a, b) {
         rootVisible: true,
         rootText: 'root',
         rowHeight: '2em',
-        afteredit: function () {},
-        onSelect: function () {}
+        afteredit: function () {
+        },
+        onSelect: function () {
+        }
     };
 
     var METHODS = {
