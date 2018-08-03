@@ -36,7 +36,7 @@ public class RuleService {
     @Inject
     private RuleRepository ruleRepository;
 
-    public List<RuleEntity> findAll(Long channelId){
+    public List<RuleEntity> findAll(Long channelId) {
         List<RuleEntity> rules = ruleRepository.findAllByChannelId(channelId);
         return rules;
     }
@@ -83,10 +83,30 @@ public class RuleService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public int delete(HttpRestfulRequest<RuleRequest> request){
+    public int delete(HttpRestfulRequest<RuleRequest> request) {
         RuleRequest data = request.getData();
         Long channelId = data.getChannelId();
         Long ruleId = data.getRuleId();
         return ruleRepository.delete(channelId, ruleId);
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public RuleResponse update(HttpRestfulRequest<RuleRequest> request) {
+        RuleRequest data = request.getData();
+        Long ruleId = data.getRuleId();
+        Long channelId = data.getChannelId();
+        RuleEntity ruleEntity = ruleRepository.findOne(ruleId);
+        AssertUtils.notNull(ruleEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+        AssertUtils.isTrue(ruleEntity.getChannelId().compareTo(channelId) == 0, ExceptionMessageEnum.DB_UNAUTHORIZED_UNMATCH);
+
+        String callType = data.getCallType();
+        String roleType = data.getRoleType();
+        String ruleExps = data.getRuleExps();
+        ruleEntity.setCallType(callType);
+        ruleEntity.setRoleType(roleType);
+        ruleEntity.setRuleExps(ruleExps);
+        ruleRepository.save(ruleEntity);
+        RuleResponse response = EntityUtils.toResponse(ruleEntity);
+        return response;
     }
 }

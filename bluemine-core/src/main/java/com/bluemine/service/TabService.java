@@ -109,9 +109,6 @@ public class TabService {
 
     @Transactional(rollbackOn = Exception.class)
     public TagResponse update(RestfulRequest<TagRequest> request) {
-        RequestContext<TagRequest> context = request.getContext();
-        RepositoryProxy repository = context.getRepository();
-
         TagRequest data = request.getData();
         Long tagId = data.getTagId();
         Long channelId = data.getChannelId();
@@ -121,7 +118,6 @@ public class TabService {
 
         TagEntity tagEntity = tagRepository.findOneByChannelIdAndTagId(channelId, tagId);
         AssertUtils.notNull(tagEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
-        AssertUtils.isTrue(tagEntity.getCustomizable(), ExceptionMessageEnum.LOGIC_EXCEPTION);
 
         if (tagText != null) {
             tagEntity.setTagText(tagText);
@@ -135,9 +131,7 @@ public class TabService {
             tagEntity.setParentId(parentId);
         }
 
-        tagEntity.markModified();
-
-        repository.commit(tagEntity);
+        tagRepository.save(tagEntity);
 
         TagResponse response = EntityUtils.toResponse(tagEntity);
         return response;

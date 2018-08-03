@@ -6,10 +6,7 @@ import com.bluemine.service.RuleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
@@ -24,6 +21,7 @@ public class RuleController extends AbstractController {
     @Inject
     private RuleService ruleService;
 
+    @ResponseBody
     @PostMapping("create")
     public ResponseEntity create(@RequestBody HttpRestfulRequest<RuleRequest> restfulRequest){
         HttpRestfulResponse restfulResponse = createRestfulResponse();
@@ -34,12 +32,24 @@ public class RuleController extends AbstractController {
         return ResponseEntity.ok().body(restfulResponse);
     }
 
+    @ResponseBody
     @PostMapping("delete")
     public ResponseEntity delete(@RequestBody HttpRestfulRequest<RuleRequest> restfulRequest){
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         int num = ruleService.delete(restfulRequest);
         restfulResponse.setResult(num);
+
+        return ResponseEntity.ok().body(restfulResponse);
+    }
+
+    @ResponseBody
+    @PostMapping("update")
+    public ResponseEntity update(@RequestBody HttpRestfulRequest<RuleRequest> restfulRequest){
+        HttpRestfulResponse restfulResponse = createRestfulResponse();
+
+        RuleResponse response = ruleService.update(restfulRequest);
+        restfulResponse.setResult(response);
 
         return ResponseEntity.ok().body(restfulResponse);
     }

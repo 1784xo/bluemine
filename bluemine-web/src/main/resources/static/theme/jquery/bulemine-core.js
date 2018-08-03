@@ -30,7 +30,7 @@ var bulemine = (function () {
             var params = $.extend({}, _def_json, opts);
 
             if (!!params.masking) {
-                var mask = $('<div class="ui-widget-overlay ui-front" z-index="' + (_mask_count++) + '"><img src="/theme/dark-blue/images/loading2.gif"/></div>');
+                var mask = $('<div class="ui-widget-overlay ui-front" style="z-index:' + (_mask_count++) + ';"><img src="/theme/dark-blue/images/loading2.gif"/></div>');
                 params.mask = mask;
                 $(document.body).append(mask);
             }
