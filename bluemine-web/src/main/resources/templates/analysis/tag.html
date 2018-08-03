@@ -9,9 +9,11 @@
     <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
     <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
+
+    <script src="/theme/jquery/jquery-treetable/js/jquery-treetable-1.0.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
 
     <style>
         /*index.css*/
@@ -84,7 +86,7 @@
                 for (var i = 0, l = list.length; i < l; i++) {
                     txt = list[i].record.tagText+' / '+txt;
                 }
-                $('#open-tags-dialog').data('select', data).val(txt);
+                $('#open-tags-dialog').data('selected', data).val(txt);
             }
         });
     });

@@ -9,10 +9,11 @@
     <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
     <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
 
+    <script src="/theme/jquery/jquery-treetable/js/jquery-treetable-1.0.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
     <style>
         .main-center-filter {
             border: 1px solid #DEDEDE;
@@ -117,8 +118,35 @@
                 //                <![CDATA[
                 bulemine.loader(function () {
 
+                    function removeRule(btn, ruletr, call, role, exps, rule, tag, index, table, tr) {
+                        console.log(arguments);
+                        bulemine.ajaxJson({
+                            url: "/service/rule/deletebak",
+                            masking: true,
+                            payload: 'data',
+                            params: {
+                                channelId: rule.channelId,
+                                ruleId: rule.ruleId
+                            },
+                            callback: function (ok, data, msg, opts) {
+//                                if (ok) {
+                                $.each(tag.rules, function (i) {
+                                    if(this.ruleId == rule.ruleId){
+                                        tag.rules.splice(i, 1);
+                                        table.treetable('updateCell', tr, 'rules', tag.rules);
+                                        return true;
+                                    }
+                                });
+//                                } else {
+//                                    alert('[ERROR]' + msg);
+//                                }
+                                console.log(rule);
+                            }
+                        });
+                    }
 
-                    function saveRule(btn, call, role, exps, rule) {
+                    function saveRule(btn, ruletr, call, role, exps, rule, tag, index, table, tr) {
+                        console.log(arguments);
                         var params = {
                             channelId: rule.channelId,
                             ruleId: rule.ruleId,
@@ -132,50 +160,51 @@
                             payload: 'data',
                             params: params,
                             callback: function (ok, data, msg, opts) {
-                                if (!ok) {
+                                if (ok) {
+                                    $.extend(rule, data);
+                                } else {
                                     alert('[ERROR]' + msg);
                                 }
-                                console.log(arguments);
+                                console.log(rule);
                             }
                         });
                     }
 
-                    function initRuleDialog(table, tr, item, data, opts) {
+                    function initRuleDialog(table, tr, item, tag, opts) {
                         var dialog = $('#rules-dialog');
                         dialog.find('tr.default-state').remove();
-                        $.each(data.rules, function (i) {
-                            console.log(this);
+                        $.each(tag.rules, function (i) {
                             var rule = this;
-                            var tr = $('<tr class="default-state" data-ruleId="' + this.ruleId + '">' +
+                            var ruletr = $('<tr class="default-state" data-ruleId="' + this.ruleId + '">' +
                                     '<td><span><select name="callType" style="width:80px;"><option value="ALL">全部</option><option value="AUD">语音</option><option value="CMT">评论</option><option value="OL">在线</option></select></span></td>' +
                                     '<td><span><select name="roleType" style="width:80px;"><option value="ALL">全部</option><option value="CSC">客服</option><option value="CUST">客户</option></select></span></td>' +
                                     '<td><span><input name="ruleExps" style="width: 90%;"/></span></td>' +
                                     '<td><span><button class="rule-save">保存</button><button class="rule-remove">删除</button></span></td>' +
                                     '</tr>');
-                            dialog.find('table').append(tr);
+                            dialog.find('table').append(ruletr);
 
-                            var call = tr.find('select[name="callType"]').val(this.callType).selectmenu();
-                            var role = tr.find('select[name="roleType"]').val(this.roleType).selectmenu();
-                            var exps = tr.find('input[name="ruleExps"]').val(this.ruleExps);
-                            tr.find('button.rule-save').bind('click', function () {
-                                saveRule(this, call, role, exps, rule);
+                            var call = ruletr.find('select[name="callType"]').val(this.callType).selectmenu();
+                            var role = ruletr.find('select[name="roleType"]').val(this.roleType).selectmenu();
+                            var exps = ruletr.find('input[name="ruleExps"]').val(this.ruleExps);
+                            ruletr.find('button.rule-save').bind('click', function () {
+                                saveRule(this, ruletr, call, role, exps, rule, tag, i, table, tr);
                             });
-                            tr.find('button.rule-remove').bind('click', function () {
-                                console.log('remove');
+                            ruletr.find('button.rule-remove').bind('click', function () {
+                                removeRule(this, ruletr, call, role, exps, rule, tag, i, table, tr);
                             });
                         });
                         dialog.dialog('open');
-//                        console.log(arguments);
+                        console.log(arguments);
                     };
 
                     $("#tags-tree").treetable({
                         data: TAGTREE_DATA,
-                        treeTitle: '所有标签',
-                        treeMinWidth: 200,
-                        treeLeft: 10,
                         treeEditor: function (table, tr, data, opts) {
                             return data.customizable;
                         },
+                        treeTitle: '所有标签',
+                        treeMinWidth: 200,
+                        treeLeft: 10,
                         expanderLeft: 20,
                         width: '100%',
                         nodeTextField: 'tagText',
@@ -194,7 +223,9 @@
                                         tagId: origin.tagId
                                     }, record),
                                     callback: function (ok, data, msg, opts) {
-                                        if (!ok) {
+                                        if (ok) {
+
+                                        } else {
                                             alert('[ERROR]' + msg);
                                         }
                                         console.log(arguments);
@@ -254,7 +285,9 @@
                                             activated: data.activated
                                         },
                                         callback: function (ok, data, msg, opts) {
-                                            if (!ok) {
+                                            if (ok) {
+
+                                            } else {
                                                 alert('[ERROR]' + msg);
                                             }
                                             console.log(arguments);
