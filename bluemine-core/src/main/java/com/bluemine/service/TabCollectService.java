@@ -46,7 +46,7 @@ public class TabCollectService {
         Long channelId = data.getChannelNo();
         Long tagId = (data.getTagId() == null ? 0 : data.getTagId());
 
-        List<TagEntity> allTags = tagRepository.findAllByChannelId(channelId);
+        List<TagEntity> allTags = tagRepository.findAll(channelId);
         List<Long> tagIds = new ArrayList<>();
         tagIds = EntityUtils.getTagCircle(tagIds, tagId, allTags);
 
@@ -99,7 +99,7 @@ public class TabCollectService {
         LocalDate end = data.getCallDate();
         LocalDate start = end.plusDays(-29);
 
-        List<TagEntity> allTags = tagRepository.findAllByChannelId(channelId);
+        List<TagEntity> allTags = tagRepository.findAll(channelId);
         List<TagCollectEntity> listCollect = null;
         if (tagId == 0) {
             List<Long> tagIds = EntityUtils.getTagIdsByParentId(tagId, allTags);
@@ -125,7 +125,7 @@ public class TabCollectService {
         Integer size = data.getSize();
         String subType = data.getSubType();
 
-        List<TagEntity> allTags = tagRepository.findAllByChannelId(channelId);
+        List<TagEntity> allTags = tagRepository.findAll(channelId);
         List<Long> tagIds = EntityUtils.getTagIdsByParentId(tagId, allTags);
         if (tagIds.size() == 0) {
             return null;

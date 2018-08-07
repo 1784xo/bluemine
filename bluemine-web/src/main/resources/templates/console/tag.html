@@ -28,12 +28,63 @@
         .treetable > tbody > tr > td > span {
             overflow: inherit;
         }
+
+        .rule-create {
+
+        }
+
+        .rule-save {
+
+        }
+
+        .rule-remove {
+
+        }
+
+        .treetable .icon-new {
+            background-image: url("/theme/dark-blue/images/icons/doc_plus.png");
+            background-repeat: no-repeat;
+            background-position: 0 4px;
+        }
+
+        .treetable .icon-edit {
+            background-image: url("/theme/dark-blue/images/icons/doc_edit.png");
+            background-repeat: no-repeat;
+            background-position: 0 4px;
+        }
+
+        .treetable .icon-enable {
+            background-image: url("/theme/dark-blue/images/icons/icon-enable.png");
+            background-repeat: no-repeat;
+            background-position: 0 1px;
+            width: 60px;
+        }
+
+        .treetable .icon-disable {
+            background-image: url("/theme/dark-blue/images/icons/icon-disabled.png");
+            background-repeat: no-repeat;
+            background-position: 0 1px;
+            width: 60px;
+        }
     </style>
 </head>
 <body>
 <div th:replace="/common/header::header"></div>
 <div th:replace="/common/main-west::main-west(3, '3-1')"></div>
-
+<div id="tag-dialog" style="display: none;" title="添加标签">
+    <table class="form-layout" cellpadding="0" cellspacing="0" border="0">
+        <tbody>
+        <tr>
+            <td style="width: 80px; text-align: right;">层级：</td>
+            <td><span name="tagCrumbs" class="form-item"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">标签名：</td>
+            <td><input name="tagName" class="form-item"/></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 <div id="rules-dialog" style="display: none;" title="配置规则">
     <table class="treetable" cellpadding="0" cellspacing="0" border="0">
         <tbody>
@@ -70,31 +121,13 @@
             </td>
             <td>
                 <span>
-                    <button>创建</button>
+                    <button class="rule-create">创建</button>
                 </span>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-<script type="text/javascript" th:inline="javascript">
-    //    <![CDATA[
-    bulemine.loader(function () {
-        $("#rules-dialog").dialog({
-            width: 800,
-            height: 500,
-            autoOpen: false,
-            resizable: false,
-            modal: true,
-            buttons: {
-                '关闭': function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-    });
-    //    ]]>
-</script>
 
 <div class="main-center">
     <div class="main-center-box">
@@ -118,47 +151,167 @@
                 //                <![CDATA[
                 bulemine.loader(function () {
 
-                    function removeRule(btn, ruletr, call, role, exps, rule, tag, index, table, tr) {
-                        console.log(arguments);
-                        bulemine.ajaxJson({
-                            url: "/service/rule/deletebak",
-                            masking: true,
-                            payload: 'data',
-                            params: {
-                                channelId: rule.channelId,
-                                ruleId: rule.ruleId
+                    var treeEl = $("#tags-tree");
+
+                    var ruleDialogEl = $('#rules-dialog').dialog({
+                        width: 800,
+                        height: 500,
+                        autoOpen: false,
+                        resizable: false,
+                        modal: true,
+                        buttons: {
+                            '取消': function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+
+                    var tagDialogEl = $('#tag-dialog').dialog({
+                        autoOpen: false,
+                        resizable: false,
+                        width: 400,
+                        modal: true,
+                        buttons: {
+                            '确定': function () {
+                                var selected = tagDialogEl.data('selected');
+                                if (!!selected) {
+                                    var nameEl = tagDialogEl.find('[name="tagName"]');
+                                    var parentEl = selected.row;
+                                    var parent = selected.data;
+                                    bulemine.ajaxJson({
+                                        url: "/service/tag/create",
+                                        masking: true,
+                                        params: {
+                                            data: {
+                                                channelId: parent.channelId,
+                                                parentId: parent.tagId,
+                                                tagText: nameEl.val()
+                                            }
+                                        },
+                                        callback: function (ok, data, msg, opts) {
+                                            if(ok){
+                                                treeEl.treetable('appendNode', parentEl, data);
+                                            }else{
+                                                alert('[ERROR]'+msg);
+                                            }
+                                        }
+                                    });
+                                    $(this).dialog("close");
+                                } else {
+                                    alert('[ERROR]');
+                                }
                             },
-                            callback: function (ok, data, msg, opts) {
-//                                if (ok) {
-                                $.each(tag.rules, function (i) {
-                                    if(this.ruleId == rule.ruleId){
-                                        tag.rules.splice(i, 1);
-                                        table.treetable('updateCell', tr, 'rules', tag.rules);
-                                        return true;
+                            '取消': function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+
+                    (function () {
+                        var callType = ruleDialogEl.find('[name="callType"]');
+                        var roleType = ruleDialogEl.find('[name="roleType"]');
+                        var ruleExps = ruleDialogEl.find('[name="ruleExps"]');
+                        ruleDialogEl.find('button.rule-create').bind('click', function () {
+                            var selected = ruleDialogEl.data('selected');
+                            if (!!selected) {
+                                var record = selected.data;
+                                var rowEl = selected.row;
+                                bulemine.ajaxJson({
+                                    url: "/service/rule/create",
+                                    masking: true,
+                                    params: {
+                                        data: {
+                                            channelId: record.channelId,
+                                            tagId: record.tagId,
+                                            callType: callType.val(),
+                                            roleType: roleType.val(),
+                                            ruleExps: ruleExps.val()
+                                        }
+                                    },
+                                    callback: function (ok, data, msg, opts) {
+                                        callType.val('ALL');
+                                        roleType.val('ALL');
+                                        ruleExps.val('');
+                                        if (ok) {
+                                            var ruleEl = createRule(data, rowEl, record, opts);
+                                            ruleDialogEl.find('table').append(ruleEl);
+                                            record.rules.push(data);
+                                            var cell = treeEl.treetable('findCell', rowEl, 'rules');
+                                            treeEl.treetable('updateCell', cell, record.rules);
+                                        } else {
+                                            alert('[ERROR]' + msg);
+                                        }
                                     }
                                 });
-//                                } else {
-//                                    alert('[ERROR]' + msg);
-//                                }
-                                console.log(rule);
+                            } else {
+                                alert('[ERROR]');
                             }
                         });
+                    })();
+
+                    function createRule(rule, rowEl, record, opts) {
+                        var ruleEl = $('<tr class="default-state" data-ruleId="' + this.ruleId + '">' +
+                                '<td><span><select name="callType" style="width:80px;"><option value="ALL">全部</option><option value="AUD">语音</option><option value="CMT">评论</option><option value="OL">在线</option></select></span></td>' +
+                                '<td><span><select name="roleType" style="width:80px;"><option value="ALL">全部</option><option value="CSC">客服</option><option value="CUST">客户</option></select></span></td>' +
+                                '<td><span><input name="ruleExps" style="width: 90%;"/></span></td>' +
+                                '<td><span><button class="rule-save">保存</button><button class="rule-remove">删除</button></span></td>' +
+                                '</tr>');
+
+                        var callEl = ruleEl.find('select[name="callType"]').val(rule.callType).selectmenu();
+                        var roleEl = ruleEl.find('select[name="roleType"]').val(rule.roleType).selectmenu();
+                        var expsEl = ruleEl.find('input[name="ruleExps"]').val(rule.ruleExps);
+                        ruleEl.find('button.rule-save').bind('click', function () {
+                            saveRule(this, ruleEl, rule, callEl, roleEl, expsEl, rowEl, record, opts);
+                        });
+                        ruleEl.find('button.rule-remove').bind('click', function () {
+                            removeRule(this, ruleEl, rule, callEl, roleEl, expsEl, rowEl, record, opts);
+                        });
+                        return ruleEl;
                     }
 
-                    function saveRule(btn, ruletr, call, role, exps, rule, tag, index, table, tr) {
+                    function removeRule(btn, ruleEl, rule, callEl, roleEl, expsEl, rowEl, record, opts) {
+                        bulemine.ajaxJson({
+                            url: "/service/rule/delete",
+                            masking: true,
+                            params: {
+                                data: {
+                                    channelId: rule.channelId,
+                                    ruleId: rule.ruleId
+                                }
+                            },
+                            callback: function (ok, data, msg, opts) {
+                                if (ok) {
+                                    $.each(record.rules, function (i) {
+                                        if (this.ruleId == rule.ruleId) {
+                                            record.rules.splice(i, 1);
+                                            var cell = treeEl.treetable('findCell', rowEl, 'rules');
+                                            treeEl.treetable('updateCell', cell, record.rules);
+                                            return true;
+                                        }
+                                    });
+                                    ruleEl.remove();
+                                } else {
+                                    alert('[ERROR]' + msg);
+                                }
+                            }
+                        });
+                    };
+
+                    function saveRule(btn, ruleEl, rule, callEl, roleEl, expsEl, rowEl, record, opts) {
                         console.log(arguments);
-                        var params = {
-                            channelId: rule.channelId,
-                            ruleId: rule.ruleId,
-                            callType: call.val(),
-                            roleType: role.val(),
-                            ruleExps: exps.val()
-                        };
                         bulemine.ajaxJson({
                             url: "/service/rule/update",
                             masking: true,
                             payload: 'data',
-                            params: params,
+                            params: {
+                                data: {
+                                    channelId: rule.channelId,
+                                    ruleId: rule.ruleId,
+                                    callType: callEl.val(),
+                                    roleType: roleEl.val(),
+                                    ruleExps: expsEl.val()
+                                }
+                            },
                             callback: function (ok, data, msg, opts) {
                                 if (ok) {
                                     $.extend(rule, data);
@@ -168,38 +321,33 @@
                                 console.log(rule);
                             }
                         });
-                    }
-
-                    function initRuleDialog(table, tr, item, tag, opts) {
-                        var dialog = $('#rules-dialog');
-                        dialog.find('tr.default-state').remove();
-                        $.each(tag.rules, function (i) {
-                            var rule = this;
-                            var ruletr = $('<tr class="default-state" data-ruleId="' + this.ruleId + '">' +
-                                    '<td><span><select name="callType" style="width:80px;"><option value="ALL">全部</option><option value="AUD">语音</option><option value="CMT">评论</option><option value="OL">在线</option></select></span></td>' +
-                                    '<td><span><select name="roleType" style="width:80px;"><option value="ALL">全部</option><option value="CSC">客服</option><option value="CUST">客户</option></select></span></td>' +
-                                    '<td><span><input name="ruleExps" style="width: 90%;"/></span></td>' +
-                                    '<td><span><button class="rule-save">保存</button><button class="rule-remove">删除</button></span></td>' +
-                                    '</tr>');
-                            dialog.find('table').append(ruletr);
-
-                            var call = ruletr.find('select[name="callType"]').val(this.callType).selectmenu();
-                            var role = ruletr.find('select[name="roleType"]').val(this.roleType).selectmenu();
-                            var exps = ruletr.find('input[name="ruleExps"]').val(this.ruleExps);
-                            ruletr.find('button.rule-save').bind('click', function () {
-                                saveRule(this, ruletr, call, role, exps, rule, tag, i, table, tr);
-                            });
-                            ruletr.find('button.rule-remove').bind('click', function () {
-                                removeRule(this, ruletr, call, role, exps, rule, tag, i, table, tr);
-                            });
-                        });
-                        dialog.dialog('open');
-                        console.log(arguments);
                     };
 
-                    $("#tags-tree").treetable({
+                    function initRuleDialog(rowEl, cellEl, itemEl, record, opts) {
+                        ruleDialogEl.data('selected', {
+                            data: record,
+                            row: rowEl
+                        }).find('tr.default-state').remove();
+                        $.each(record.rules, function (i) {
+                            var ruleEl = createRule(this, rowEl, record, opts);
+                            ruleDialogEl.find('table').append(ruleEl);
+                        });
+                        ruleDialogEl.dialog('open');
+                    };
+
+                    function initTagDialog(rowEl, cellEl, itemEl, record, opts) {
+                        var crumbs = treeEl.treetable('crumbs', rowEl);
+                        tagDialogEl.data('selected', {
+                            row: rowEl,
+                            data: record
+                        }).find('span[name="tagCrumbs"]').text(bulemine.crumbs(crumbs));
+//                        console.log(tagDialogEl);
+                        tagDialogEl.dialog('open');
+                    }
+
+                    treeEl.treetable({
                         data: TAGTREE_DATA,
-                        treeEditor: function (table, tr, data, opts) {
+                        treeEditor: function (tableEl, rowEl, data, opts) {
                             return data.customizable;
                         },
                         treeTitle: '所有标签',
@@ -212,27 +360,28 @@
                         rootVisible: false,
                         rowHeight: 30,
                         expand: true,
-                        afteredit: function (target, origin, record, editer, opts) {
-                            if (!$.isEmptyObject(record)) {
+                        afteredit: function (cellEl, name, val, old, data, opts) {
+                            if (val != old) {
+                                var params = {};
+                                params[name] = val;
                                 bulemine.ajaxJson({
                                     url: "/service/tag/update",
                                     masking: true,
-                                    payload: 'data',
-                                    params: $.extend({
-                                        channelId: origin.channelId,
-                                        tagId: origin.tagId
-                                    }, record),
+                                    params: {
+                                        data: $.extend({
+                                            channelId: data.channelId,
+                                            tagId: data.tagId,
+                                        }, params)
+                                    },
                                     callback: function (ok, data, msg, opts) {
                                         if (ok) {
 
                                         } else {
                                             alert('[ERROR]' + msg);
                                         }
-                                        console.log(arguments);
                                     }
                                 });
                             }
-                            console.log(arguments);
                         },
                         columns: [{
                             name: 'rules',
@@ -249,14 +398,14 @@
                             items: [{
 //                                iconCls: 'icon-new',  // Use a URL in the icon config
                                 text: '添加子级',
-                                handler: function (table, tr, item, data, opts) {
-                                    console.log(arguments);
+                                handler: function (rowEl, cellEl, itemEl, record, opts) {
+                                    initTagDialog(rowEl, cellEl, itemEl, record, opts);
                                 }
                             }, {
 //                                iconCls: 'icon-new',  // Use a URL in the icon config
                                 text: '配置规则',
-                                handler: function (table, tr, item, data, opts) {
-                                    initRuleDialog(table, tr, item, data, opts);
+                                handler: function (rowEl, cellEl, itemEl, record, opts) {
+                                    initRuleDialog(rowEl, cellEl, itemEl, record, opts);
                                 }
                             }]
                         }, {
@@ -264,25 +413,26 @@
                             width: 100,
                             items: [{
                                 iconCls: true,
-                                format: function (table, tr, item, data, opts) {
-                                    item.addClass(data.activated ? 'icon-enable' : 'icon-disable');
+                                render: function (rowEl, cellEl, itemEl, record, opts) {
+                                    itemEl.addClass(record.activated ? 'icon-enable' : 'icon-disable');
                                 },
-                                handler: function (table, tr, item, data, opts) {
-                                    if (item.hasClass('icon-enable')) {
-                                        data.activated = false;
-                                        item.removeClass('icon-enable').addClass('icon-disable');
+                                handler: function (rowEl, cellEl, itemEl, record, opts) {
+                                    if (itemEl.hasClass('icon-enable')) {
+                                        record.activated = false;
+                                        itemEl.removeClass('icon-enable').addClass('icon-disable');
                                     } else {
-                                        data.activated = true;
-                                        item.removeClass('icon-disable').addClass('icon-enable');
+                                        record.activated = true;
+                                        itemEl.removeClass('icon-disable').addClass('icon-enable');
                                     }
                                     bulemine.ajaxJson({
                                         url: "/service/tag/update",
                                         masking: true,
-                                        payload: 'data',
                                         params: {
-                                            channelId: data.channelId,
-                                            tagId: data.tagId,
-                                            activated: data.activated
+                                            data: {
+                                                channelId: record.channelId,
+                                                tagId: record.tagId,
+                                                activated: record.activated
+                                            }
                                         },
                                         callback: function (ok, data, msg, opts) {
                                             if (ok) {
@@ -290,7 +440,6 @@
                                             } else {
                                                 alert('[ERROR]' + msg);
                                             }
-                                            console.log(arguments);
                                         }
                                     });
                                     console.log(arguments);

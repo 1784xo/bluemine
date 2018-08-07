@@ -85,11 +85,7 @@
             }],
             onSelect: function (row, e, data) {
                 var list = $("#tags-tree").treetable('crumbs', row);
-                var txt = '';
-                for (var i = 0, l = list.length; i < l; i++) {
-                    txt = list[i].record.tagText+' / '+txt;
-                }
-                $('#open-tags-dialog').data('selected', data).val(txt);
+                $('#open-tags-dialog').data('selected', data).val(bulemine.crumbs(list));
             }
         });
     });

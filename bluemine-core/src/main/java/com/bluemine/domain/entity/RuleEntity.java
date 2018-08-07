@@ -21,19 +21,19 @@ public class RuleEntity extends PartitionEntity implements Serializable {
     @Column(name = "CHANNEL_ID", nullable = false, updatable = false)
     private Long channelId;
 
-    @Column(name = "CALL_TYPE", nullable = false, updatable = false, length = 4)
+    @Column(name = "CALL_TYPE", nullable = false, length = 4)
     private String callType;
 
-    @Column(name = "ROLE_TYPE", nullable = false, updatable = false, length = 4)
+    @Column(name = "ROLE_TYPE", nullable = false, length = 4)
     private String roleType;
 
     @Column(name = "TAG_ID", nullable = false, updatable = false)
     private Long tagId;
 
-    @Column(name = "PRIORITY_NO", nullable = false, updatable = false)
+    @Column(name = "PRIORITY_NO", nullable = false)
     private Integer priorityNo;
 
-    @Column(name = "RULE_EXPS", nullable = false, updatable = false, length = 255)
+    @Column(name = "RULE_EXPS", nullable = false,length = 255)
     private String ruleExps;
 
     public Long getRuleId() {

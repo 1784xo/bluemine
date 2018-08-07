@@ -9,13 +9,19 @@ var bulemine = (function () {
         dataType: 'JSON',
         contentType: 'application/json;charset=UTF-8',
         masking: false,
-        payload: null,
         type: "POST",
         success: function () {
         }
     }
 
     var me = {
+        crumbs:function(list){
+            var txt = '';
+            for (var i = 0, l = list.length; i < l; i++) {
+                txt = list[i].record.tagText+' / '+txt;
+            }
+            return txt;
+        },
         loader: function (init) {
             var len = LOAD_QUEUE.length;
             LOAD_QUEUE.push(init);
@@ -53,12 +59,6 @@ var bulemine = (function () {
                     params.callback(status, null, error);
                 }
             });
-
-            if (!!opts.payload) {
-                var req = {};
-                req[opts.payload] = params.data;
-                params.data = req;
-            }
 
             params.data = JSON.stringify(params.data);
 

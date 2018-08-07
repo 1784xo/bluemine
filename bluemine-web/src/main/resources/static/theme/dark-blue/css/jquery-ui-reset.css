@@ -1,3 +1,6 @@
+.ui-widget{
+    font-family: "Microsoft YaHei", \u5fae\u8f6f\u96c5\u9ed1, "微软雅黑", "Hiragino Sans GB", MingLiu, tahoma, arial, simsun, "宋体";
+}
 .ui-widget-overlay img{
     position: absolute;
     top: 50%;
@@ -30,7 +33,11 @@
 }
 
 
-.ui-corner-all{
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr{
+    border-radius: 0;
+}
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br{
     border-radius: 0;
 }
 
@@ -107,7 +114,7 @@
 
 /*input*/
 input{
-    padding: 4px 4px;
+    padding: 3px;
     line-height: 16px;
     background-color: #E6F3FB;
     border: 1px solid #B4CBE7;
@@ -221,6 +228,10 @@ input.hasDatepicker {
     padding: 0;
 }
 
+.ui-dialog.ui-front{
+    z-index: 101!important;
+}
+
 .ui-dialog .ui-dialog-content{
     padding: 0;
 }
@@ -235,4 +246,14 @@ input.hasDatepicker {
     border-top: none;
     border-left: none;
     border-right: none;
+}
+
+/*menu*/
+.ui-selectmenu-menu.ui-front{
+    z-index: 200;
+}
+
+.treetable .ui-selectmenu-button span.ui-selectmenu-text{
+    padding:3px;
+    line-height: 16px;
 }

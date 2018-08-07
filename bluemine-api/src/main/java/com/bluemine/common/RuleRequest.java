@@ -18,7 +18,7 @@ public class RuleRequest implements Serializable {
 
     private Long tagId;
 
-    private Integer priorityNo;
+    private Integer priorityNo  =  0;
 
     private String ruleExps;
 

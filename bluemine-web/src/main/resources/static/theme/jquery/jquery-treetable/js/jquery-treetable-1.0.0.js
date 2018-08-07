@@ -25,28 +25,60 @@
     };
 
     var METHODS = {
-        updateCell:function () {
-            console.log(arguments);
+        findCell: function (rowEl, name) {
+            return rowEl.find('span[data-column="' + name + '"]');
         },
-        onCancelEditor: function (e, opts) {
-            var tr = e.data('selected');
-            if (!!tr) {
-                e.detach();
-                tr.find('.tree-node-text:first').html(tr.data('originData')[opts.nodeTextField]);
-                opts.afteredit(tr, tr.data('originData'), null, e, opts);
+        updateCell: function (cellEl, val) {
+            cellEl.empty();
+            var rowEl = cellEl.parents('tr.default-state');
+            var record = rowEl.data('originData');
+            var opt = cellEl.data('option');
+            if (!!opt.items) {
+                $.each(opt.items, function (i) {
+                    var item = this;
+                    var itemEl = $('<a class="column-item"></a>');
+                    if (!!item.iconCls) {
+                        itemEl.attr('title', item.title).addClass(item.iconCls).addClass('column-item-icon');
+                    }
+                    if (!!item.render) {
+                        item.render(rowEl, cellEl, itemEl, record, item);
+                    }
+                    if (!!item.text) {
+                        itemEl.html(item.text);
+                    }
+                    if (!!item.handler) {
+                        itemEl.bind('click', function () {
+                            item.handler(rowEl, cellEl, itemEl, record, item);
+                        });
+                    }
+                    cellEl.append(itemEl);
+                });
+            } else {
+                if (!opt.format) {
+                    val = $.default(val, '&nbsp;');
+                } else {
+                    val = opt.format(val, record);
+                }
+                cellEl.html(val);
             }
         },
-        onOkEditor: function (e, opts) {
-            var tr = e.data('selected');
-            if (!!tr) {
-                e.detach();
-                var val = e.find('input').val();
-                tr.find('.tree-node-text:first').html(val);
-                var origin = tr.data('originData');
-                origin[opts.nodeTextField] = val;
-                var record = tr.data('recordData');
-                record[opts.nodeTextField] = val;
-                opts.afteredit(tr, origin, record, e, opts);
+        onCancelEditor: function (opts) {
+            _editor.detach();
+            var selected = _editor.data('selected');
+            if (!!selected) {
+                selected.cell.html(selected.cell.data('originValue'));
+            }
+        },
+        onOkEditor: function (opts) {
+            _editor.detach();
+            var selected = _editor.data('selected');
+            if (!!selected) {
+                var val = _editor.find('input').val();
+                var originValue = selected.cell.data('originValue');
+                var data = selected.data;
+                selected.cell.html(val);
+                data[opts.nodeTextField] = val;
+                opts.afteredit(selected, opts.nodeTextField, val, originValue, data, opts);
             }
         },
         crumbs: function (row) {
@@ -109,114 +141,108 @@
             } else {
                 this.onSelect(el.parents('tr[data-level]'), el, opts);
             }
+        },
+        appendNode: function (parentEl, record) {
+            var index = parentEl.data('index');
+            var parent = parentEl.data('originData');
+            var parentLevel = parentEl.data('level');
+            var uid = parentLevel + '-' + parent.childrens.length;
+            var meEl = $(this);
+            var prevEl = parentEl.find('~tr[data-parent="' + parentLevel + '"]:last');
+            renderNode(index + 1, uid, parentLevel, record, meEl, meEl.find('table.treetable'), prevEl.size()==0? parentEl: prevEl, meEl.data('option'));
         }
     }
 
-    function renderHeader(table, opts) {
-        var tr = $('<tr><th>' + opts.treeTitle + '</th></tr>');
-        tr.find('th').css('minWidth', opts.treeMinWidth).width(opts.treeWidth);
-        table.append(tr);
+    function renderHeader(tableEl, opts) {
+        var headEl = $('<tr><th>' + opts.treeTitle + '</th></tr>');
+        headEl.find('th').css('minWidth', opts.treeMinWidth).width(opts.treeWidth);
+        tableEl.append(headEl);
         $.each(opts.columns, function (i) {
-            var dt = $('<th>' + this.text + '</th>');
-            dt.width(this.width);
-            tr.append(dt);
+            var thEl = $('<th>' + this.text + '</th>');
+            thEl.width(this.width);
+            headEl.append(thEl);
         });
+        return headEl;
     }
 
-    function renderNode(index, uid, pid, data, table, box, opts) {
+    function renderNode(index, uid, pid, data, meEl, tableEl, prevEl, opts) {
+
+        var prev = prevEl;
 
         if (((!!opts.rootVisible) && (index == -1)) || (index >= 0)) {
-            var tr = $('<tr class="default-state" data-level="' + uid + '" data-parent="' + pid + '"></tr>');
-            var node = $('<td style="padding-left: ' + (Math.max(index, 0) * opts.expanderLeft + opts.treeLeft) + 'px;">' +
-                '<button class="expand-icon">+</button><span data-column="'+opts.nodeTextField+'" class="tree-node-text" >' + data[opts.nodeTextField] + '</span></td>');
-            tr.append(node);
+            var rowEl = $('<tr class="default-state" data-index="' + index + '" data-level="' + uid + '" data-parent="' + pid + '"></tr>').data({
+                expand: opts.expand,
+                originData: data
+            });
 
-            if (($.isFunction(opts.treeEditor) && opts.treeEditor(table, tr, data, opts)) || (opts.treeEditor === true)) {
-                node.find('.tree-node-text').bind('dblclick', function () {
-                    METHODS.onCancelEditor(_editor, opts);
-                    $(this).html('').append(_editor);
-                    _editor.data('selected', tr).find('input').focus().val(tr.data('originData')[opts.nodeTextField]);
+            var colEl = $('<td style="padding-left: ' + (Math.max(index, 0) * opts.expanderLeft + opts.treeLeft) + 'px;">' +
+                '<button class="expand-icon">+</button><span data-column="' + opts.nodeTextField + '" class="tree-node-text" >' + data[opts.nodeTextField] + '</span></td>');
+            rowEl.append(colEl);
+
+            if (($.isFunction(opts.treeEditor) && opts.treeEditor(tableEl, rowEl, data, opts)) || (opts.treeEditor === true)) {
+                colEl.find('.tree-node-text').bind('dblclick', function () {
+                    METHODS.onCancelEditor(opts);
+                    var val = rowEl.data('originData')[opts.nodeTextField];
+                    var cellEl = $(this).data('originValue', val);
+                    cellEl.empty().append(_editor);
+                    _editor.data('selected', {
+                        'data': data,
+                        'cell': cellEl
+                    }).find('input').focus().val(val);
                 });
             }
 
             $.each(opts.columns, function (i) {
-                var col = this;
-                var td = $('<td><span data-column="'+$.default(col.name, '')+'"></span></td>');
-                if (!!col.items) {
-                    $.each(col.items, function (j) {
-                        var me = this;
-                        var item = $('<a class="column-item"></a>')
-                        if (!!me.iconCls) {
-                            item.attr('title', me.title).addClass(me.iconCls).addClass('column-item-icon');
-                        }
-                        if (!!me.format) {
-                            me.format(table, tr, item, data, me);
-                        }
-                        item.html(me.text);
-                        item.bind('click', function () {
-                            me.handler(table, tr, item, data, me);
-                        });
-                        td.find('span:first-child').append(item);
-                    });
-                } else {
-                    var val = data[col.name];
-                    if (!col.format) {
-                        val = $.default(val, '&nbsp;');
-                    } else {
-                        val = col.format(val, data);
-                    }
-                    td.find('span:first-child').html(val);
-                }
-                tr.append(td);
-            });
-
-            tr.data({
-                expand: opts.expand,
-                originData: data,
-                recordData: {}
+                var cellEl = $('<span data-column="' + $.default(this.name, '') + '"></span>');
+                cellEl.data('option', this);
+                colEl = $('<td></td>').append(cellEl);
+                rowEl.append(colEl);
+                METHODS.updateCell(cellEl, data[this.name]);
             });
 
             if (index > 0) {
-                if (tr.data('expand')) {
-                    tr.show();
+                if (rowEl.data('expand')) {
+                    rowEl.show();
                 } else {
-                    tr.hide();
+                    rowEl.hide();
                 }
             }
 
-            table.append(tr);
+            prev.after(rowEl);
+            prev = rowEl;
         }
 
         var childs = data.childrens;
         for (var child, i = 0, l = childs.length; i < l; i++) {
             child = childs[i];
-            renderNode(index + 1, uid + '-' + (i + 1), uid, child, table, box, opts);
+            prev = renderNode(index + 1, uid + '-' + (i + 1), uid, child, meEl, tableEl, prev, opts);
         }
+        return prev;
     }
 
-    function render(box, opts) {
-        var table = $('<table class="treetable" cellpadding="0" cellspacing="0"  border="0"></table>');
-        box.append(table);
-        table.bind('click', function (e) {
+    function render(meEl, opts) {
+        var tableEl = $('<table class="treetable" cellpadding="0" cellspacing="0"  border="0"></table>');
+        meEl.append(tableEl);
+        tableEl.bind('click', function (e) {
             METHODS.onClick(e, opts);
         });
 
-        renderHeader(table, opts);
+        var headEl = renderHeader(tableEl, opts);
         var data = {
             childrens: opts.data
         };
         data[opts.nodeTextField] = opts.rootText;
-        renderNode(opts.rootVisible ? 0 : -1, '0', 'null', data, table, box, opts);
+        renderNode(opts.rootVisible ? 0 : -1, '0', 'null', data, meEl, tableEl, headEl, opts);
     }
 
     function prepare(opts) {
 
         _editor.find('.editor-cancel').bind('click', function () {
-            METHODS.onCancelEditor(_editor, opts);
+            METHODS.onCancelEditor(opts);
         });
 
         _editor.find('.editor-ok').bind('click', function () {
-            METHODS.onOkEditor(_editor, opts);
+            METHODS.onOkEditor(opts);
         });
 
         opts = $.extend({}, opts);
@@ -225,16 +251,17 @@
     }
 
     $.fn.treetable = function (opts, a, b, c, d, e) {
-        var me = this;
+        var meEl = this;
         if (METHODS[opts]) {
-            return METHODS[opts].apply(this, [a, b, c, d, e]);
-        } if(opts instanceof Object){
+            return METHODS[opts].apply(meEl, [a, b, c, d, e]);
+        }
+        if (opts instanceof Object) {
             var options = prepare($.extend({}, _def_options, opts));
-            me.addClass('treetable-container');
-            me.css('height', options.height).css('width', options.width);
-            render(me, options);
-            me.data('option', options);
-        }else{
+            meEl.addClass('treetable-container');
+            meEl.css('height', options.height).css('width', options.width);
+            render(meEl, options);
+            meEl.data('option', options);
+        } else {
 
         }
     };

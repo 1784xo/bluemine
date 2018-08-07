@@ -44,7 +44,7 @@ public class TabService {
     };
 
     public Map<Long, TagResponse> findAllWithRule(long channelId) {
-        List<TagEntity> tags = tagRepository.findAllByChannelId(channelId);
+        List<TagEntity> tags = tagRepository.findAll(channelId);
         List<RuleEntity> rules = ruleService.findAll(channelId);
 
         Collections.sort(tags, TAG_DESC);
@@ -54,7 +54,7 @@ public class TabService {
 
     public List<TagResponse> findTreeWithRule(long channelId) {
         List<TagEntity> tags;
-        tags = tagRepository.findAllByChannelId(channelId);
+        tags = tagRepository.findAll(channelId);
         List<RuleEntity> rules = ruleService.findAll(channelId);
         List<TagResponse> tagTree = EntityUtils.toTagTree(tags, rules);
         return tagTree;
@@ -99,7 +99,7 @@ public class TabService {
                 .activated(true)
                 .channelId(channelId)
                 .parentId(parentId)
-                .customizable(false);
+                .customizable(true);
 
         TagResponse response = EntityUtils.toResponse(tagEntity);
 
