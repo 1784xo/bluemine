@@ -1,6 +1,116 @@
 /**
  * Created by hechao on 2018/7/25.
  */
+
+var MULTIPLE_SERIES_OPT = (function (template) {
+    return function (opt) {
+
+        var yaxis = [];
+
+        var option = $.extend(true, {
+            xAxis: {
+                axisLabel: {
+                    textStyle: {
+                        fontFamily: template.fontFamily
+                    }
+                }
+            }
+        }, template, opt);
+
+        for (var serie, i = 0, l = opt.series.length; i < l; i++) {
+            serie = opt.series[i];
+            yaxis.push($.extend(true, {
+                name: serie.name,
+                axisLabel: {
+                    textStyle: {
+                        fontFamily: option.fontFamily
+                    }
+                }
+            }, option.yAxis, serie.yAxis));
+        }
+        option.yAxis = yaxis;
+
+        console.log(option);
+
+        return option;
+    }
+})({
+    fontFamily: 'tahoma, arial, simsun, "Microsoft YaHei", \u5fae\u8f6f\u96c5\u9ed1, "微软雅黑", "Hiragino Sans GB", MingLiu',
+    backgroundColor: '#FFF',
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            lineStyle: {
+                color: '#B9B9B9'
+            }
+        },
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        padding: [5, 10],
+        textStyle: {
+            color: '#FFFFFF',
+        },
+        extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: true,
+        splitLine: {
+            show: true,
+            interval: 'auto',
+            lineStyle: {
+                color: '#D4DFF5'
+            }
+        },
+        axisTick: {
+            show: true,
+            length: 8,
+            lineStyle: {
+                color: '#D3DEEC'
+            }
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#D3DEEC'
+            }
+        },
+        axisLabel: {
+            margin: 10,
+            textStyle: {
+                fontSize: 12,
+                color: '#666666'
+            }
+        }
+    },
+    yAxis: {
+        splitLine: {
+            lineStyle: {
+                color: '#D4DFF5'
+            }
+        },
+        axisTick: {
+            show: true,
+            lineStyle: {
+                color: '#D3DEEC'
+            }
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#D3DEEC'
+            }
+        },
+        axisLabel: {
+            margin: 10,
+            textStyle: {
+                fontSize: 12,
+                color: '#666666'
+            }
+        }
+    },
+    series: {
+        data: []
+    }
+});
+
 var bulemine = (function () {
     var LOAD_QUEUE = [];
 
@@ -12,13 +122,93 @@ var bulemine = (function () {
         type: "POST",
         success: function () {
         }
-    }
+    };
+
+    var _def_chart = {
+        autoLoad: true,
+        option: {},
+        parsexAxisData: function () {
+            return [];
+        },
+        parseSeriesData: function () {
+            return [];
+        },
+        afterload: function () {
+        },
+        beforeload: function () {
+        }
+    };
+    var Chart = function (opts) {
+        var option = opts;
+        var chart = echarts.init(opts.canvas);
+        chart.setOption(opts.option);
+        this.__defineGetter__('option', function () {
+            return option;
+        });
+        this.__defineGetter__('chart', function () {
+            return chart;
+        });
+        if (!!option.autoLoad) {
+            this.reload({});
+        }
+    };
+
+    Chart.prototype.reload = function (p) {
+        var params = $.extend(true, {}, this.option.params, p);
+        var opt = this.option;
+        var chart = this.chart;
+        opt.beforeload(params);
+        bulemine.ajaxJson({
+            url: opt.url,
+            params: params,
+            callback: function (ok, data, msg, opts) {
+                if (ok) {
+                    opt.afterload(ok, data, msg, opts);
+                    var xaxis = opt.parsexAxisData(data, params);
+                    chart.setOption({
+                        xAxis: [{
+                            data: xaxis
+                        }]
+                    });
+
+                    var series = chart.getOption().series;
+                    var results = [];
+                    for (var result, i = 0, l = series.length; i < l; i++) {
+                        results.push({
+                            yAxisIndex: i,
+                            data: opt.parseSeriesData(i, data, series[i], params)
+                        });
+                    }
+                    chart.setOption({
+                        series: results
+                    });
+                } else {
+                    alert('[ERROR]' + msg);
+                }
+            }
+        });
+    };
 
     var me = {
-        crumbs:function(list){
+        queue: function () {
+            var list = [];
+            return {
+                push: function (d) {
+                    list.push(d);
+                },
+                each: function (fn) {
+                    for (var i = 0, l = list.length; i < l; i++) {
+                        if (!!fn(i, list[i])) {
+                            return;
+                        }
+                    }
+                }
+            }
+        },
+        crumbs: function (list) {
             var txt = '';
             for (var i = 0, l = list.length; i < l; i++) {
-                txt = list[i].record.tagText+' / '+txt;
+                txt = list[i].record.tagText + ' / ' + txt;
             }
             return txt;
         },
@@ -28,9 +218,8 @@ var bulemine = (function () {
             return len;
         },
         charts: function (opts) {
-            if (!!opts.gradientDate) {
-                opts.gradientDate.selectmenu();
-            }
+            var options = $.extend({}, _def_chart, opts);
+            return new Chart(options);
         },
         ajaxJson: function (opts) {
             var params = $.extend({}, _def_json, opts);

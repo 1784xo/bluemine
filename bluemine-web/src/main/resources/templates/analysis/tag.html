@@ -8,24 +8,23 @@
     <script src="/theme/jquery/jquery-ui/jquery-ui-1.11.4.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/theme/echarts.min.js"></script>
-    <script src="/theme/tag/options.js"></script>
-    <script src="/theme/tag/index.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
     <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
 
     <script src="/theme/jquery/jquery-treetable/js/jquery-treetable-1.0.0.js"></script>
+    <script src="/theme/jquery/jquery-treetable/js/jquery-form-1.0.0.js"></script>
     <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
 
-    <style>
-        /*index.css*/
-
-        /*dark-blue/css/style.css*/
-
-        /*dark-blue/css/jquery-reset.css*/
-
-    </style>
+    <script src="/theme/tag/options.js"></script>
+    <script src="/theme/tag/index.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        //    <![CDATA[
+        var CHANNEL_ID = '49252889384718336';
+        var FILTER_QUEUE = bulemine.queue();
+        //    ]]>
+    </script>
 </head>
 <body>
 <div th:replace="/common/header::header"></div>
@@ -37,7 +36,7 @@
     </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
-//    <![CDATA[
+    //    <![CDATA[
     bulemine.loader(function () {
         $("#tags-dialog").dialog({
             width: 800,
@@ -85,11 +84,11 @@
             }],
             onSelect: function (row, e, data) {
                 var list = $("#tags-tree").treetable('crumbs', row);
-                $('#open-tags-dialog').data('selected', data).val(bulemine.crumbs(list));
+                $('#filter-form .tag-select').data('value', !data.tagId ? 0 : data.tagId).val(bulemine.crumbs(list));
             }
         });
     });
-//    ]]>
+    //    ]]>
 </script>
 
 <div class="main-center">
@@ -104,27 +103,61 @@
                     <li><a href="#tabs-2">按日期</a></li>
                 </ul>
                 <div id="tabs-1" class="control-group">
-                    <ul class="main-center-filter">
-                        <li>
-                            <label>日期：</label><input type="text" class="to" />
-                        </li>
-                        <li>
-                            <label>标签：</label><input readonly="true" style="width: 300px;" class="tag-select" id="open-tags-dialog" value="全部 / "/>
-                        </li>
-                        <li>
-                            <button id="subBtn">查询</button>
-                        </li>
-                    </ul>
+                    <form id="filter-form">
+                        <ul class="main-center-filter">
+                            <li>
+                                <label>开始日期：</label><input class="daterange-form" name="daterangeForm" type="text"/>
+                            </li>
+                            <li>
+                                <label>结束日期：</label><input class="daterange-to" name="daterangeTo" type="text"/>
+                            </li>
+                            <li>
+                                <label>标签：</label><input class="tag-select" name="tagIds" readonly="true"
+                                                         style="width: 300px;" value="全部 / "/>
+                            </li>
+                            <li>
+                                <button class="btn-search" type="button">查询</button>
+                            </li>
+                        </ul>
+                    </form>
 
                     <script type="text/javascript" th:inline="javascript">
                         //    <![CDATA[
                         bulemine.loader(function () {
-                            $('#open-tags-dialog').on('click', function () {
+                            $('#filter-form .daterange-form').datepicker({
+                                dayNamesMin: ['一', '二', '三', '四', '五', '六', '日'],
+                                monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                                dateFormat: 'yy-mm-dd',
+                                changeMonth: true,
+                                changeYear: true
+                            }).datepicker('setDate', -30);
+
+                            $('#filter-form .daterange-to').datepicker({
+                                dayNamesMin: ['一', '二', '三', '四', '五', '六', '日'],
+                                monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                                dateFormat: 'yy-mm-dd',
+                                changeMonth: true,
+                                changeYear: true
+                            }).datepicker('setDate', new Date());
+
+                            $('#filter-form .tag-select').data('value', 0).bind('click', function () {
                                 $("#tags-dialog").dialog('open');
+                            });
+
+                            $('#filter-form').form({
+                                submit: $('#filter-form .btn-search'),
+                                onSubmit: function (vals, el, e, opts) {
+                                    FILTER_QUEUE.each(function (i, chart) {
+                                        chart.reload({
+                                            data: vals
+                                        });
+                                    });
+                                }
                             });
                         });
                         //    ]]>
                     </script>
+
                     <div class="main-center-panel">
                         <div class="main-center-panel-header">
                             近30天趋势图
@@ -142,13 +175,7 @@
                                     <button id="exportbtn">导出</button>
                                 </li>
                             </ui>
-                            <div id="kind" class="panel-canvas" style="width: 100%; height: 30px;z-index: 1;">
-                                <div style="width: 120px;line-height: 27px;;text-align: center;margin: 0 auto;">
-                                    <div id="led1" class="led-enable">次数</div>
-                                    <div id="led2" class="led-disable" style="margin-left: 10px;">会话数</div>
-                                </div>
-                            </div>
-                            <div id="main" class="panel-canvas" style="width: 100%; height: 300px;z-index: 1;">
+                            <div id="charts-1" class="panel-canvas" style="width: 100%; height: 400px;z-index: 1;">
 
                             </div>
                         </div>
@@ -156,19 +183,91 @@
                     <script type="text/javascript" th:inline="javascript">
                         //    <![CDATA[
                         bulemine.loader(function () {
-                            bulemine.charts({
+                            var values = $('#filter-form').form('getValues');
+                            var chart1 = bulemine.charts({
                                 export: null,
-                                gradientDate: $("#trend-gradient-date"),
-                                init: function () {
-
+                                canvas: $('#charts-1')[0],
+                                autoLoad: true,
+                                url: '/service/tagcollect/findByTag',
+                                params: {
+                                    data: $.extend({
+                                        channelId: CHANNEL_ID
+                                    }, values)
                                 },
-                                reset: function () {
-
+                                option: MULTIPLE_SERIES_OPT({
+                                    grid: {
+                                        left: 80,
+                                        top: 80,
+                                        right: 80,
+                                        bottom: 80
+                                    },
+                                    legend: {
+                                        orient: 'horizontal',
+                                        left: 'center'
+                                    },
+                                    series: [{
+                                        name: '次数',
+                                        type: 'line',
+                                        smooth: true,
+                                        symbolSize: 10,
+                                        itemStyle: {
+                                            normal: {
+                                                color: '#3F90F7',
+                                                borderColor: '#3F90F7',
+                                                borderWidth: 3
+                                            },
+                                            emphasis: {
+                                                color: '#3F90F7',
+                                                borderColor: '#FFFFFF',
+                                                borderWidth: 3
+                                            }
+                                        },
+                                        lineStyle: {
+                                            width: 3,
+                                            color: '#3F90F7'
+                                        }
+                                    }, {
+                                        name: '会话数',
+                                        type: 'bar',
+                                        barWidth: '30%',
+                                        yAxis: {
+                                            splitLine: {
+                                                show: false
+                                            }
+                                        },
+                                        itemStyle: {
+                                            normal: {
+                                                color: '#FFA046'
+                                            }
+                                        }
+                                    }]
+                                }),
+                                afterload: function () {
                                 },
-                                change: function (name, val) {
-
+                                beforeload: function () {
+                                },
+                                parsexAxisData: function (data, params) {
+                                    var list = [];
+                                    for (var i = 0, l = data.length; i < l; i++) {
+                                        list.push(data[i].callDate);
+                                    }
+                                    return list;
+                                },
+                                parseSeriesData: function (index, data, opts, params) {
+                                    var list = [];
+                                    for (var i = 0, l = data.length; i < l; i++) {
+                                        if (opts.name == '次数') {
+                                            list.push(data[i].frequency);
+                                        } else if (opts.name == '会话数') {
+                                            list.push(data[i].callNum);
+                                        } else {
+                                            list.push(0);
+                                        }
+                                    }
+                                    return list;
                                 }
                             });
+                            FILTER_QUEUE.push(chart1);
                         });
                         //    ]]>
                     </script>
@@ -213,21 +312,6 @@
     //    <![CDATA[
     bulemine.loader(function () {
         $("#tabs").tabs();
-        $(".form").datepicker({
-            dayNamesMin: ["一", "二", "三", "四", "五", "六", "日"],
-            monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            dateFormat: "yy-mm-dd",
-            changeMonth: true,
-            changeYear: true
-        });
-
-        $(".to").datepicker({
-            dayNamesMin: ["一", "二", "三", "四", "五", "六", "日"],
-            monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            dateFormat: "yy-mm-dd",
-            changeMonth: true,
-            changeYear: true
-        });
     });
     //    ]]>
 </script>

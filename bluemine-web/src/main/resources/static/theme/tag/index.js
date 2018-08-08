@@ -145,10 +145,11 @@ var dd = new Date();
 
 
 bulemine.loader(function () {
-	
+
+	return;
 	$(".to").val(getYesterday());
 
-	var lineChart = echarts.init(document.getElementById('main'));
+	var lineChart = echarts.init(document.getElementById('charts-1'));
 	var pieChart1 = echarts.init(document.getElementById('fdiv'));
 	var pieChart2 = echarts.init(document.getElementById('cdiv'));
 

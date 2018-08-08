@@ -34,7 +34,7 @@ public class TagController extends AbstractController {
         List<TagResponse> responses = tabService.findTreeWithRule(channelId);
         restfulResponse.setResult(responses);
         new Integer(null);
-        return ResponseEntity.accepted().body(restfulResponse);
+        return ResponseEntity.ok(restfulResponse);
     }
 
     @ResponseBody
@@ -44,7 +44,7 @@ public class TagController extends AbstractController {
 
         List<TagResponse> responses = tabService.findTreeWithRule(channelId);
         restfulResponse.setResult(responses);
-        return ResponseEntity.accepted().body(restfulResponse);
+        return ResponseEntity.ok(restfulResponse);
     }
 
     @ResponseBody
@@ -55,7 +55,7 @@ public class TagController extends AbstractController {
         TagResponse response = tabService.create(restfulRequest);
         restfulResponse.setResult(response);
 
-        return ResponseEntity.ok().body(restfulResponse);
+        return ResponseEntity.ok(restfulResponse);
     }
 
     @ResponseBody
@@ -66,6 +66,6 @@ public class TagController extends AbstractController {
         TagResponse response = tabService.update(restfulRequest);
         restfulResponse.setResult(response);
 
-        return ResponseEntity.ok().body(restfulResponse);
+        return ResponseEntity.ok(restfulResponse);
     }
 }

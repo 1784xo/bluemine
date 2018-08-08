@@ -2,23 +2,20 @@ package com.bluemine.service;
 
 import com.bluemine.ExceptionMessageEnum;
 import com.bluemine.common.*;
-import com.bluemine.context.RequestContext;
-import com.bluemine.domain.entity.*;
+import com.bluemine.domain.entity.TagCollectEntity;
+import com.bluemine.domain.entity.TagEntity;
 import com.bluemine.domain.util.EntityUtils;
 import com.bluemine.repository.TabCollectRepository;
 import com.bluemine.repository.TagRepository;
 import com.bluemine.util.AssertUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
@@ -43,8 +40,8 @@ public class TabCollectService {
     public List<TagCollectResponse> findByDate(RestfulRequest<TagCollectRequest> request) {
 
         TagCollectRequest data = request.getData();
-        Long channelId = data.getChannelNo();
-        Long tagId = (data.getTagId() == null ? 0 : data.getTagId());
+        Long channelId = data.getChannelId();
+        Long tagId = (data.getTagIds() == null ? 0 : data.getTagIds());
 
         List<TagEntity> allTags = tagRepository.findAll(channelId);
         List<Long> tagIds = new ArrayList<>();
@@ -94,20 +91,18 @@ public class TabCollectService {
     public List<ParentTagCollectResponse> findByTag(RestfulRequest<TagCollectRequest> request) {
 
         TagCollectRequest data = request.getData();
-        Long channelId = data.getChannelNo();
-        Long tagId = (data.getTagId() == null ? 0 : data.getTagId());
-        LocalDate end = data.getCallDate();
-        LocalDate start = end.plusDays(-29);
+        Long channelId = data.getChannelId();
+        Long tagId = (data.getTagIds() == null ? 0 : data.getTagIds());
+        LocalDate form = data.getDaterangeForm();
+        LocalDate to = data.getDaterangeTo();
 
         List<TagEntity> allTags = tagRepository.findAll(channelId);
         List<TagCollectEntity> listCollect = null;
         if (tagId == 0) {
-            List<Long> tagIds = EntityUtils.getTagIdsByParentId(tagId, allTags);
-            listCollect = tagCollectRepository.findByTagsAllIsBetween(channelId, tagIds, start, end);
+            listCollect = tagCollectRepository.findAll(channelId, form, to);
         } else {
-            listCollect = tagCollectRepository.findByTagsIsBetween(channelId, tagId, start, end);
+            listCollect = tagCollectRepository.findOne(channelId, tagId, form, to);
         }
-
         AssertUtils.notNull(allTags, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
 
         List<ParentTagCollectResponse> response = EntityUtils.toParentTagCollect(listCollect, allTags);
@@ -118,8 +113,8 @@ public class TabCollectService {
     public List<SubTagCollectResponse> findBySubTag(RestfulRequest<TagCollectRequest> request) {
 
         TagCollectRequest data = request.getData();
-        Long channelId = data.getChannelNo();
-        Long tagId = (data.getTagId() == null ? 0 : data.getTagId());
+        Long channelId = data.getChannelId();
+        Long tagId = (data.getTagIds() == null ? 0 : data.getTagIds());
         LocalDate end = data.getCallDate();
         LocalDate start = end.plusDays(-29);
         Integer size = data.getSize();

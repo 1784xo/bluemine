@@ -71,6 +71,7 @@ header nav .logo {
     right: 5px;
     top: 5px;
     clear: both;
+    z-index: 2;
 }
 
 .panel-gadget-col {
@@ -113,6 +114,10 @@ header nav .logo {
 
 .main-center-filter label {
     color: #888888;
+}
+
+.main-center-filter .btn-search{
+
 }
 
 .led-enable {

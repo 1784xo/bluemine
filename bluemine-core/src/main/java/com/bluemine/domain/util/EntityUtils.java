@@ -166,7 +166,7 @@ public abstract class EntityUtils {
         List<Long> tagIds = new ArrayList<>();
         for (TagEntity tag : allTags) {
             if (tagId == 0) {
-                //if (tag.getParentId() != 0) tagIds.add(tag.getTagId());
+                //if (tag.getParentId() != 0) tagIds.add(tag.getTagIds());
                 tagIds.add(tag.getTagId());
             } else {
                 if (tagId.equals(tag.getParentId())) {

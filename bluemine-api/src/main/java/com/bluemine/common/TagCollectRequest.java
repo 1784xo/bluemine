@@ -10,15 +10,15 @@ public class TagCollectRequest implements Serializable {
     private static final long serialVersionUID = 2573158003745547629L;
 
     private String sType;//day，week，month
-    private Long tagId;
+    private Long tagIds;
     private String dateType;
     private String dateStr;
-    private Long channelNo;
+    private Long channelId;
     private String seatNo;
     private String callNo;
     private LocalDate callDate;
-    private LocalDate start;
-    private LocalDate end;
+    private LocalDate daterangeForm;
+    private LocalDate daterangeTo;
     private Integer page;
     private Integer size;
     private String subType;
@@ -39,12 +39,12 @@ public class TagCollectRequest implements Serializable {
         this.dateStr = dateStr;
     }
 
-    public Long getTagId() {
-        return tagId;
+    public Long getTagIds() {
+        return tagIds;
     }
 
-    public void setTagId(Long tagId) {
-        this.tagId = tagId;
+    public void setTagIds(Long tagIds) {
+        this.tagIds = tagIds;
     }
 
     public String getDateType() {
@@ -55,12 +55,12 @@ public class TagCollectRequest implements Serializable {
         this.dateType = dateType;
     }
 
-    public Long getChannelNo() {
-        return channelNo;
+    public Long getChannelId() {
+        return channelId;
     }
 
-    public void setChannelNo(Long channelNo) {
-        this.channelNo = channelNo;
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
     }
 
     public String getSeatNo() {
@@ -87,20 +87,20 @@ public class TagCollectRequest implements Serializable {
         this.callDate = callDate;
     }
 
-    public LocalDate getStart() {
-        return start;
+    public LocalDate getDaterangeForm() {
+        return daterangeForm;
     }
 
-    public void setStart(LocalDate start) {
-        this.start = start;
+    public void setDaterangeForm(LocalDate daterangeForm) {
+        this.daterangeForm = daterangeForm;
     }
 
-    public LocalDate getEnd() {
-        return end;
+    public LocalDate getDaterangeTo() {
+        return daterangeTo;
     }
 
-    public void setEnd(LocalDate end) {
-        this.end = end;
+    public void setDaterangeTo(LocalDate daterangeTo) {
+        this.daterangeTo = daterangeTo;
     }
 
     public Integer getPage() {
@@ -131,15 +131,15 @@ public class TagCollectRequest implements Serializable {
     public String toString() {
         return "TagCollectRequest{" +
                 "sType='" + sType + '\'' +
-                ", tagId=" + tagId +
+                ", tagIds=" + tagIds +
                 ", dateType='" + dateType + '\'' +
                 ", dateStr='" + dateStr + '\'' +
-                ", channelNo=" + channelNo +
+                ", channelId=" + channelId +
                 ", seatNo='" + seatNo + '\'' +
                 ", callNo='" + callNo + '\'' +
                 ", callDate=" + callDate +
-                ", start=" + start +
-                ", end=" + end +
+                ", daterangeForm=" + daterangeForm +
+                ", daterangeTo=" + daterangeTo +
                 ", page=" + page +
                 ", size=" + size +
                 ", subType=" + subType +

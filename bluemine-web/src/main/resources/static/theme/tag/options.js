@@ -1,7 +1,7 @@
 ﻿var lineOption = {
-	title:{
-		text:""
-	},
+    title: {
+        text: ""
+    },
     backgroundColor: '#fff',
     tooltip: {
         trigger: 'axis',
@@ -20,7 +20,7 @@
     legend: {
         right: 20,
         orient: 'vertical',
-		left: 'center',
+        left: 'center',
         data: ['昨日1']
     },
     xAxis: {
@@ -51,6 +51,7 @@
     },
     yAxis: {
         type: 'value',
+        boundaryGap: true,
         splitLine: {
             lineStyle: {
                 color: ['#D4DFF5']
@@ -80,8 +81,8 @@
         symbolSize: 10,
         data: [],
         areaStyle: {
-			color: "#2C99F9",
-			opacity :0.1
+            color: "#2C99F9",
+            opacity: 0.1
         },
         itemStyle: {
             normal: {
@@ -96,15 +97,15 @@
     }]
 };
 var pieOption = {
-    title:{
-        text:"次数",
-        left:'center'
+    title: {
+        text: "次数",
+        left: 'center'
     },
     tooltip: {
         trigger: 'item',
         formatter: "{a} <br/>{b} : {c} ({d}%)"
     },
-	legend: {
+    legend: {
         orient: 'vertical',
         //right: '0%',
         top: 'middle',

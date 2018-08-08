@@ -23,6 +23,6 @@ public class CallCollectJobTest {
 
     @Test
     public void test() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-        callCollectService.run("100001", "1000", "2018-07-21", "2");
+        callCollectService.run("100001", "1005", "2018-07-21", "2");
     }
 }

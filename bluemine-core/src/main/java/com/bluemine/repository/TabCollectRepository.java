@@ -26,14 +26,38 @@ public interface TabCollectRepository extends JpaRepository<TagCollectEntity, Ta
     List<TagCollectEntity> findByDateAndTagIdIsBetween(@Param("channelId") long channelId, @Param("start") LocalDate start, @Param("ends") LocalDate ends, Pageable pageable, @Param("tagIds") List<Long> tagIds);
 
     /*********************************标签分析*********************************/
-    //标签分析(30天走势)(所有标签)所有
+
+    /**
+     * 得到所有标签数据汇总
+     * @param channelId
+     * @param start
+     * @param ends
+     * @return
+     */
+    @Query("select tag.callDate,sum(tag.frequency+tag.subFrequency) as frequency,count(tag.id.callNo) as callNum from TagCollectEntity as tag where tag.id.channelId=:channelId and tag.callDate between :start and :ends group by tag.callDate")
+    List<TagCollectEntity> findAll(@Param("channelId") long channelId, @Param("start") LocalDate start, @Param("ends") LocalDate ends);
+
+    /**
+     * 得到指定标单签数据汇总
+     * @param channelId
+     * @param tagId
+     * @param start
+     * @param ends
+     * @return
+     */
+    @Query("select tag.callDate,sum(tag.frequency+tag.subFrequency) as frequency,count(tag.id.callNo) as callNum from TagCollectEntity as tag where tag.id.channelId=:channelId and tag.id.tagId = :tagId and tag.callDate between :start and :ends group by tag.callDate")
+    List<TagCollectEntity> findOne(@Param("channelId") long channelId, @Param("tagId") Long tagId, @Param("start") LocalDate start, @Param("ends") LocalDate ends);
+
+    /**
+     * 得到指定多标签数据汇总
+     * @param channelId
+     * @param tagIds
+     * @param start
+     * @param ends
+     * @return
+     */
     @Query("select tag.callDate,sum(tag.frequency+tag.subFrequency) as frequency,count(tag.id.callNo) as callNum from TagCollectEntity as tag where tag.id.channelId=:channelId and tag.id.tagId in (:tagIds) and tag.callDate between :start and :ends group by tag.callDate")
-    List<TagCollectEntity> findByTagsAllIsBetween(@Param("channelId") long channelId, @Param("tagIds") List<Long> tagIds, @Param("start") LocalDate start, @Param("ends") LocalDate ends);
-
-    //标签分析(30天走势)(所有标签)
-    @Query("select tag.callDate,sum(tag.frequency+tag.subFrequency) as frequency,count(tag.id.callNo) as callNum from TagCollectEntity as tag where tag.id.channelId=:channelId and tag.id.tagId=:tagId and tag.callDate between :start and :ends group by tag.callDate")
-    List<TagCollectEntity> findByTagsIsBetween(@Param("channelId") long channelId, @Param("tagId") Long tagId, @Param("start") LocalDate start, @Param("ends") LocalDate ends);
-
+    List<TagCollectEntity> findAllInId(@Param("channelId") long channelId, @Param("tagIds") List<Long> tagIds, @Param("start") LocalDate start, @Param("ends") LocalDate ends);
 
     //标签分析(30天走势)
     //@Query("select tag.callDate,sum(tag.frequency+tag.subFrequency) as frequency,tag.id.tagId,'AAA' as tagText,count(tag.id.callNo) as callNum from TagCollectEntity as tag where tag.channelId=:channelId and tag.id.tagId in (:tagIds) and tag.callDate between :start and :ends group by tag.callDate")
