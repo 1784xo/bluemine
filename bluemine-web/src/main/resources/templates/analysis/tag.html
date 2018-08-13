@@ -175,7 +175,7 @@
                                     <button id="exportbtn">导出</button>
                                 </li>
                             </ui>
-                            <div id="charts-1" class="panel-canvas" style="width: 100%; height: 400px;z-index: 1;">
+                            <div id="axis-call" class="panel-canvas" style="width: 100%; height: 400px;z-index: 1;">
 
                             </div>
                         </div>
@@ -184,17 +184,17 @@
                         //    <![CDATA[
                         bulemine.loader(function () {
                             var values = $('#filter-form').form('getValues');
-                            var chart1 = bulemine.charts({
+                            var axisCall = bulemine.charts({
                                 export: null,
-                                canvas: $('#charts-1')[0],
+                                canvas: $('#axis-call')[0],
                                 autoLoad: true,
-                                url: '/service/tagcollect/findByTag',
+                                url: '/service/tag/collect/find',
                                 params: {
                                     data: $.extend({
                                         channelId: CHANNEL_ID
                                     }, values)
                                 },
-                                option: MULTIPLE_SERIES_OPT({
+                                option: AXIS_OPTION({
                                     grid: {
                                         left: 80,
                                         top: 80,
@@ -207,6 +207,7 @@
                                     },
                                     series: [{
                                         name: '次数',
+                                        field: 'rule',
                                         type: 'line',
                                         smooth: true,
                                         symbolSize: 10,
@@ -228,6 +229,7 @@
                                         }
                                     }, {
                                         name: '会话数',
+                                        field: 'call',
                                         type: 'bar',
                                         barWidth: '30%',
                                         yAxis: {
@@ -256,9 +258,9 @@
                                 parseSeriesData: function (index, data, opts, params) {
                                     var list = [];
                                     for (var i = 0, l = data.length; i < l; i++) {
-                                        if (opts.name == '次数') {
-                                            list.push(data[i].frequency);
-                                        } else if (opts.name == '会话数') {
+                                        if (opts.field == 'rule') {
+                                            list.push(data[i].totalFrequency);
+                                        } else if (opts.field == 'call') {
                                             list.push(data[i].callNum);
                                         } else {
                                             list.push(0);
@@ -267,7 +269,7 @@
                                     return list;
                                 }
                             });
-                            FILTER_QUEUE.push(chart1);
+                            FILTER_QUEUE.push(axisCall);
                         });
                         //    ]]>
                     </script>
@@ -276,23 +278,151 @@
                             子标签分布
                         </div>
                         <div class="main-center-panel-container">
-                            <div style="height: 300px;">
-                                <div id="fdiv" style="float: left;width: 50%; height: 300px;z-index: 1;">aaa</div>
-                                <div id="cdiv" style="float: left;width: 50%; height: 300px;z-index: 1;">bbb</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="main-center-panel">
-                        <div class="main-center-panel-header">
-                            会话内容
-                        </div>
-                        <div class="main-center-panel-container">
-                            <div>会话列表</div>
+                            <div id="pie-rule" class="sub-tag-pie"></div>
+                            <script type="text/javascript" th:inline="javascript">
+                                //    <![CDATA[
+                                bulemine.loader(function () {
+                                    var values = $('#filter-form').form('getValues');
+                                    var pierule = bulemine.charts({
+                                        name:'次数',
+                                        export: null,
+                                        canvas: $('#pie-rule')[0],
+                                        autoLoad: true,
+                                        url: '/service/tag/collect/findSubTop',
+                                        params: {
+                                            data: $.extend({
+                                                channelId: CHANNEL_ID,
+                                                indexType:'FREQ',
+                                                size: 3
+                                            }, values)
+                                        },
+                                        option: PIE_OPTION({
+                                            title : {
+                                                text: '次数',
+                                                x:'center'
+                                            },
+                                            legend: {
+                                                orient: 'vertical',
+                                                x: 'right',
+                                                y: 'center'
+                                            },
+                                            series:[{
+                                                name:'次数',
+                                                avoidLabelOverlap: false,
+                                                radius: ['50%', '75%'],
+                                                center: ['50%', '50%'],
+                                                label: {
+                                                    normal: {
+                                                        show: false,
+                                                        position: 'center'
+                                                    },
+                                                    emphasis: {
+                                                        show: true,
+                                                        formatter: '{b}\r\n{c} ({d}%)',
+                                                    }
+                                                }
+                                            }]
+                                        }),
+                                        afterload: function () {
+                                        },
+                                        beforeload: function () {
+                                        },
+                                        parseLegendData:function (index, data, opts, params) {
+                                            var list = [];
+                                            for (var i = 0, l = data.length; i < l; i++) {
+                                                list.push(data[i].tagText);
+                                            }
+                                            return list;
+                                        },
+                                        parseSeriesData: function (index, data, opts, params) {
+                                            var list = [];
+                                            for (var i = 0, l = data.length; i < l; i++) {
+                                                list.push({
+                                                    name:data[i].tagText,
+                                                    value: data[i].totalFrequency
+                                                });
+                                            }
+                                            return list;
+                                        }
+                                    });
+                                    FILTER_QUEUE.push(pierule);
+                                });
+                                //    ]]>
+                            </script>
+                            <div id="pie-call" class="sub-tag-pie"></div>
+                            <script type="text/javascript" th:inline="javascript">
+                                //    <![CDATA[
+                                bulemine.loader(function () {
+                                    var values = $('#filter-form').form('getValues');
+                                    var piecall = bulemine.charts({
+                                        name:'会话数',
+                                        export: null,
+                                        canvas: $('#pie-call')[0],
+                                        autoLoad: true,
+                                        url: '/service/tag/collect/findSubTop',
+                                        params: {
+                                            data: $.extend({
+                                                channelId: CHANNEL_ID,
+                                                indexType:'CALL',
+                                                size: 3
+                                            }, values)
+                                        },
+                                        option: PIE_OPTION({
+                                            title : {
+                                                text: '会话数',
+                                                x:'center'
+                                            },
+                                            legend: {
+                                                orient: 'vertical',
+                                                x: 'left',
+                                                y: 'center'
+                                            },
+                                            series:[{
+                                                name:'次数',
+                                                avoidLabelOverlap: false,
+                                                radius: ['50%', '75%'],
+                                                center: ['50%', '50%'],
+                                                label: {
+                                                    normal: {
+                                                        show: false,
+                                                        position: 'center'
+                                                    },
+                                                    emphasis: {
+                                                        show: true,
+                                                        formatter: '{b}\r\n{c} ({d}%)',
+                                                    }
+                                                }
+                                            }]
+                                        }),
+                                        afterload: function () {
+                                        },
+                                        beforeload: function () {
+                                        },
+                                        parseLegendData:function (index, data, opts, params) {
+                                            var list = [];
+                                            for (var i = 0, l = data.length; i < l; i++) {
+                                                list.push(data[i].tagText);
+                                            }
+                                            return list;
+                                        },
+                                        parseSeriesData: function (index, data, opts, params) {
+                                            var list = [];
+                                            for (var i = 0, l = data.length; i < l; i++) {
+                                                list.push({
+                                                    name:data[i].tagText,
+                                                    value: data[i].callNum
+                                                });
+                                            }
+                                            return list;
+                                        }
+                                    });
+                                    FILTER_QUEUE.push(piecall);
+                                });
+                                //    ]]>
+                            </script>
                         </div>
                     </div>
                 </div>
-
-
                 <div id="tabs-2">
                     <p><strong>Click this tab again to close the content pane.</strong></p>
                     <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus

@@ -92,120 +92,120 @@ public abstract class EntityUtils {
     }
 
 
-    public static List<TagCollectResponse> toDateCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
-
-        List<TagCollectResponse> responses = new ArrayList<>();
-        for (Object tag : tags) {
-            TagCollectResponse response = new TagCollectResponse();
-
-            Object[] tagCells = (Object[]) tag;
-            response.setCallDate(String.valueOf(tagCells[0]));
-            response.setFrequency(Integer.valueOf(String.valueOf(tagCells[1])));
-            response.setTagId(Long.valueOf(String.valueOf(tagCells[2])));
-            response.setTagText(String.valueOf(tagCells[3]));
-            response.setCallNum(Integer.valueOf(String.valueOf(tagCells[4])));
-
-            for (TagEntity tg : listTag) {
-                if (Long.valueOf(String.valueOf(tagCells[2])).equals(tg.getTagId())) {
-                    response.setTagText(tg.getTagText());
-                    break;
-                }
-            }
-
-            responses.add(response);
-        }
-        return responses;
-    }
-
-    public static List<ParentTagCollectResponse> toParentTagCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
-
-        List<ParentTagCollectResponse> responses = new ArrayList<>();
-        for (Object tag : tags) {
-            ParentTagCollectResponse response = new ParentTagCollectResponse();
-
-            Object[] tagCells = (Object[]) tag;
-            response.setCallDate(String.valueOf(tagCells[0]));
-            response.setFrequency(Integer.valueOf(String.valueOf(tagCells[1])));
-            response.setCallNum(Integer.valueOf(String.valueOf(tagCells[2])));
-
-            responses.add(response);
-        }
-        return responses;
-    }
-
-    public static List<SubTagCollectResponse> toSubTagCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
-
-        List<SubTagCollectResponse> responses = new ArrayList<>();
-        for (Object tag : tags) {
-            SubTagCollectResponse response = new SubTagCollectResponse();
-
-            Object[] tagCells = (Object[]) tag;
-            response.setFrequency(Integer.valueOf(String.valueOf(tagCells[0])));
-            response.setTagId(Long.valueOf(String.valueOf(tagCells[1])));
-            response.setTagText(String.valueOf(tagCells[2]));
-            response.setCallNum(Integer.valueOf(String.valueOf(tagCells[3])));
-
-            if (String.valueOf(tagCells[1]).equals("0")) {
-                response.setTagText("其他");
-            } else {
-                for (TagEntity tg : listTag) {
-                    if (Long.valueOf(String.valueOf(tagCells[1])).equals(tg.getTagId())) {
-                        response.setTagText(tg.getTagText());
-                        break;
-                    }
-                }
-            }
-
-            responses.add(response);
-        }
-        return responses;
-    }
-
-    //获取子标签tagIds
-    public static List<Long> getTagIdsByParentIdbak(Long tagId, List<TagEntity> allTags) {
-        List<Long> tagIds = new ArrayList<>();
-        for (TagEntity tag : allTags) {
-            if (tagId == 0) {
-                //if (tag.getParentId() != 0) tagIds.add(tag.getTagIds());
-                tagIds.add(tag.getTagId());
-            } else {
-                if (tagId.equals(tag.getParentId())) {
-                    tagIds.add(tag.getTagId());
-                    for (TagEntity cTag : allTags) {
-                        if (tag.getTagId().equals(cTag.getParentId())) {
-                            tagIds.add(cTag.getTagId());
-                        }
-                    }
-                }
-            }
-        }
-        return tagIds;
-    }
-
-    //获取子标签tagIds
-    public static List<Long> getTagIdsByParentId(Long tagId, List<TagEntity> allTags) {
-        List<Long> tagIds = new ArrayList<>();
-        for (TagEntity tag : allTags) {
-            if (tagId.equals(tag.getParentId())) {
-                tagIds.add(tag.getTagId());
-            }
-        }
-        return tagIds;
-    }
-
-    //按日期获取tagIds(标签多选后作废)
-    public static List<Long> getTagCircle(List<Long> tagIds, Long tagId, List<TagEntity> allTags) {
-        for (TagEntity tag : allTags) {
-            if (tagId == 0) {
-                if (tag.getParentId() != 0) tagIds.add(tag.getTagId());
-            } else {
-                if (tagId.equals(tag.getParentId())) {
-                    tagIds.add(tag.getTagId());
-                    getTagCircle(tagIds, tag.getTagId(), allTags);
-                }
-            }
-        }
-        return tagIds;
-    }
+//    public static List<TagCollectResponse> toDateCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
+//
+//        List<TagCollectResponse> responses = new ArrayList<>();
+//        for (Object tag : tags) {
+//            TagCollectResponse response = new TagCollectResponse();
+//
+//            Object[] tagCells = (Object[]) tag;
+//            response.setCallDate(String.valueOf(tagCells[0]));
+//            response.setFrequency(Integer.valueOf(String.valueOf(tagCells[1])));
+//            response.setTagId(Long.valueOf(String.valueOf(tagCells[2])));
+//            response.setTagText(String.valueOf(tagCells[3]));
+//            response.setCallNum(Long.valueOf(String.valueOf(tagCells[4])));
+//
+//            for (TagEntity tg : listTag) {
+//                if (Long.valueOf(String.valueOf(tagCells[2])).equals(tg.getTagId())) {
+//                    response.setTagText(tg.getTagText());
+//                    break;
+//                }
+//            }
+//
+//            responses.add(response);
+//        }
+//        return responses;
+//    }
+//
+//    public static List<TagCollectResponse> toTagCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
+//
+//        List<TagCollectResponse> responses = new ArrayList<>();
+//        for (Object tag : tags) {
+//            TagCollectResponse response = new TagCollectResponse();
+//
+//            Object[] tagCells = (Object[]) tag;
+//            response.setCallDate(String.valueOf(tagCells[0]));
+//            response.setFrequency(Integer.valueOf(String.valueOf(tagCells[1])));
+//            response.setCallNum(Long.valueOf(String.valueOf(tagCells[2])));
+//
+//            responses.add(response);
+//        }
+//        return responses;
+//    }
+//
+//    public static List<TagCollectResponse> toSubTagCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
+//
+//        List<TagCollectResponse> responses = new ArrayList<>();
+//        for (Object tag : tags) {
+//            TagCollectResponse response = new TagCollectResponse();
+//
+//            Object[] tagCells = (Object[]) tag;
+//            response.setFrequency(Integer.valueOf(String.valueOf(tagCells[0])));
+//            response.setTagId(Long.valueOf(String.valueOf(tagCells[1])));
+//            response.setTagText(String.valueOf(tagCells[2]));
+//            response.setCallNum(Long.valueOf(String.valueOf(tagCells[3])));
+//
+//            if (String.valueOf(tagCells[1]).equals("0")) {
+//                response.setTagText("其他");
+//            } else {
+//                for (TagEntity tg : listTag) {
+//                    if (Long.valueOf(String.valueOf(tagCells[1])).equals(tg.getTagId())) {
+//                        response.setTagText(tg.getTagText());
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            responses.add(response);
+//        }
+//        return responses;
+//    }
+//
+//    //获取子标签tagIds
+//    public static List<Long> getTagIdsByParentIdbak(Long tagId, List<TagEntity> allTags) {
+//        List<Long> tagIds = new ArrayList<>();
+//        for (TagEntity tag : allTags) {
+//            if (tagId == 0) {
+//                //if (tag.getParentId() != 0) tagIds.add(tag.getTagIds());
+//                tagIds.add(tag.getTagId());
+//            } else {
+//                if (tagId.equals(tag.getParentId())) {
+//                    tagIds.add(tag.getTagId());
+//                    for (TagEntity cTag : allTags) {
+//                        if (tag.getTagId().equals(cTag.getParentId())) {
+//                            tagIds.add(cTag.getTagId());
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return tagIds;
+//    }
+//
+//    //获取子标签tagIds
+//    public static List<Long> getTagIdsByParentId(Long tagId, List<TagEntity> allTags) {
+//        List<Long> tagIds = new ArrayList<>();
+//        for (TagEntity tag : allTags) {
+//            if (tagId.equals(tag.getParentId())) {
+//                tagIds.add(tag.getTagId());
+//            }
+//        }
+//        return tagIds;
+//    }
+//
+//    //按日期获取tagIds(标签多选后作废)
+//    public static List<Long> getTagCircle(List<Long> tagIds, Long tagId, List<TagEntity> allTags) {
+//        for (TagEntity tag : allTags) {
+//            if (tagId == 0) {
+//                if (tag.getParentId() != 0) tagIds.add(tag.getTagId());
+//            } else {
+//                if (tagId.equals(tag.getParentId())) {
+//                    tagIds.add(tag.getTagId());
+//                    getTagCircle(tagIds, tag.getTagId(), allTags);
+//                }
+//            }
+//        }
+//        return tagIds;
+//    }
 
 }

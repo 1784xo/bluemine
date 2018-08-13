@@ -17,7 +17,8 @@ public interface TagRepository extends JpaRepository<TagEntity, Long> {
     @Query("SELECT tag FROM TagEntity tag WHERE tag.channelId=:channelId ORDER BY tag.tagNo ASC")
     List<TagEntity> findAll(@Param("channelId") long channelId);
 
-    List<TagEntity> findAllByChannelIdAndParentId(long channelId, long parentId);
+    @Query("SELECT tag FROM TagEntity tag WHERE tag.channelId=:channelId AND tag.parentId=:parentId ORDER BY tag.tagNo ASC")
+    List<TagEntity> findAllSub(@Param("channelId") long channelId, @Param("parentId") long parentId);
 
     TagEntity findOneByChannelIdAndTagId(long channelId, long tagId);
 }

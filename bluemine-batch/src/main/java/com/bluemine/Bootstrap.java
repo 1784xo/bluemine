@@ -1,7 +1,7 @@
 package com.bluemine;
 
 
-import com.bluemine.batch.config.BatchApplicationConfiguration;
+import com.bluemine.config.BatchApplicationConfiguration;
 import com.bluemine.context.ApplicationContextLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

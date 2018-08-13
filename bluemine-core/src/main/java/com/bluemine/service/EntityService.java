@@ -1,6 +1,5 @@
 package com.bluemine.service;
 
-import com.bluemine.domain.entity.ChannelEntity;
 import com.bluemine.domain.entity.CodeProfileEntity;
 import com.bluemine.domain.entity.CodeProfileId;
 import com.bluemine.domain.entity.TagControlEntity;
@@ -8,7 +7,6 @@ import com.bluemine.repository.CodeProfileRepository;
 import com.bluemine.repository.TagControlRepository;
 import com.bluemine.repository.proxy.RepositoryProxy;
 import com.bluemine.struct.CodeEnum;
-import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -29,7 +27,7 @@ public class EntityService {
         return tagControlRepository.findOne(channelId);
     }
 
-    public CodeProfileEntity findCodeProfileWithCache(long channelId, CodeEnum codeType, String codeValue, RepositoryProxy repositoryProxy){
+    public CodeProfileEntity findCodeProfileWithCache(long channelId, CodeEnum codeType, String codeValue, RepositoryProxy repositoryProxy) {
         CodeProfileId id = new CodeProfileId()
                 .channelId(channelId)
                 .codeType(codeType.name())

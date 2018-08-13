@@ -66,11 +66,11 @@ public class TabService {
         return findTreeWithRule(channelId);
     }
 
-    public List<TagResponse> findAll(RestfulRequest<TagRequest> request) {
+    public List<TagResponse> findAllSub(RestfulRequest<TagRequest> request) {
         TagRequest data = request.getData();
         Long channelId = data.getChannelId();
         Long parentId = data.getParentId();
-        List<TagEntity> tags = tagRepository.findAllByChannelIdAndParentId(channelId, parentId);
+        List<TagEntity> tags = tagRepository.findAllSub(channelId, parentId);
         List<TagResponse> responses = EntityUtils.toTagTree(tags);
         return responses;
     }

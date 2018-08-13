@@ -2,7 +2,69 @@
  * Created by hechao on 2018/7/25.
  */
 
-var MULTIPLE_SERIES_OPT = (function (template) {
+var PIE_OPTION = (function (template) {
+    return function (opt) {
+
+        var option = $.extend(true, {}, template, opt);
+        console.log(option);
+
+        for (var serie, i = 0, l = option.series.length; i < l; i++) {
+            option.series[i] = $.extend(true, {
+                type: 'pie',
+                label: {
+                    emphasis: {
+                        textStyle: {
+                            fontFamily: template.fontFamily
+                        }
+                    }
+                }
+            }, template.series, option.series[i]);
+            console.log(option.series[i]);
+        }
+
+        return option;
+    };
+})({
+    fontFamily: 'tahoma, arial, simsun, "Microsoft YaHei", \u5fae\u8f6f\u96c5\u9ed1, "微软雅黑", "Hiragino Sans GB", MingLiu',
+    legend: {
+        data: []
+    },
+    tooltip: {
+        formatter: '{a} <br/>{b}: {c} ({d}%)',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        padding: [5, 10],
+        textStyle: {
+            color: '#FFFFFF',
+        },
+        extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
+    },
+    series: {
+        label: {
+            emphasis: {
+                textStyle: {
+                    color: '#333333',
+                    fontSize: '14',
+                    fontWeight: 'bold'
+                }
+            }
+        }
+    },
+    color: [
+        '#fb497b',
+        '#ffa046',
+        '#5fd91a',
+        '#2f7af9',
+        '#3f90f7',
+        '#489cf6',
+        '#64bef2',
+        '#6dc9f0',
+        '#76d5ef',
+        '#7fe0ee'
+    ],
+    backgroundColor: '#fff'
+});
+
+var AXIS_OPTION = (function (template) {
     return function (opt) {
 
         var yaxis = [];
@@ -29,8 +91,6 @@ var MULTIPLE_SERIES_OPT = (function (template) {
             }, option.yAxis, serie.yAxis));
         }
         option.yAxis = yaxis;
-
-        console.log(option);
 
         return option;
     }
@@ -128,7 +188,10 @@ var bulemine = (function () {
         autoLoad: true,
         option: {},
         parsexAxisData: function () {
-            return [];
+            return null;
+        },
+        parseLegendData: function () {
+            return null;
         },
         parseSeriesData: function () {
             return [];
@@ -165,21 +228,30 @@ var bulemine = (function () {
                 if (ok) {
                     opt.afterload(ok, data, msg, opts);
                     var xaxis = opt.parsexAxisData(data, params);
-                    chart.setOption({
-                        xAxis: [{
-                            data: xaxis
-                        }]
-                    });
-
-                    var series = chart.getOption().series;
-                    var results = [];
-                    for (var result, i = 0, l = series.length; i < l; i++) {
-                        results.push({
-                            yAxisIndex: i,
-                            data: opt.parseSeriesData(i, data, series[i], params)
+                    if ((!!xaxis) && (xaxis.length > 0)) {
+                        chart.setOption({
+                            xAxis: [{
+                                data: xaxis
+                            }]
                         });
                     }
+                    var series = chart.getOption().series;
+                    var results = [];
+                    var legenddata=null;
+                    for (var result, i = 0, l = series.length; i < l; i++) {
+                        result = {
+                            yAxisIndex: i,
+                            data: opt.parseSeriesData(i, data, series[i], params)
+                        };
+                        results.push(result);
+                        if (legenddata == null) {
+                            legenddata = opt.parseLegendData(i, data, series[i], params);
+                        }
+                    }
                     chart.setOption({
+                        legend:{
+                            data:legenddata
+                        },
                         series: results
                     });
                 } else {

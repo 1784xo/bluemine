@@ -1,6 +1,7 @@
 package com.bluemine.common;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * Created by wangjt on 2018/7/22.
@@ -9,22 +10,65 @@ public class TagCollectResponse implements Serializable {
 
     private static final long serialVersionUID = 4940137728011791573L;
 
-    private String callDate;
+    private Integer callYear;
+
+    private Integer callMonth;
+
+    private Integer callDay;
+
+    private Integer callWeek;
+
+    private LocalDate callDate;
 
     private Integer frequency;
+
+    private Integer subFrequency;
+
+    private Integer totalFrequency;
 
     private Long tagId;
 
     private String tagText;
 
-    private Integer callNum;
+    private Long callNum;
 
+    public Integer getCallYear() {
+        return callYear;
+    }
 
-    public String getCallDate() {
+    public void setCallYear(Integer callYear) {
+        this.callYear = callYear;
+    }
+
+    public Integer getCallMonth() {
+        return callMonth;
+    }
+
+    public void setCallMonth(Integer callMonth) {
+        this.callMonth = callMonth;
+    }
+
+    public Integer getCallDay() {
+        return callDay;
+    }
+
+    public void setCallDay(Integer callDay) {
+        this.callDay = callDay;
+    }
+
+    public Integer getCallWeek() {
+        return callWeek;
+    }
+
+    public void setCallWeek(Integer callWeek) {
+        this.callWeek = callWeek;
+    }
+
+    public LocalDate getCallDate() {
         return callDate;
     }
 
-    public void setCallDate(String callDate) {
+    public void setCallDate(LocalDate callDate) {
         this.callDate = callDate;
     }
 
@@ -34,6 +78,22 @@ public class TagCollectResponse implements Serializable {
 
     public void setFrequency(Integer frequency) {
         this.frequency = frequency;
+    }
+
+    public Integer getSubFrequency() {
+        return subFrequency;
+    }
+
+    public void setSubFrequency(Integer subFrequency) {
+        this.subFrequency = subFrequency;
+    }
+
+    public Integer getTotalFrequency() {
+        return totalFrequency;
+    }
+
+    public void setTotalFrequency(Integer totalFrequency) {
+        this.totalFrequency = totalFrequency;
     }
 
     public String getTagText() {
@@ -52,22 +112,28 @@ public class TagCollectResponse implements Serializable {
         this.tagText = tagText;
     }
 
-    public Integer getCallNum() {
+    public Long getCallNum() {
         return callNum;
     }
 
-    public void setCallNum(Integer callNum) {
+    public void setCallNum(Long callNum) {
         this.callNum = callNum;
     }
 
     @Override
     public String toString() {
         return "TagCollectResponse{" +
-                "callDate='" + callDate + '\'' +
-                ", frequency=" + frequency +
-                ", tagText='" + tagText + '\'' +
-                ", tagId=" + tagId +
+                "callDate=" + callDate +
+                ", callDay=" + callDay +
+                ", callMonth=" + callMonth +
                 ", callNum=" + callNum +
+                ", callWeek=" + callWeek +
+                ", callYear=" + callYear +
+                ", frequency=" + frequency +
+                ", subFrequency=" + subFrequency +
+                ", tagId=" + tagId +
+                ", tagText='" + tagText + '\'' +
+                ", totalFrequency=" + totalFrequency +
                 '}';
     }
 }

@@ -1,5 +1,7 @@
 package com.bluemine.common;
 
+import com.bluemine.struct.IndexTypeEnum;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -8,35 +10,30 @@ import java.time.LocalDate;
  */
 public class TagCollectRequest implements Serializable {
     private static final long serialVersionUID = 2573158003745547629L;
+    private Long channelId;
+    private Long tagIds;
+    private LocalDate daterangeForm;
+    private LocalDate daterangeTo;
+    private String callType;
+    private String roleType;
+    private IndexTypeEnum indexType;
 
     private String sType;//day，week，month
-    private Long tagIds;
     private String dateType;
     private String dateStr;
-    private Long channelId;
     private String seatNo;
     private String callNo;
     private LocalDate callDate;
-    private LocalDate daterangeForm;
-    private LocalDate daterangeTo;
     private Integer page;
     private Integer size;
-    private String subType;
 
-    public String getsType() {
-        return sType;
+
+    public Long getChannelId() {
+        return channelId;
     }
 
-    public void setsType(String sType) {
-        this.sType = sType;
-    }
-
-    public String getDateStr() {
-        return dateStr;
-    }
-
-    public void setDateStr(String dateStr) {
-        this.dateStr = dateStr;
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
     }
 
     public Long getTagIds() {
@@ -47,6 +44,46 @@ public class TagCollectRequest implements Serializable {
         this.tagIds = tagIds;
     }
 
+    public LocalDate getDaterangeForm() {
+        return daterangeForm;
+    }
+
+    public void setDaterangeForm(LocalDate daterangeForm) {
+        this.daterangeForm = daterangeForm;
+    }
+
+    public LocalDate getDaterangeTo() {
+        return daterangeTo;
+    }
+
+    public void setDaterangeTo(LocalDate daterangeTo) {
+        this.daterangeTo = daterangeTo;
+    }
+
+    public String getCallType() {
+        return callType;
+    }
+
+    public void setCallType(String callType) {
+        this.callType = callType;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
+    }
+
+    public String getsType() {
+        return sType;
+    }
+
+    public void setsType(String sType) {
+        this.sType = sType;
+    }
+
     public String getDateType() {
         return dateType;
     }
@@ -55,12 +92,12 @@ public class TagCollectRequest implements Serializable {
         this.dateType = dateType;
     }
 
-    public Long getChannelId() {
-        return channelId;
+    public String getDateStr() {
+        return dateStr;
     }
 
-    public void setChannelId(Long channelId) {
-        this.channelId = channelId;
+    public void setDateStr(String dateStr) {
+        this.dateStr = dateStr;
     }
 
     public String getSeatNo() {
@@ -87,22 +124,6 @@ public class TagCollectRequest implements Serializable {
         this.callDate = callDate;
     }
 
-    public LocalDate getDaterangeForm() {
-        return daterangeForm;
-    }
-
-    public void setDaterangeForm(LocalDate daterangeForm) {
-        this.daterangeForm = daterangeForm;
-    }
-
-    public LocalDate getDaterangeTo() {
-        return daterangeTo;
-    }
-
-    public void setDaterangeTo(LocalDate daterangeTo) {
-        this.daterangeTo = daterangeTo;
-    }
-
     public Integer getPage() {
         return page;
     }
@@ -119,30 +140,32 @@ public class TagCollectRequest implements Serializable {
         this.size = size;
     }
 
-    public String getSubType() {
-        return subType;
+    public IndexTypeEnum getIndexType() {
+        return indexType;
     }
 
-    public void setSubType(String subType) {
-        this.subType = subType;
+    public void setIndexType(IndexTypeEnum indexType) {
+        this.indexType = indexType;
     }
 
     @Override
     public String toString() {
         return "TagCollectRequest{" +
-                "sType='" + sType + '\'' +
-                ", tagIds=" + tagIds +
-                ", dateType='" + dateType + '\'' +
-                ", dateStr='" + dateStr + '\'' +
-                ", channelId=" + channelId +
-                ", seatNo='" + seatNo + '\'' +
+                "callDate=" + callDate +
                 ", callNo='" + callNo + '\'' +
-                ", callDate=" + callDate +
+                ", callType='" + callType + '\'' +
+                ", channelId=" + channelId +
                 ", daterangeForm=" + daterangeForm +
                 ", daterangeTo=" + daterangeTo +
+                ", dateStr='" + dateStr + '\'' +
+                ", dateType='" + dateType + '\'' +
                 ", page=" + page +
+                ", roleType='" + roleType + '\'' +
+                ", seatNo='" + seatNo + '\'' +
                 ", size=" + size +
-                ", subType=" + subType +
+                ", sType='" + sType + '\'' +
+                ", indexType='" + indexType + '\'' +
+                ", tagIds=" + tagIds +
                 '}';
     }
 }

@@ -2,7 +2,7 @@ package com.bluemine;
 
 
 import com.bluemine.context.ApplicationContextLoader;
-import com.bluemine.web.config.WebApplicationConfiguration;
+import com.bluemine.config.WebApplicationConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;

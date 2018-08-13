@@ -62,8 +62,11 @@ header nav .logo {
 
 .main-center-panel-container {
     width: auto;
+    clear: both;
     padding: 10px;
     position: relative;
+    zoom: 1;
+    overflow: hidden;
 }
 
 .panel-gadget {
@@ -118,6 +121,13 @@ header nav .logo {
 
 .main-center-filter .btn-search{
 
+}
+
+.sub-tag-pie{
+    width: 49.999%;
+    float: left;
+    height: 350px;
+    overflow: hidden;
 }
 
 .led-enable {
