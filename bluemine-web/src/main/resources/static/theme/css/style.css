@@ -54,8 +54,8 @@ header nav .logo {
 
 .main-center-panel-header {
     font-size: 14px;
-    height: 30px;
-    line-height: 30px;
+    height: 40px;
+    line-height: 40px;
     padding: 0 10px;
     border-bottom: 1px solid #DEDEDE;
 }
@@ -81,11 +81,6 @@ header nav .logo {
     float: left;
 }
 
-.control-group li {
-    float: left;
-    margin: 4px 0 0 10px;
-}
-
 .main-center .main-center-box {
     width: 100%;
     zoom: 1;
@@ -106,9 +101,13 @@ header nav .logo {
 /*filter*/
 .main-center-filter {
     width: 100%;
-    overflow: auto;
     clear: both;
     padding: 9px 0 13px 0;
+}
+
+.main-center-filter>li {
+    display: inline-block;
+    margin: 4px 0 0 10px;
 }
 
 .main-center-filter button {
@@ -117,6 +116,11 @@ header nav .logo {
 
 .main-center-filter label {
     color: #888888;
+    display: inline-block;
+}
+
+.main-center-filter .ui-menu{
+    display: inline-block;
 }
 
 .main-center-filter .btn-search{

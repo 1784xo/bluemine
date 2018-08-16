@@ -10,7 +10,7 @@
 
     function prepare(el, opts) {
         opts.submit.bind('click', function (e) {
-            opts.onSubmit(el.form('getValues'), el, e, opts);
+            opts.onSubmit(el.xform('getValues'), el, e, opts);
         });
         return opts;
     };
@@ -25,7 +25,7 @@
             return vals;
         }
     };
-    $.fn.form = function (opts, a, b, c, d, e) {
+    $.fn.xform = function (opts, a, b, c, d, e) {
         var meEl = this;
         if (METHODS[opts]) {
             return METHODS[opts].apply(meEl, [a, b, c, d, e]);

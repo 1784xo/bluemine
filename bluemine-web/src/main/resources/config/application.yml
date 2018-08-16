@@ -71,3 +71,5 @@ server:
     session:
         cookie:
             http-only: true
+    tomcat:
+        max-http-header-size: 3145728

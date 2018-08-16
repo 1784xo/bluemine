@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>语义分析 - 标签分析</title>
+    <title>标签分析 - 按标签</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="/theme/jquery/jquery-ui/jquery-2.2.4.js"></script>
-    <script src="/theme/jquery/jquery-ui/jquery-ui-1.11.4.js"></script>
+    <script src="/theme/jquery/jquery-ui/jquery-ui-1.12.1.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/theme/echarts.min.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui-1.12.1.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
 
-    <script src="/theme/jquery/jquery-treetable/js/jquery-treetable-1.0.0.js"></script>
-    <script src="/theme/jquery/jquery-treetable/js/jquery-form-1.0.0.js"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
+    <script src="/theme/jquery/jquery-xtreetable/jquery-xtreetable-1.0.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-xtreetable/css/jquery-xtreetable-1.0.0.css"/>
+
+    <script src="/theme/jquery/jquery-xform/jquery-xform-1.0.0.js"></script>
 
     <script src="/theme/tag/options.js"></script>
     <script src="/theme/tag/index.js"></script>
@@ -51,23 +52,28 @@
             }
         });
 
-        $("#tags-tree").treetable({
+        $("#tags-tree").xtreetable({
             data: TAGTREE_DATA,
-            treeWidth: 100,
             width: '100%',
-            height: 200,
-            nodeTextField: 'tagText',
-            treeTitle: '所有标签',
-            treeLeft: 10,
-            rootText: '全部',
-            rowHeight: 30,
-            expand: true,
+            rowHeight: 36,
+            tree:{
+                title:'所有标签',
+                expand: true,
+                fieldName: 'tagText',
+                minWidth: 200,
+                whiteSpace:10,
+                nodeSpace: 20,
+                root:{
+                    text:'全部',
+                    valueName:'tagId',
+                    value: 0,
+                    visible: true
+                }
+            },
             columns: [{
-                name: 'tagId',
-                text: '标签ID'
-            }, {
                 name: 'rules',
                 text: '规则数',
+                width:100,
                 format: function (val, record) {
                     if (val == undefined)
                         return '';
@@ -76,6 +82,7 @@
             }, {
                 name: 'activated',
                 text: '有效',
+                width:100,
                 format: function (val, record) {
                     if (val == undefined)
                         return '';
@@ -83,7 +90,7 @@
                 }
             }],
             onSelect: function (row, e, data) {
-                var list = $("#tags-tree").treetable('crumbs', row);
+                var list = $("#tags-tree").xtreetable('crumbs', row);
                 $('#filter-form .tag-select').data('value', !data.tagId ? 0 : data.tagId).val(bulemine.crumbs(list));
             }
         });
@@ -97,12 +104,12 @@
             <h2>标签分析</h2>
         </div>
         <div class="main-center-row">
-            <div class="dark-blue" id="tabs">
-                <ul>
-                    <li><a href="#tabs-1">按标签</a></li>
-                    <li><a href="#tabs-2">按日期</a></li>
+            <div class="dark-blue ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+                    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#" class="ui-tabs-anchor">按标签</a></li>
+                    <li class="ui-state-default ui-corner-top"><a href="date" class="ui-tabs-anchor">按日期</a></li>
                 </ul>
-                <div id="tabs-1" class="control-group">
+                <div class="control-group">
                     <form id="filter-form">
                         <ul class="main-center-filter">
                             <li>
@@ -112,8 +119,7 @@
                                 <label>结束日期：</label><input class="daterange-to" name="daterangeTo" type="text"/>
                             </li>
                             <li>
-                                <label>标签：</label><input class="tag-select" name="tagIds" readonly="true"
-                                                         style="width: 300px;" value="全部 / "/>
+                                <label>标签：</label><input class="tag-select" name="tagIds" readonly="true" style="width: 300px;" value="全部 / "/>
                             </li>
                             <li>
                                 <button class="btn-search" type="button">查询</button>
@@ -144,7 +150,7 @@
                                 $("#tags-dialog").dialog('open');
                             });
 
-                            $('#filter-form').form({
+                            $('#filter-form').xform({
                                 submit: $('#filter-form .btn-search'),
                                 onSubmit: function (vals, el, e, opts) {
                                     FILTER_QUEUE.each(function (i, chart) {
@@ -183,7 +189,7 @@
                     <script type="text/javascript" th:inline="javascript">
                         //    <![CDATA[
                         bulemine.loader(function () {
-                            var values = $('#filter-form').form('getValues');
+                            var values = $('#filter-form').xform('getValues');
                             var axisCall = bulemine.charts({
                                 export: null,
                                 canvas: $('#axis-call')[0],
@@ -282,7 +288,7 @@
                             <script type="text/javascript" th:inline="javascript">
                                 //    <![CDATA[
                                 bulemine.loader(function () {
-                                    var values = $('#filter-form').form('getValues');
+                                    var values = $('#filter-form').xform('getValues');
                                     var pierule = bulemine.charts({
                                         name:'次数',
                                         export: null,
@@ -323,10 +329,6 @@
                                                 }
                                             }]
                                         }),
-                                        afterload: function () {
-                                        },
-                                        beforeload: function () {
-                                        },
                                         parseLegendData:function (index, data, opts, params) {
                                             var list = [];
                                             for (var i = 0, l = data.length; i < l; i++) {
@@ -353,7 +355,7 @@
                             <script type="text/javascript" th:inline="javascript">
                                 //    <![CDATA[
                                 bulemine.loader(function () {
-                                    var values = $('#filter-form').form('getValues');
+                                    var values = $('#filter-form').xform('getValues');
                                     var piecall = bulemine.charts({
                                         name:'会话数',
                                         export: null,
@@ -394,10 +396,6 @@
                                                 }
                                             }]
                                         }),
-                                        afterload: function () {
-                                        },
-                                        beforeload: function () {
-                                        },
                                         parseLegendData:function (index, data, opts, params) {
                                             var list = [];
                                             for (var i = 0, l = data.length; i < l; i++) {
@@ -423,26 +421,15 @@
                         </div>
                     </div>
                 </div>
-                <div id="tabs-2">
-                    <p><strong>Click this tab again to close the content pane.</strong></p>
-                    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus
-                        id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus
-                        eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse
-                        sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing.
-                        Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla.
-                        Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium
-                        posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et
-                        purus.</p>
-                </div>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
     //    <![CDATA[
-    bulemine.loader(function () {
-        $("#tabs").tabs();
-    });
+//    bulemine.loader(function () {
+//        $("#tabs").tabs();
+//    });
     //    ]]>
 </script>
 </body>

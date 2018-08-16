@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="/theme/jquery/jquery-ui/jquery-2.2.4.js"></script>
-    <script src="/theme/jquery/jquery-ui/jquery-ui-1.11.4.js"></script>
+    <script src="/theme/jquery/jquery-ui/jquery-ui-1.12.1.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui-1.12.1.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
 
-    <script src="/theme/jquery/jquery-treetable/js/jquery-treetable-1.0.0.js"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-treetable/css/jquery-treetable.css"/>
+    <script src="/theme/jquery/jquery-xtreetable/jquery-xtreetable-1.0.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-xtreetable/css/jquery-xtreetable-1.0.0.css"/>
     <style>
         .main-center-filter {
             border: 1px solid #DEDEDE;
@@ -25,7 +25,7 @@
             border-bottom: 1px solid #DEDEDE;
         }
 
-        .treetable > tbody > tr > td > span {
+        .xtreetable > tbody > tr > td > span {
             overflow: inherit;
         }
 
@@ -41,30 +41,44 @@
 
         }
 
-        .treetable .icon-new {
+        .xtreetable .icon-new {
             background-image: url("/theme/dark-blue/images/icons/doc_plus.png");
             background-repeat: no-repeat;
             background-position: 0 4px;
         }
 
-        .treetable .icon-edit {
+        .xtreetable .icon-edit {
             background-image: url("/theme/dark-blue/images/icons/doc_edit.png");
             background-repeat: no-repeat;
             background-position: 0 4px;
         }
 
-        .treetable .icon-enable {
+        .xtreetable .icon-enable {
             background-image: url("/theme/dark-blue/images/icons/icon-enable.png");
             background-repeat: no-repeat;
             background-position: 0 1px;
             width: 60px;
         }
 
-        .treetable .icon-disable {
+        .xtreetable .icon-disable {
             background-image: url("/theme/dark-blue/images/icons/icon-disabled.png");
             background-repeat: no-repeat;
             background-position: 0 1px;
             width: 60px;
+        }
+
+        #rules-dialog .table th{
+            height: 32px;
+            padding: 0 0 0 5px;
+            background: #F9F9F9;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        #rules-dialog .table td{
+            height: 32px;
+            padding: 0 0 0 5px;
+            border-top:1px solid #E1E6EB;
         }
     </style>
 </head>
@@ -86,7 +100,7 @@
     </table>
 </div>
 <div id="rules-dialog" style="display: none;" title="配置规则">
-    <table class="treetable" cellpadding="0" cellspacing="0" border="0">
+    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tbody>
         <tr>
             <th style="width: 100px;">会话类型</th>
@@ -171,6 +185,9 @@
                         resizable: false,
                         width: 400,
                         modal: true,
+                        open:function (event, ui) {
+                            $(this).find('input[name="tagName"]').val('');
+                        },
                         buttons: {
                             '确定': function () {
                                 var selected = tagDialogEl.data('selected');
@@ -189,10 +206,10 @@
                                             }
                                         },
                                         callback: function (ok, data, msg, opts) {
-                                            if(ok){
-                                                treeEl.treetable('appendNode', parentEl, data);
-                                            }else{
-                                                alert('[ERROR]'+msg);
+                                            if (ok) {
+                                                treeEl.xtreetable('appendNode', parentEl, data);
+                                            } else {
+                                                alert('[ERROR]' + msg);
                                             }
                                         }
                                     });
@@ -208,8 +225,8 @@
                     });
 
                     (function () {
-                        var callType = ruleDialogEl.find('[name="callType"]');
-                        var roleType = ruleDialogEl.find('[name="roleType"]');
+                        var callType = ruleDialogEl.find('[name="callType"]').selectmenu();
+                        var roleType = ruleDialogEl.find('[name="roleType"]').selectmenu();
                         var ruleExps = ruleDialogEl.find('[name="ruleExps"]');
                         ruleDialogEl.find('button.rule-create').bind('click', function () {
                             var selected = ruleDialogEl.data('selected');
@@ -236,8 +253,8 @@
                                             var ruleEl = createRule(data, rowEl, record, opts);
                                             ruleDialogEl.find('table').append(ruleEl);
                                             record.rules.push(data);
-                                            var cell = treeEl.treetable('findCell', rowEl, 'rules');
-                                            treeEl.treetable('updateCell', cell, record.rules);
+                                            var cell = treeEl.xtreetable('findCell', rowEl, 'rules');
+                                            treeEl.xtreetable('updateCell', cell, record.rules);
                                         } else {
                                             alert('[ERROR]' + msg);
                                         }
@@ -284,8 +301,8 @@
                                     $.each(record.rules, function (i) {
                                         if (this.ruleId == rule.ruleId) {
                                             record.rules.splice(i, 1);
-                                            var cell = treeEl.treetable('findCell', rowEl, 'rules');
-                                            treeEl.treetable('updateCell', cell, record.rules);
+                                            var cell = treeEl.xtreetable('findCell', rowEl, 'rules');
+                                            treeEl.xtreetable('updateCell', cell, record.rules);
                                             return true;
                                         }
                                     });
@@ -336,7 +353,7 @@
                     };
 
                     function initTagDialog(rowEl, cellEl, itemEl, record, opts) {
-                        var crumbs = treeEl.treetable('crumbs', rowEl);
+                        var crumbs = treeEl.xtreetable('crumbs', rowEl);
                         tagDialogEl.data('selected', {
                             row: rowEl,
                             data: record
@@ -345,21 +362,28 @@
                         tagDialogEl.dialog('open');
                     }
 
-                    treeEl.treetable({
+                    treeEl.xtreetable({
                         data: TAGTREE_DATA,
-                        treeEditor: function (tableEl, rowEl, data, opts) {
-                            return data.customizable;
-                        },
-                        treeTitle: '所有标签',
-                        treeMinWidth: 200,
-                        treeLeft: 10,
-                        expanderLeft: 20,
                         width: '100%',
-                        nodeTextField: 'tagText',
-                        rootText: '全部',
-                        rootVisible: false,
-                        rowHeight: 30,
-                        expand: true,
+                        rowHeight: 36,
+                        tree: {
+                            checked:true,
+                            expand: true,
+                            title: '所有标签',
+                            fieldName: 'tagText',
+                            minWidth: 200,
+                            whiteSpace: 10,
+                            nodeSpace: 20,
+                            editable: function (tableEl, rowEl, data, opts) {
+                                return data.customizable;
+                            },
+                            root: {
+                                text: '全部',
+                                valueName: 'tagId',
+                                value: 0,
+                                visible: false
+                            }
+                        },
                         afteredit: function (cellEl, name, val, old, data, opts) {
                             if (val != old) {
                                 var params = {};

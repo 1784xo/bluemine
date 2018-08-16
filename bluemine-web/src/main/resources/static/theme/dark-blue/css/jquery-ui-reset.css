@@ -9,27 +9,31 @@
 
 .ui-icon,
 .ui-widget-content .ui-icon {
-    background-image: url("/theme/jquery/jquery-ui/images/ui-icons_ffffff_256x240.png");
+    background-image: url("/theme/jquery/jquery-ui/images/ui-icons_444444_256x240.png");
 }
 .ui-widget-header .ui-icon {
-    background-image: url("/theme/jquery/jquery-ui/images/ui-icons_ffffff_256x240.png");
-}
-.ui-state-default .ui-icon {
-    background-image: url("/theme/jquery/jquery-ui/images/ui-icons_777777_256x240.png");
+    background-image: url("/theme/jquery/jquery-ui/images/ui-icons_444444_256x240.png");
 }
 .ui-state-hover .ui-icon,
-.ui-state-focus .ui-icon {
+.ui-state-focus .ui-icon,
+.ui-button:hover .ui-icon,
+.ui-button:focus .ui-icon {
+    background-image: url("/theme/jquery/jquery-ui/images/ui-icons_555555_256x240.png");
+}
+.ui-state-active .ui-icon,
+.ui-button:active .ui-icon {
     background-image: url("/theme/jquery/jquery-ui/images/ui-icons_ffffff_256x240.png");
 }
-.ui-state-active .ui-icon {
-    background-image: url("/theme/jquery/jquery-ui/images/ui-icons_ffffff_256x240.png");
-}
-.ui-state-highlight .ui-icon {
+.ui-state-highlight .ui-icon,
+.ui-button .ui-state-highlight.ui-icon {
     background-image: url("/theme/jquery/jquery-ui/images/ui-icons_777620_256x240.png");
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
     background-image: url("/theme/jquery/jquery-ui/images/ui-icons_cc0000_256x240.png");
+}
+.ui-button .ui-icon {
+    background-image: url("/theme/jquery/jquery-ui/images/ui-icons_777777_256x240.png");
 }
 
 
@@ -42,26 +46,32 @@
 }
 
 /*accordion*/
-.dark-blue.ui-accordion .ui-accordion-header {
+.dark-blue .ui-accordion-header {
     font-size: 1.2em;
 }
 
-.dark-blue.ui-accordion .ui-accordion-icons {
-    padding-left: 3em;
+.dark-blue .ui-accordion-icons {
+    padding-left: 1em;
 }
 
-.dark-blue.ui-accordion .ui-accordion-header span.ui-accordion-header-icon {
-    left: auto;
-    right: .5em;
+.dark-blue .ui-accordion-header span.ui-accordion-header-icon {
+    margin-right: .5em;
 }
 
-.dark-blue.ui-accordion .ui-accordion-header img.ui-accordion-header-icon {
-    left: 1em;
-    margin-top: -10px;
+.dark-blue .ui-accordion-header img.ui-accordion-header-icon {
+    display: inline-block;
+    vertical-align:middle;
+    margin-right: .5em;
 }
 
-.dark-blue.ui-accordion .ui-accordion-content {
+.dark-blue .ui-accordion-content {
     padding: 0;
+}
+
+.dark-blue .ui-accordion-content .ui-selectable a {
+    padding-left: 5em;
+    line-height: 2.5em;
+    color: #FFF;
 }
 
 .dark-blue.ui-accordion .ui-state-default {
@@ -91,12 +101,6 @@
 
 .dark-blue.ui-accordion .ui-selectable {
 
-}
-
-.dark-blue.ui-accordion .ui-selectable a {
-    padding-left: 3.5em;
-    line-height: 2.5;
-    color: #FFF;
 }
 
 .dark-blue.ui-accordion .ui-selectable li {
@@ -253,7 +257,29 @@ input.hasDatepicker {
     z-index: 200;
 }
 
-.treetable .ui-selectmenu-button span.ui-selectmenu-text{
-    padding:3px;
+.ui-selectmenu-button.ui-button{
+    border:1px solid #B4CBE7;
+    background:#E6F3FB;
+    padding: 3px;
     line-height: 16px;
+}
+
+.ui-dialog .ui-selectmenu-button.ui-button{
+    width: auto;
+}
+
+/*x-menu*/
+.x-menu{
+    line-height: 16px;
+}
+
+.x-menu.ui-widget-content{
+    border:1px solid #B4CBE7;
+    background:#E6F3FB;
+}
+
+.x-menu-pop{
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
