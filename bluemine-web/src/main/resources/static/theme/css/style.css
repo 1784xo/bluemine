@@ -105,7 +105,7 @@ header nav .logo {
     padding: 9px 0 13px 0;
 }
 
-.main-center-filter>li {
+.main-center-filter > li {
     display: inline-block;
     margin: 4px 0 0 10px;
 }
@@ -119,15 +119,15 @@ header nav .logo {
     display: inline-block;
 }
 
-.main-center-filter .ui-menu{
+.main-center-filter .ui-menu {
     display: inline-block;
 }
 
-.main-center-filter .btn-search{
+.main-center-filter .btn-search {
 
 }
 
-.sub-tag-pie{
+.sub-tag-pie {
     width: 49.999%;
     float: left;
     height: 350px;
@@ -153,17 +153,72 @@ header nav .logo {
     cursor: pointer;
 }
 
-.form-layout{
+.form-layout {
     width: 100%;
     font-size: 14px;
 }
 
-.form-layout td{
+.form-layout td {
     height: 2.5em;
     padding: 0 0 0 10px;
 }
 
-.form-item{
+.form-item {
     display: block;
-    width:80%;
+    width: 80%;
+}
+
+.call-summary {
+    font-family: tahoma, arial, simsun, "Microsoft YaHei";
+    font-size: 14px;
+    margin: 0 0 10px 0;
+}
+
+.call-summary .call-daterange{
+    width: 200px;
+}
+
+.call-summary .call-time {
+    color: #999999;
+    width: 60px;
+}
+
+.call-summary .call-member{
+    width: 40px;
+    text-align: right;
+}
+
+.call-summary th {
+    padding: 0 10px;
+    height: 40px;
+    background-color: #CAE6FE;
+    text-align: left;
+}
+
+.call-summary td {
+    padding: 0 10px;
+    height: 34px;
+    text-align: left;
+    background-color: #F0F8FF;
+}
+
+.call-summary .call-dock{
+    text-align: center;
+}
+
+.call-summary .call-dock button{
+    background-color: #8DCBFF;
+    color: #333333;
+    cursor: pointer;
+    width: 110px;
+    height: 30px;
+    border: 0px;
+    background-image: url("/theme/dark-blue/images/icon-collapse.png");
+    background-repeat: no-repeat;
+    background-position: 80px center;
+    border-radius: 3px;
+}
+
+.call-summary .call-dock .call-expand{
+    background-image: url("/theme/dark-blue/images/icon-expand.png");
 }
