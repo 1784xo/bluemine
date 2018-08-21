@@ -1,9 +1,6 @@
 package com.bluemine.rest;
 
-import com.bluemine.common.HttpRestfulRequest;
-import com.bluemine.common.HttpRestfulResponse;
-import com.bluemine.common.TagCollectRequest;
-import com.bluemine.common.TagCollectResponse;
+import com.bluemine.common.*;
 import com.bluemine.service.TagCollectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +36,7 @@ public class TagCollectController extends AbstractController {
 
     @ResponseBody
     @PostMapping("findOne")
-    public ResponseEntity find(@RequestBody HttpRestfulRequest<TagCollectRequest> restfulRequest, HttpServletResponse res) {
+    public ResponseEntity find(@RequestBody RestfulRequest<TagCollectRequest> restfulRequest, HttpServletResponse res) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         List<TagCollectResponse> response = tagCollectService.findOne(restfulRequest);
@@ -50,7 +47,7 @@ public class TagCollectController extends AbstractController {
 
     @ResponseBody
     @PostMapping("findSubTop")
-    public ResponseEntity findSubTop(@RequestBody HttpRestfulRequest<TagCollectRequest> restfulRequest) {
+    public ResponseEntity findSubTop(@RequestBody RestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         List<TagCollectResponse> response = tagCollectService.findSubTop(restfulRequest);

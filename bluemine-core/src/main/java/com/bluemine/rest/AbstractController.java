@@ -1,7 +1,7 @@
 package com.bluemine.rest;
 
 
-import com.bluemine.common.GenericRestfulRequest;
+import com.bluemine.common.RestfulGenericRequest;
 import com.bluemine.common.HttpRestfulResponse;
 import com.bluemine.common.RestfulRequest;
 import com.bluemine.context.RequestContext;
@@ -20,7 +20,7 @@ public abstract class AbstractController {
 
     public HttpRestfulResponse createRestfulResponse(RequestContext context){
         RestfulRequest request = context.getRequest();
-        GenericRestfulRequest generic = request.getGeneric();
+        RestfulGenericRequest generic = request.getGeneric();
         return new HttpRestfulResponse(true, generic.getReceipt());
     }
 }

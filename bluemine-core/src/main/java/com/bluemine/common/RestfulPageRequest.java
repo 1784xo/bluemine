@@ -1,84 +1,51 @@
 package com.bluemine.common;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import java.util.Arrays;
-
 /**
- * @author hechao
- * @date 2017/4/17.
+ * Created by hechao on 2018/8/21.
  */
-public class RestfulPageRequest {
+public class RestfulPageRequest<D, S extends SortRequest>extends RestfulRequest<D> {
 
-    protected int pageNumber = 0;
+    protected PageRequest<S> paging;
 
-    protected int pageSize = 1;
-
-    protected OrderRequest[] sort;
-
-    public RestfulPageRequest() {
-        this(0, 1);
+    public PageRequest<S> getPaging() {
+        return paging;
     }
 
-    public RestfulPageRequest(int page, int size) {
-        pageNumber = page;
-        pageSize = size;
-    }
-
-    public int getPageNumber() {
-        return pageNumber;
-    }
-
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public void setSort(OrderRequest[] sort) {
-        this.sort = sort;
+    public void setPaging(PageRequest<S> paging) {
+        this.paging = paging;
     }
 
     public Sort getSort() {
-        if (sort == null) {
-            return null;
-        }
+        SortRequest[] sort = paging.getSort();
         Sort.Order[] orders = new Sort.Order[sort.length];
         for (int i = 0, l = sort.length; i < l; i++) {
-            orders[i] = new Sort.Order(sort[i].getDirection(), sort[i].getProperty());
+            orders[i] = new Sort.Order(Sort.Direction.valueOf(sort[i].getDirection()), sort[i].getProperty());
         }
         return new Sort(orders);
     }
 
-    public PageRequest toPageRequest() {
-        return toPageRequest(0);
+    public org.springframework.data.domain.PageRequest getPageRequest() {
+        return getPageRequest(0);
     }
 
-    public PageRequest toPageRequest(int diff) {
-        return toPageRequest(pageNumber + diff, getSort());
+    public org.springframework.data.domain.PageRequest getPageRequest(int diff) {
+        return getPageRequest(paging.getPage() + diff, getSort());
     }
 
-    public PageRequest toPageRequest(int page, Sort sort) {
-        return toPageRequest(page, pageSize, sort);
+    public org.springframework.data.domain.PageRequest getPageRequest(int page, Sort sort) {
+        return getPageRequest(page, paging.getSize(), sort);
     }
 
-    public PageRequest toPageRequest(int page, int size, Sort sort) {
-        return new PageRequest(page, size, sort);
+    public org.springframework.data.domain.PageRequest getPageRequest(int page, int size, Sort sort) {
+        return new org.springframework.data.domain.PageRequest(page, size, sort);
     }
 
     @Override
     public String toString() {
-        return "PageableRequest{" +
-                "pageNumber=" + pageNumber +
-                ", pageSize=" + pageSize +
-                ", sort=" + Arrays.toString(sort) +
-                '}';
+        return "RestfulPageRequest{" +
+                "paging=" + paging +
+                "} " + super.toString();
     }
 }

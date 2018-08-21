@@ -5,23 +5,22 @@ import com.bluemine.context.RequestContext;
 import java.time.LocalDateTime;
 
 /**
- * Created by hechao on 2017/8/29.
+ *
+ * @param <T> data class
  */
 public class RestfulRequest<T> {
 
     private RequestContext<T> context;
 
-    protected GenericRestfulRequest generic;
+    protected RestfulGenericRequest generic;
 
     protected T data;
 
-    protected RestfulPageRequest paging;
-
-    public GenericRestfulRequest getGeneric() {
+    public RestfulGenericRequest getGeneric() {
         return generic;
     }
 
-    public void setGeneric(GenericRestfulRequest generic) {
+    public void setGeneric(RestfulGenericRequest generic) {
         this.generic = generic;
     }
 
@@ -31,14 +30,6 @@ public class RestfulRequest<T> {
 
     public void setData(T data) {
         this.data = data;
-    }
-
-    public RestfulPageRequest getPaging() {
-        return paging;
-    }
-
-    public void setPaging(RestfulPageRequest paging) {
-        this.paging = paging;
     }
 
     public boolean isRevised(){
@@ -63,13 +54,20 @@ public class RestfulRequest<T> {
         return generic.getRequestTime();
     }
 
+//    public <E extends Class> RestfulPageRequest<T> toPageRequest(E cls){
+//        if(RestfulPageRequest.class.isInstance(this)){
+//            return (RestfulPageRequest<T>) this;
+//        }
+//        throw new ClassCastException();
+//    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("RequestDTO{");
-        sb.append("data=").append(data);
-        sb.append(", generic=").append(generic);
-        sb.append(", paging=").append(paging);
-        sb.append("}");
-        return sb.toString();
+        return "RestfulRequest{" +
+                "businessTime=" + getBusinessTime() +
+                ", context=" + context +
+                ", data=" + data +
+                ", generic=" + generic +
+                '}';
     }
 }

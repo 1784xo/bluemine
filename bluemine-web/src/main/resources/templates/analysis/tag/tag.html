@@ -307,9 +307,14 @@
                                         channelId: CHANNEL_ID,
                                         daterangeForm: values.daterangeForm,
                                         daterangeTo: values.daterangeTo,
-                                        indexType: "FREQ",
-                                        size: 3,
-                                        tagIds: tagIds
+                                        tagIds: tagIds,
+                                        limit:10
+                                    },
+                                    paging:{
+                                        sort:[{
+                                            property:'FREQ',
+                                            direction:'DESC'
+                                        }]
                                     }
                                 },
                                 option: PIE_OPTION({
@@ -370,9 +375,14 @@
                                         channelId: CHANNEL_ID,
                                         daterangeForm: values.daterangeForm,
                                         daterangeTo: values.daterangeTo,
-                                        indexType: "CALL",
-                                        size: 3,
-                                        tagIds: tagIds
+                                        tagIds: tagIds,
+                                        limit:10
+                                    },
+                                    paging:{
+                                        sort:[{
+                                            property:'CALL',
+                                            direction:'DESC'
+                                        }]
                                     }
                                 },
                                 option: PIE_OPTION({

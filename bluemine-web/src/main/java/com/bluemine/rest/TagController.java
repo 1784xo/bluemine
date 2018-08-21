@@ -1,9 +1,6 @@
 package com.bluemine.rest;
 
-import com.bluemine.common.HttpRestfulRequest;
-import com.bluemine.common.HttpRestfulResponse;
-import com.bluemine.common.TagRequest;
-import com.bluemine.common.TagResponse;
+import com.bluemine.common.*;
 import com.bluemine.service.TabService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +45,7 @@ public class TagController extends AbstractController {
 
     @ResponseBody
     @PostMapping("create")
-    public ResponseEntity create(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest) {
+    public ResponseEntity create(@RequestBody RestfulRequest<TagRequest> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         TagResponse response = tabService.create(restfulRequest);
@@ -59,7 +56,7 @@ public class TagController extends AbstractController {
 
     @ResponseBody
     @PostMapping("update")
-    public ResponseEntity update(@RequestBody HttpRestfulRequest<TagRequest> restfulRequest) {
+    public ResponseEntity update(@RequestBody RestfulRequest<TagRequest> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         TagResponse response = tabService.update(restfulRequest);

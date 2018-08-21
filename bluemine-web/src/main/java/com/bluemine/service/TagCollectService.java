@@ -1,15 +1,18 @@
 package com.bluemine.service;
 
 import com.bluemine.ExceptionMessageEnum;
+
 import com.bluemine.common.RestfulRequest;
 import com.bluemine.common.TagCollectRequest;
 import com.bluemine.common.TagCollectResponse;
+import com.bluemine.common.TagCollectSort;
+import com.bluemine.common.RestfulPageRequest;
 import com.bluemine.domain.entity.TagCollectVirtualEntity;
 import com.bluemine.domain.util.WebEntityUtils;
 import com.bluemine.repository.TagCollectVirtualRespository;
 import com.bluemine.repository.TagRepository;
-import com.bluemine.struct.IndexTypeEnum;
 import com.bluemine.util.AssertUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -78,7 +81,7 @@ public class TagCollectService {
         return responses;
     }
 
-    public List<TagCollectResponse> findSubTop(RestfulRequest<TagCollectRequest> request) {
+    public List<TagCollectResponse> findSubTop(RestfulPageRequest<TagCollectRequest,  TagCollectSort> request) {
         TagCollectRequest data = request.getData();
         Long channelId = data.getChannelId();
         AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
@@ -96,15 +99,12 @@ public class TagCollectService {
         LocalDate to = data.getDaterangeTo();
         AssertUtils.notNull(to, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
-        Integer size = data.getSize();
-        AssertUtils.notNull(size, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
-
-        IndexTypeEnum indexType = data.getIndexType();
+        PageRequest pageRequest = request.getPageRequest();
 
         String callType = data.getCallType();
         String roleType = data.getRoleType();
 
-        List<TagCollectVirtualEntity> collect = tagCollectVirtualRespository.findAll(channelId, tagId, form, to, indexType.getValue());
+        List<TagCollectVirtualEntity> collect = tagCollectVirtualRespository.findAll(channelId, tagId, form, to, pageRequest.getSort());
 
         List<TagCollectResponse> responses = new LinkedList<>();
         for (TagCollectVirtualEntity entity : collect) {

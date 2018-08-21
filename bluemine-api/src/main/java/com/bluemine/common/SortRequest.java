@@ -1,14 +1,18 @@
 package com.bluemine.common;
 
-import org.springframework.data.domain.Sort;
+import java.io.Serializable;
 
 /**
  * @author hechao
  * @date 2017/10/24.
  */
-public class OrderRequest {
-    private String property;
-    private Sort.Direction direction;
+public class SortRequest implements Serializable{
+
+    private static final long serialVersionUID = 8499103762139718491L;
+
+    protected String property;
+
+    protected String direction;
 
     public String getProperty() {
         return property;
@@ -18,17 +22,17 @@ public class OrderRequest {
         this.property = property;
     }
 
-    public Sort.Direction getDirection() {
+    public String getDirection() {
         return direction;
     }
 
-    public void setDirection(Sort.Direction direction) {
+    public void setDirection(String direction) {
         this.direction = direction;
     }
 
     @Override
     public String toString() {
-        return "OrderRequest{" +
+        return "SortRequest{" +
                 "direction=" + direction +
                 ", property='" + property + '\'' +
                 '}';

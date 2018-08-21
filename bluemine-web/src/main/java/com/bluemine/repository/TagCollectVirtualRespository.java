@@ -1,7 +1,9 @@
 package com.bluemine.repository;
 
 import com.bluemine.domain.entity.TagCollectVirtualEntity;
-import com.bluemine.struct.IndexTypeEnum;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -203,7 +205,7 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
      * @param parentId  父级tagId
      * @param start     起始日期
      * @param end       结束日期
-     * @param type      数量
+     * @param sort      排序
      * @return
      */
     @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
@@ -223,7 +225,6 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
             "CHANNEL_ID = ?1 " +
             "AND PARENT_ID=?2 " +
             "AND CALL_DATE >= ?3 AND CALL_DATE<=?4 " +
-            "GROUP BY TAG_ID " +
-            "ORDER BY ?5 DESC ", nativeQuery = true)
-    List<TagCollectVirtualEntity> findAll(long channelId, long parentId, LocalDate start, LocalDate end, String type);
+            "GROUP BY TAG_ID ORDER BY ?#{#sort}", nativeQuery = true)
+    List<TagCollectVirtualEntity> findAll(long channelId, long parentId, LocalDate start, LocalDate end, Sort sort);
 }

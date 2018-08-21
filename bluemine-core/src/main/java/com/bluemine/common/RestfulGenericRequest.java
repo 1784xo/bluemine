@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * Created by hechao on 2017/8/29.
  */
-public class GenericRestfulRequest {
+public class RestfulGenericRequest {
 
     private Boolean receipt=true;
     //the function code
