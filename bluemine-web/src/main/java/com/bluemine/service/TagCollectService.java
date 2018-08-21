@@ -1,7 +1,6 @@
 package com.bluemine.service;
 
 import com.bluemine.ExceptionMessageEnum;
-import com.bluemine.ServerConstants;
 import com.bluemine.common.RestfulRequest;
 import com.bluemine.common.TagCollectRequest;
 import com.bluemine.common.TagCollectResponse;
@@ -30,13 +29,19 @@ public class TagCollectService {
     @Inject
     private TagCollectVirtualRespository tagCollectVirtualRespository;
 
-    public List<TagCollectResponse> find(RestfulRequest<TagCollectRequest> request) {
+    public List<TagCollectResponse> findOne(RestfulRequest<TagCollectRequest> request) {
 
         TagCollectRequest data = request.getData();
         Long channelId = data.getChannelId();
         AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
-        Long tagId = (data.getTagIds() == null ? ServerConstants.ROOT_TAG_ID : data.getTagIds());
+        Long[] tagIds = data.getTagIds();
+        AssertUtils.notNull(tagIds, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        AssertUtils.isTrue(tagIds.length == 1, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        Long tagId = tagIds[0];
+        AssertUtils.notNull(tagId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
         LocalDate form = data.getDaterangeForm();
         AssertUtils.notNull(form, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
@@ -47,7 +52,7 @@ public class TagCollectService {
         String roleType = data.getRoleType();
 
         List<TagCollectVirtualEntity> collect = null;
-        if (tagId == 0) {
+        if (tagId.compareTo(0L) == 0) {
             if (callType == null) {
                 if (roleType == null) {
                     collect = tagCollectVirtualRespository.findAll(channelId, form, to);
@@ -62,7 +67,7 @@ public class TagCollectService {
                 }
             }
         } else {
-            collect = tagCollectVirtualRespository.findAll(channelId, tagId, form, to);
+            collect = tagCollectVirtualRespository.findOne(channelId, tagId, form, to);
         }
 
         List<TagCollectResponse> responses = new LinkedList<>();
@@ -78,7 +83,13 @@ public class TagCollectService {
         Long channelId = data.getChannelId();
         AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
-        Long tagId = (data.getTagIds() == null ? ServerConstants.ROOT_TAG_ID : data.getTagIds());
+        Long[] tagIds = data.getTagIds();
+        AssertUtils.notNull(tagIds, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        AssertUtils.isTrue(tagIds.length == 1, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        Long tagId = tagIds[0];
+        AssertUtils.notNull(tagId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
         LocalDate form = data.getDaterangeForm();
         AssertUtils.notNull(form, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
@@ -93,7 +104,7 @@ public class TagCollectService {
         String callType = data.getCallType();
         String roleType = data.getRoleType();
 
-        List<TagCollectVirtualEntity> collect = tagCollectVirtualRespository.findAll(channelId, tagId, form, to, indexType);
+        List<TagCollectVirtualEntity> collect = tagCollectVirtualRespository.findAll(channelId, tagId, form, to, indexType.getValue());
 
         List<TagCollectResponse> responses = new LinkedList<>();
         for (TagCollectVirtualEntity entity : collect) {

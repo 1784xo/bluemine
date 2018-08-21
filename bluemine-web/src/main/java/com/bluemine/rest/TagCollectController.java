@@ -38,12 +38,11 @@ public class TagCollectController extends AbstractController {
 //    }
 
     @ResponseBody
-    @PostMapping("find")
+    @PostMapping("findOne")
     public ResponseEntity find(@RequestBody HttpRestfulRequest<TagCollectRequest> restfulRequest, HttpServletResponse res) {
-        res.setHeader("Access-Control-Allow-Origin", "*");
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
-        List<TagCollectResponse> response = tagCollectService.find(restfulRequest);
+        List<TagCollectResponse> response = tagCollectService.findOne(restfulRequest);
         restfulResponse.setResult(response);
 
         return ResponseEntity.ok(restfulResponse);

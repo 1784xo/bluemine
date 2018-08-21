@@ -2,7 +2,6 @@ package com.bluemine.domain.util;
 
 import com.bluemine.common.*;
 import com.bluemine.domain.entity.RuleEntity;
-import com.bluemine.domain.entity.TagCollectEntity;
 import com.bluemine.domain.entity.TagEntity;
 
 import java.util.*;
@@ -73,7 +72,7 @@ public abstract class EntityUtils {
         response.setChannelId(tag.getChannelId());
         response.setParentId(tag.getParentId());
         response.setCustomizable(tag.getCustomizable());
-        response.setTagCode(tag.getTagNo());
+        response.setTagNo(tag.getTagNo());
         response.setTagId(tag.getTagId());
         response.setTagText(tag.getTagText());
         return response;

@@ -56,16 +56,16 @@
             data: TAGTREE_DATA,
             width: '100%',
             rowHeight: 36,
-            tree:{
-                title:'所有标签',
+            tree: {
+                title: '所有标签',
                 expand: true,
                 fieldName: 'tagText',
                 minWidth: 200,
-                whiteSpace:10,
+                whiteSpace: 10,
                 nodeSpace: 20,
-                root:{
-                    text:'全部',
-                    valueName:'tagId',
+                root: {
+                    text: '全部',
+                    valueName: 'tagId',
                     value: 0,
                     visible: true
                 }
@@ -73,7 +73,7 @@
             columns: [{
                 name: 'rules',
                 text: '规则数',
-                width:100,
+                width: 100,
                 format: function (val, record) {
                     if (val == undefined)
                         return '';
@@ -82,7 +82,7 @@
             }, {
                 name: 'activated',
                 text: '有效',
-                width:100,
+                width: 100,
                 format: function (val, record) {
                     if (val == undefined)
                         return '';
@@ -105,8 +105,10 @@
         </div>
         <div class="main-center-row">
             <div class="dark-blue ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
-                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
-                    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#" class="ui-tabs-anchor">按标签</a></li>
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"
+                    role="tablist">
+                    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#" class="ui-tabs-anchor">按标签</a>
+                    </li>
                     <li class="ui-state-default ui-corner-top"><a href="date" class="ui-tabs-anchor">按日期</a></li>
                 </ul>
                 <div class="control-group">
@@ -119,7 +121,8 @@
                                 <label>结束日期：</label><input class="daterange-to" name="daterangeTo" type="text"/>
                             </li>
                             <li>
-                                <label>标签：</label><input class="tag-select" name="tagIds" readonly="true" style="width: 300px;" value="全部 / "/>
+                                <label>标签：</label><input class="tag-select" name="tagIds" readonly="true"
+                                                         style="width: 300px;" value="全部 / "/>
                             </li>
                             <li>
                                 <button class="btn-search" type="button">查询</button>
@@ -152,6 +155,7 @@
                             $('#filter-form').xform({
                                 submit: $('#filter-form .btn-search'),
                                 onSubmit: function (vals, el, e, opts) {
+                                    vals.tagIds = vals.tagIds.split(',');
                                     FILTER_QUEUE.each(function (i, chart) {
                                         chart.reload({
                                             data: vals
@@ -186,19 +190,34 @@
                             </div>
                         </div>
                     </div>
+                    <!--子标签分布-->
+                    <div class="main-center-panel">
+                        <div class="main-center-panel-header">
+                            子标签分布
+                        </div>
+                        <div class="main-center-panel-container">
+                            <div id="pie-rule" class="sub-tag-pie"></div>
+                            <div id="pie-call" class="sub-tag-pie"></div>
+                        </div>
+                    </div>
                     <script type="text/javascript" th:inline="javascript">
                         //    <![CDATA[
                         bulemine.loader(function () {
                             var values = $('#filter-form').xform('getValues');
+                            var tagIds = String(values.tagIds).split(',');
+
                             var axisCall = bulemine.charts({
                                 export: null,
                                 canvas: $('#axis-call')[0],
                                 autoLoad: true,
-                                url: '/service/tag/collect/find',
+                                url: '/service/tag/collect/findOne',
                                 params: {
-                                    data: $.extend({
-                                        channelId: CHANNEL_ID
-                                    }, values)
+                                    data: {
+                                        channelId: CHANNEL_ID,
+                                        daterangeForm: values.daterangeForm,
+                                        daterangeTo: values.daterangeTo,
+                                        tagIds: tagIds
+                                    }
                                 },
                                 option: AXIS_OPTION({
                                     grid: {
@@ -276,50 +295,35 @@
                                 }
                             });
                             FILTER_QUEUE.push(axisCall);
-                        });
-                        //    ]]>
-                    </script>
-
-                    <!--子标签分布-->
-                    <div class="main-center-panel">
-                        <div class="main-center-panel-header">
-                            子标签分布
-                        </div>
-                        <div class="main-center-panel-container">
-                            <div id="pie-rule" class="sub-tag-pie"></div>
-                            <div id="pie-call" class="sub-tag-pie"></div>
-                        </div>
-                    </div>
-                    <script type="text/javascript" th:inline="javascript">
-                        //    <![CDATA[
-                        bulemine.loader(function () {
-                            var values = $('#filter-form').xform('getValues');
 
                             var pierule = bulemine.charts({
-                                name:'次数',
+                                name: '次数',
                                 export: null,
                                 canvas: $('#pie-rule')[0],
                                 autoLoad: true,
                                 url: '/service/tag/collect/findSubTop',
                                 params: {
-                                    data: $.extend({
+                                    data: {
                                         channelId: CHANNEL_ID,
-                                        indexType:'FREQ',
-                                        size: 3
-                                    }, values)
+                                        daterangeForm: values.daterangeForm,
+                                        daterangeTo: values.daterangeTo,
+                                        indexType: "FREQ",
+                                        size: 3,
+                                        tagIds: tagIds
+                                    }
                                 },
                                 option: PIE_OPTION({
-                                    title : {
+                                    title: {
                                         text: '次数',
-                                        x:'center'
+                                        x: 'center'
                                     },
                                     legend: {
                                         orient: 'vertical',
                                         x: 'right',
                                         y: 'center'
                                     },
-                                    series:[{
-                                        name:'次数',
+                                    series: [{
+                                        name: '次数',
                                         avoidLabelOverlap: false,
                                         radius: ['50%', '75%'],
                                         center: ['50%', '50%'],
@@ -335,7 +339,7 @@
                                         }
                                     }]
                                 }),
-                                parseLegendData:function (index, data, opts, params) {
+                                parseLegendData: function (index, data, opts, params) {
                                     var list = [];
                                     for (var i = 0, l = data.length; i < l; i++) {
                                         list.push(data[i].tagText);
@@ -346,7 +350,7 @@
                                     var list = [];
                                     for (var i = 0, l = data.length; i < l; i++) {
                                         list.push({
-                                            name:data[i].tagText,
+                                            name: data[i].tagText,
                                             value: data[i].totalFrequency
                                         });
                                     }
@@ -356,30 +360,33 @@
                             FILTER_QUEUE.push(pierule);
 
                             var piecall = bulemine.charts({
-                                name:'会话数',
+                                name: '会话数',
                                 export: null,
                                 canvas: $('#pie-call')[0],
                                 autoLoad: true,
                                 url: '/service/tag/collect/findSubTop',
                                 params: {
-                                    data: $.extend({
+                                    data: {
                                         channelId: CHANNEL_ID,
-                                        indexType:'CALL',
-                                        size: 3
-                                    }, values)
+                                        daterangeForm: values.daterangeForm,
+                                        daterangeTo: values.daterangeTo,
+                                        indexType: "CALL",
+                                        size: 3,
+                                        tagIds: tagIds
+                                    }
                                 },
                                 option: PIE_OPTION({
-                                    title : {
+                                    title: {
                                         text: '会话数',
-                                        x:'center'
+                                        x: 'center'
                                     },
                                     legend: {
                                         orient: 'vertical',
                                         x: 'left',
                                         y: 'center'
                                     },
-                                    series:[{
-                                        name:'次数',
+                                    series: [{
+                                        name: '次数',
                                         avoidLabelOverlap: false,
                                         radius: ['50%', '75%'],
                                         center: ['50%', '50%'],
@@ -395,7 +402,7 @@
                                         }
                                     }]
                                 }),
-                                parseLegendData:function (index, data, opts, params) {
+                                parseLegendData: function (index, data, opts, params) {
                                     var list = [];
                                     for (var i = 0, l = data.length; i < l; i++) {
                                         list.push(data[i].tagText);
@@ -406,7 +413,7 @@
                                     var list = [];
                                     for (var i = 0, l = data.length; i < l; i++) {
                                         list.push({
-                                            name:data[i].tagText,
+                                            name: data[i].tagText,
                                             value: data[i].callNum
                                         });
                                     }
@@ -442,7 +449,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="call-dock"><button type="button">展开</button></td>
+                                    <td colspan="4" class="call-dock">
+                                        <button type="button">展开</button>
+                                    </td>
                                 </tr>
                             </table>
                             <table class="call-summary" cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -463,7 +472,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="call-dock"><button type="button" class="call-expand">收起</button></td>
+                                    <td colspan="4" class="call-dock">
+                                        <button type="button" class="call-expand">收起</button>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -473,12 +484,5 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" th:inline="javascript">
-    //    <![CDATA[
-//    bulemine.loader(function () {
-//        $("#tabs").tabs();
-//    });
-    //    ]]>
-</script>
 </body>
 </html>

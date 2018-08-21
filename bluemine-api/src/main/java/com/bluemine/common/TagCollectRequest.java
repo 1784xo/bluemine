@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class TagCollectRequest implements Serializable {
     private static final long serialVersionUID = 2573158003745547629L;
     private Long channelId;
-    private Long tagIds;
+    private Long[] tagIds;
     private LocalDate daterangeForm;
     private LocalDate daterangeTo;
     private String callType;
@@ -36,11 +36,11 @@ public class TagCollectRequest implements Serializable {
         this.channelId = channelId;
     }
 
-    public Long getTagIds() {
+    public Long[] getTagIds() {
         return tagIds;
     }
 
-    public void setTagIds(Long tagIds) {
+    public void setTagIds(Long[] tagIds) {
         this.tagIds = tagIds;
     }
 

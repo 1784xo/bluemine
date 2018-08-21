@@ -17,7 +17,7 @@ public class TagResponse implements Serializable {
 
     private long channelId;
 
-    private int tagCode;
+    private int tagNo;
 
     private String tagText;
 
@@ -53,12 +53,12 @@ public class TagResponse implements Serializable {
         this.channelId = channelId;
     }
 
-    public int getTagCode() {
-        return tagCode;
+    public int getTagNo() {
+        return tagNo;
     }
 
-    public void setTagCode(int tagCode) {
-        this.tagCode = tagCode;
+    public void setTagNo(int tagNo) {
+        this.tagNo = tagNo;
     }
 
     public String getTagText() {
@@ -118,7 +118,7 @@ public class TagResponse implements Serializable {
                 ", parentId=" + parentId +
                 ", customizable=" + customizable +
                 ", rules=" + rules +
-                ", tagCode='" + tagCode + '\'' +
+                ", tagNo='" + tagNo + '\'' +
                 ", tagId=" + tagId +
                 ", tagText='" + tagText + '\'' +
                 '}';
