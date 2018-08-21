@@ -21,7 +21,7 @@ public class TagCollectVirtualEntity implements Serializable {
     private Long tagId;
 
     @Column(name = "CALL_NUM", updatable = false)
-    private Long callNum;
+    private Integer callNum;
 
     @Column(name = "PARENT_ID", updatable = false)
     private Long parentId;
@@ -61,11 +61,11 @@ public class TagCollectVirtualEntity implements Serializable {
         this.collectId = collectId;
     }
 
-    public Long getCallNum() {
+    public Integer getCallNum() {
         return callNum;
     }
 
-    public void setCallNum(Long callNum) {
+    public void setCallNum(Integer callNum) {
         this.callNum = callNum;
     }
 

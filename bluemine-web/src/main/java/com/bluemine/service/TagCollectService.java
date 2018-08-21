@@ -1,12 +1,9 @@
 package com.bluemine.service;
 
 import com.bluemine.ExceptionMessageEnum;
-
-import com.bluemine.common.RestfulRequest;
-import com.bluemine.common.TagCollectRequest;
-import com.bluemine.common.TagCollectResponse;
-import com.bluemine.common.TagCollectSort;
-import com.bluemine.common.RestfulPageRequest;
+import com.bluemine.common.*;
+import com.bluemine.context.RequestContext;
+import com.bluemine.context.ServerApplicationContext;
 import com.bluemine.domain.entity.TagCollectVirtualEntity;
 import com.bluemine.domain.util.WebEntityUtils;
 import com.bluemine.repository.TagCollectVirtualRespository;
@@ -81,7 +78,7 @@ public class TagCollectService {
         return responses;
     }
 
-    public List<TagCollectResponse> findSubTop(RestfulPageRequest<TagCollectRequest,  TagCollectSort> request) {
+    public List<TagCollectResponse> findSubTop(RestfulPageRequest<TagCollectRequest, TagCollectSort> request) {
         TagCollectRequest data = request.getData();
         Long channelId = data.getChannelId();
         AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
@@ -99,17 +96,44 @@ public class TagCollectService {
         LocalDate to = data.getDaterangeTo();
         AssertUtils.notNull(to, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
+        int i = 1;
+        Integer limit = data.getLimit();
+
         PageRequest pageRequest = request.getPageRequest();
 
         String callType = data.getCallType();
         String roleType = data.getRoleType();
+        RequestContext<TagCollectRequest> context = request.getContext();
+        ServerApplicationContext applicationContext = context.getParent();
 
         List<TagCollectVirtualEntity> collect = tagCollectVirtualRespository.findAll(channelId, tagId, form, to, pageRequest.getSort());
-
         List<TagCollectResponse> responses = new LinkedList<>();
+        TagCollectVirtualEntity other = new TagCollectVirtualEntity();
+        other.setFrequency(0);
+        other.setSubFrequency(0);
+        other.setTotleFrequency(0);
+        other.setCallNum(0);
+
         for (TagCollectVirtualEntity entity : collect) {
-            responses.add(WebEntityUtils.toResponse(entity));
+            if (i < limit) {
+                responses.add(WebEntityUtils.toResponse(entity));
+            }else{
+                other.setCallDate(entity.getCallDate());
+                other.setCallDay(entity.getCallDay());
+                other.setCallYear(entity.getCallYear());
+                other.setCallMonth(entity.getCallMonth());
+                other.setCallWeek(entity.getCallWeek());
+                other.setTotleFrequency(other.getTotleFrequency()+entity.getTotleFrequency());
+                other.setSubFrequency(other.getSubFrequency()+entity.getSubFrequency());
+                other.setFrequency(other.getFrequency()+entity.getFrequency());
+                other.setCallNum(other.getCallNum()+entity.getCallNum());
+                other.setParentId(entity.getParentId());
+                other.setTagId(entity.getTagId());
+                other.setTagText(applicationContext.getMessage("tag.collect.other.total"));
+            }
+            i++;
         }
+        responses.add(WebEntityUtils.toResponse(other));
         return responses;
     }
 }

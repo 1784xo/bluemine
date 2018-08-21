@@ -30,7 +30,7 @@ public class TagCollectResponse implements Serializable {
 
     private String tagText;
 
-    private Long callNum;
+    private Integer callNum;
 
     public Integer getCallYear() {
         return callYear;
@@ -112,11 +112,11 @@ public class TagCollectResponse implements Serializable {
         this.tagText = tagText;
     }
 
-    public Long getCallNum() {
+    public Integer getCallNum() {
         return callNum;
     }
 
-    public void setCallNum(Long callNum) {
+    public void setCallNum(Integer callNum) {
         this.callNum = callNum;
     }
 

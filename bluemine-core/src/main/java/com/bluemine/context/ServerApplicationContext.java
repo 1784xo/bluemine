@@ -63,6 +63,10 @@ public class ServerApplicationContext {
         return parent.getMessage(code, args, Locale.getDefault());
     }
 
+    public String getMessage(String code) {
+        return parent.getMessage(code, null, Locale.getDefault());
+    }
+
     public String getVersion() {
         return parent.getEnvironment().getProperty(ServerConstants.PROFILE_SERVER_VERSION);
     }

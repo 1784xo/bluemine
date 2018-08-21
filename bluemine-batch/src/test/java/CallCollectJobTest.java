@@ -23,12 +23,12 @@ public class CallCollectJobTest {
 
     @Test
     public void test() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-        callCollectService.run("100001", "101", "2018-07-01", "2");
-        callCollectService.run("100001", "102", "2018-07-01", "2");
-        callCollectService.run("100001", "103", "2018-07-01", "2");
-        callCollectService.run("100001", "104", "2018-07-04", "2");
-        callCollectService.run("100001", "105", "2018-07-25", "2");
-        callCollectService.run("100001", "106", "2018-07-25", "2");
+//        callCollectService.run("100001", "101", "2018-07-01", "2");
+//        callCollectService.run("100001", "102", "2018-07-01", "2");
+//        callCollectService.run("100001", "103", "2018-07-01", "2");
+//        callCollectService.run("100001", "104", "2018-07-04", "2");
+//        callCollectService.run("100001", "105", "2018-07-25", "2");
+        callCollectService.run("100001", "107", "2018-07-29", "2");
 
 //        for (int i = 1, l = 31; i <= l; i++) {
 //            callCollectService.run("100001", "1000" + i, "2018-07-" + (i < 10 ? "0" + i : i), "2");
