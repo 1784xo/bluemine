@@ -4,112 +4,90 @@
     <title>规则配置 - 标签管理</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script src="/theme/jquery/jquery-ui/jquery-2.2.4.js"></script>
-    <script src="/theme/jquery/jquery-ui/jquery-ui-1.12.1.js"></script>
+    <script src="/theme/jquery/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery/jquery-easyui/jquery-easyui-1.5.5.7.min.js"></script>
+    <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui-1.12.1.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/css/jquery-easyui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
-
-    <script src="/theme/jquery/jquery-xtreetable/jquery-xtreetable-1.0.0.js"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-xtreetable/css/jquery-xtreetable-1.0.0.css"/>
     <style>
-        .main-center-filter {
-            border: 1px solid #DEDEDE;
+
+        .datagrid-row-over, .datagrid-row-selected{
+            background:transparent;
         }
 
-        #tags-tree {
-            border-left: 1px solid #DEDEDE;
-            border-right: 1px solid #DEDEDE;
-            border-bottom: 1px solid #DEDEDE;
+        .datagrid-row-editing{
+            background: #e6f0fa;
         }
 
-        .xtreetable > tbody > tr > td > span {
-            overflow: inherit;
+        .tags-datagrid .datagrid-header{
+            background-color: #F9F9F9;
         }
 
-        .rule-create {
-
+        .tags-datagrid .datagrid-header-row, .datagrid .datagrid-row {
+            height: 40px;
         }
 
-        .rule-save {
-
+        .tags-datagrid .datagrid-cell {
+            margin: 0 10px;
         }
 
-        .rule-remove {
-
+        .tags-datagrid .tree-icon {
+            display: none;
         }
 
-        .xtreetable .icon-new {
-            background-image: url("/theme/dark-blue/images/icons/doc_plus.png");
-            background-repeat: no-repeat;
-            background-position: 0 4px;
+        .tags-datagrid .easyui-linkbutton .l-btn-text {
+            font-size: 12px;
         }
 
-        .xtreetable .icon-edit {
-            background-image: url("/theme/dark-blue/images/icons/doc_edit.png");
-            background-repeat: no-repeat;
-            background-position: 0 4px;
+        .tags-datagrid .datagrid-body .l-btn {
+            color: #006FFF;
+            border: 0px;
         }
 
-        .xtreetable .icon-enable {
-            background-image: url("/theme/dark-blue/images/icons/icon-enable.png");
-            background-repeat: no-repeat;
-            background-position: 0 1px;
-            width: 60px;
-        }
-
-        .xtreetable .icon-disable {
-            background-image: url("/theme/dark-blue/images/icons/icon-disabled.png");
-            background-repeat: no-repeat;
-            background-position: 0 1px;
-            width: 60px;
-        }
-
-        #rules-dialog .table th{
-            height: 32px;
-            padding: 0 0 0 5px;
-            background: #F9F9F9;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        #rules-dialog .table td{
-            height: 32px;
-            padding: 0 0 0 5px;
-            border-top:1px solid #E1E6EB;
+        .tags-datagrid .datagrid-body .l-btn:hover {
+            background-color: transparent;
         }
     </style>
 </head>
 <body>
 <div th:replace="/common/header::header"></div>
-<div th:replace="/common/main-west::main-west(3, '3-1')"></div>
-<div id="tag-dialog" style="display: none;" title="添加标签">
-    <table class="form-layout" cellpadding="0" cellspacing="0" border="0">
-        <tbody>
-        <tr>
-            <td style="width: 80px; text-align: right;">层级：</td>
-            <td><span name="tagCrumbs" class="form-item"></span></td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">标签名：</td>
-            <td><input name="tagName" class="form-item"/></td>
-        </tr>
-        </tbody>
-    </table>
+<div th:replace="/common/main-west::main-west(3, 301)"></div>
+
+<div title="添加子标签" id="tag-dialog">
+    <form>
+        <table width="100%" cellpadding="0" cellspacing="10" border="0">
+            <tbody>
+            <tr>
+                <td style="width: 80px; text-align: right;">父级名:</td>
+                <td><span name="tagCrumbs"></span></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">子级名:</td>
+                <td><input name="tagName" style="width: 80%" class="easyui-validatebox"
+                           data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
 </div>
-<div id="rules-dialog" style="display: none;" title="配置规则">
-    <table class="table" width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tbody>
-        <tr>
-            <th style="width: 100px;">会话类型</th>
-            <th style="width: 100px;">数据角色</th>
-            <th>规则</th>
-            <th style="width: 100px;"></th>
-        </tr>
-        <tr>
-            <td>
+
+<div title="配置规则" id="rules-dialog">
+    <form>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+            <tr>
+                <th style="width: 100px;">会话类型</th>
+                <th style="width: 100px;">数据角色</th>
+                <th>规则</th>
+                <th style="width: 100px;"></th>
+            </tr>
+            <tr>
+                <td>
                 <span>
                     <select name="callType">
                         <option value="ALL">全部</option>
@@ -118,8 +96,8 @@
                         <option value="OL">在线</option>
                     </select>
                 </span>
-            </td>
-            <td>
+                </td>
+                <td>
                 <span>
                     <select name="roleType">
                         <option value="ALL">全部</option>
@@ -127,20 +105,21 @@
                         <option value="CUST">客户</option>
                     </select>
                 </span>
-            </td>
-            <td>
+                </td>
+                <td>
                 <span>
                 <input name="ruleExps" style="width: 90%;"/>
                 </span>
-            </td>
-            <td>
+                </td>
+                <td>
                 <span>
                     <button class="rule-create">创建</button>
                 </span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
 </div>
 
 <div class="main-center">
@@ -157,324 +136,211 @@
                     <button>查询</button>
                 </li>
             </ul>
-            <div id="tags-tree">
+            <div class="tags-datagrid">
+                <table class="easyui-treegrid" width="100%">
 
+                </table>
             </div>
-
-            <script type="text/javascript" th:inline="javascript">
-                //                <![CDATA[
-                bulemine.loader(function () {
-
-                    var treeEl = $("#tags-tree");
-
-                    var ruleDialogEl = $('#rules-dialog').dialog({
-                        width: 800,
-                        height: 500,
-                        autoOpen: false,
-                        resizable: false,
-                        modal: true,
-                        buttons: {
-                            '取消': function () {
-                                $(this).dialog("close");
-                            }
-                        }
-                    });
-
-                    var tagDialogEl = $('#tag-dialog').dialog({
-                        autoOpen: false,
-                        resizable: false,
-                        width: 400,
-                        modal: true,
-                        open:function (event, ui) {
-                            $(this).find('input[name="tagName"]').val('');
-                        },
-                        buttons: {
-                            '确定': function () {
-                                var selected = tagDialogEl.data('selected');
-                                if (!!selected) {
-                                    var nameEl = tagDialogEl.find('[name="tagName"]');
-                                    var parentEl = selected.row;
-                                    var parent = selected.data;
-                                    bulemine.ajaxJson({
-                                        url: "/service/tag/create",
-                                        masking: true,
-                                        params: {
-                                            data: {
-                                                channelId: parent.channelId,
-                                                parentId: parent.tagId,
-                                                tagText: nameEl.val()
-                                            }
-                                        },
-                                        callback: function (ok, data, msg, opts) {
-                                            if (ok) {
-                                                treeEl.xtreetable('appendNode', parentEl, data);
-                                            } else {
-                                                alert('[ERROR]' + msg);
-                                            }
-                                        }
-                                    });
-                                    $(this).dialog("close");
-                                } else {
-                                    alert('[ERROR]');
-                                }
-                            },
-                            '取消': function () {
-                                $(this).dialog("close");
-                            }
-                        }
-                    });
-
-                    (function () {
-                        var callType = ruleDialogEl.find('[name="callType"]').selectmenu();
-                        var roleType = ruleDialogEl.find('[name="roleType"]').selectmenu();
-                        var ruleExps = ruleDialogEl.find('[name="ruleExps"]');
-                        ruleDialogEl.find('button.rule-create').bind('click', function () {
-                            var selected = ruleDialogEl.data('selected');
-                            if (!!selected) {
-                                var record = selected.data;
-                                var rowEl = selected.row;
-                                bulemine.ajaxJson({
-                                    url: "/service/rule/create",
-                                    masking: true,
-                                    params: {
-                                        data: {
-                                            channelId: record.channelId,
-                                            tagId: record.tagId,
-                                            callType: callType.val(),
-                                            roleType: roleType.val(),
-                                            ruleExps: ruleExps.val()
-                                        }
-                                    },
-                                    callback: function (ok, data, msg, opts) {
-                                        callType.val('ALL');
-                                        roleType.val('ALL');
-                                        ruleExps.val('');
-                                        if (ok) {
-                                            var ruleEl = createRule(data, rowEl, record, opts);
-                                            ruleDialogEl.find('table').append(ruleEl);
-                                            record.rules.push(data);
-                                            var cell = treeEl.xtreetable('findCell', rowEl, 'rules');
-                                            treeEl.xtreetable('updateCell', cell, record.rules);
-                                        } else {
-                                            alert('[ERROR]' + msg);
-                                        }
-                                    }
-                                });
-                            } else {
-                                alert('[ERROR]');
-                            }
-                        });
-                    })();
-
-                    function createRule(rule, rowEl, record, opts) {
-                        var ruleEl = $('<tr class="default-state" data-ruleId="' + this.ruleId + '">' +
-                                '<td><span><select name="callType" style="width:80px;"><option value="ALL">全部</option><option value="AUD">语音</option><option value="CMT">评论</option><option value="OL">在线</option></select></span></td>' +
-                                '<td><span><select name="roleType" style="width:80px;"><option value="ALL">全部</option><option value="CSC">客服</option><option value="CUST">客户</option></select></span></td>' +
-                                '<td><span><input name="ruleExps" style="width: 90%;"/></span></td>' +
-                                '<td><span><button class="rule-save">保存</button><button class="rule-remove">删除</button></span></td>' +
-                                '</tr>');
-
-                        var callEl = ruleEl.find('select[name="callType"]').val(rule.callType).selectmenu();
-                        var roleEl = ruleEl.find('select[name="roleType"]').val(rule.roleType).selectmenu();
-                        var expsEl = ruleEl.find('input[name="ruleExps"]').val(rule.ruleExps);
-                        ruleEl.find('button.rule-save').bind('click', function () {
-                            saveRule(this, ruleEl, rule, callEl, roleEl, expsEl, rowEl, record, opts);
-                        });
-                        ruleEl.find('button.rule-remove').bind('click', function () {
-                            removeRule(this, ruleEl, rule, callEl, roleEl, expsEl, rowEl, record, opts);
-                        });
-                        return ruleEl;
-                    }
-
-                    function removeRule(btn, ruleEl, rule, callEl, roleEl, expsEl, rowEl, record, opts) {
-                        bulemine.ajaxJson({
-                            url: "/service/rule/delete",
-                            masking: true,
-                            params: {
-                                data: {
-                                    channelId: rule.channelId,
-                                    ruleId: rule.ruleId
-                                }
-                            },
-                            callback: function (ok, data, msg, opts) {
-                                if (ok) {
-                                    $.each(record.rules, function (i) {
-                                        if (this.ruleId == rule.ruleId) {
-                                            record.rules.splice(i, 1);
-                                            var cell = treeEl.xtreetable('findCell', rowEl, 'rules');
-                                            treeEl.xtreetable('updateCell', cell, record.rules);
-                                            return true;
-                                        }
-                                    });
-                                    ruleEl.remove();
-                                } else {
-                                    alert('[ERROR]' + msg);
-                                }
-                            }
-                        });
-                    };
-
-                    function saveRule(btn, ruleEl, rule, callEl, roleEl, expsEl, rowEl, record, opts) {
-                        console.log(arguments);
-                        bulemine.ajaxJson({
-                            url: "/service/rule/update",
-                            masking: true,
-                            payload: 'data',
-                            params: {
-                                data: {
-                                    channelId: rule.channelId,
-                                    ruleId: rule.ruleId,
-                                    callType: callEl.val(),
-                                    roleType: roleEl.val(),
-                                    ruleExps: expsEl.val()
-                                }
-                            },
-                            callback: function (ok, data, msg, opts) {
-                                if (ok) {
-                                    $.extend(rule, data);
-                                } else {
-                                    alert('[ERROR]' + msg);
-                                }
-                                console.log(rule);
-                            }
-                        });
-                    };
-
-                    function initRuleDialog(rowEl, cellEl, itemEl, record, opts) {
-                        ruleDialogEl.data('selected', {
-                            data: record,
-                            row: rowEl
-                        }).find('tr.default-state').remove();
-                        $.each(record.rules, function (i) {
-                            var ruleEl = createRule(this, rowEl, record, opts);
-                            ruleDialogEl.find('table').append(ruleEl);
-                        });
-                        ruleDialogEl.dialog('open');
-                    };
-
-                    function initTagDialog(rowEl, cellEl, itemEl, record, opts) {
-                        var crumbs = treeEl.xtreetable('crumbs', rowEl);
-                        tagDialogEl.data('selected', {
-                            row: rowEl,
-                            data: record
-                        }).find('span[name="tagCrumbs"]').text(bulemine.crumbs(crumbs));
-//                        console.log(tagDialogEl);
-                        tagDialogEl.dialog('open');
-                    }
-
-                    treeEl.xtreetable({
-                        data: TAGTREE_DATA,
-                        width: '100%',
-                        rowHeight: 36,
-                        tree: {
-//                            checked:true,
-                            expand: true,
-                            title: '所有标签',
-                            fieldName: 'tagText',
-                            minWidth: 200,
-                            whiteSpace: 10,
-                            nodeSpace: 20,
-                            editable: function (tableEl, rowEl, data, opts) {
-                                return data.customizable;
-                            },
-                            root: {
-                                text: '全部',
-                                valueName: 'tagId',
-                                value: 0,
-                                visible: false
-                            }
-                        },
-                        afteredit: function (cellEl, name, val, old, data, opts) {
-                            if (val != old) {
-                                var params = {};
-                                params[name] = val;
-                                bulemine.ajaxJson({
-                                    url: "/service/tag/update",
-                                    masking: true,
-                                    params: {
-                                        data: $.extend({
-                                            channelId: data.channelId,
-                                            tagId: data.tagId,
-                                        }, params)
-                                    },
-                                    callback: function (ok, data, msg, opts) {
-                                        if (ok) {
-
-                                        } else {
-                                            alert('[ERROR]' + msg);
-                                        }
-                                    }
-                                });
-                            }
-                        },
-                        columns: [{
-                            name: 'rules',
-                            text: '规则数',
-                            width: 100,
-                            format: function (val, record) {
-                                if (val == undefined)
-                                    return '';
-                                return val.length;
-                            }
-                        }, {
-                            text: '操作',
-                            width: 150,
-                            items: [{
-//                                iconCls: 'icon-new',  // Use a URL in the icon config
-                                text: '添加子级',
-                                handler: function (rowEl, cellEl, itemEl, record, opts) {
-                                    initTagDialog(rowEl, cellEl, itemEl, record, opts);
-                                }
-                            }, {
-//                                iconCls: 'icon-new',  // Use a URL in the icon config
-                                text: '配置规则',
-                                handler: function (rowEl, cellEl, itemEl, record, opts) {
-                                    initRuleDialog(rowEl, cellEl, itemEl, record, opts);
-                                }
-                            }]
-                        }, {
-                            text: '有效',
-                            width: 100,
-                            items: [{
-                                iconCls: true,
-                                render: function (rowEl, cellEl, itemEl, record, opts) {
-                                    itemEl.addClass(record.activated ? 'icon-enable' : 'icon-disable');
-                                },
-                                handler: function (rowEl, cellEl, itemEl, record, opts) {
-                                    if (itemEl.hasClass('icon-enable')) {
-                                        record.activated = false;
-                                        itemEl.removeClass('icon-enable').addClass('icon-disable');
-                                    } else {
-                                        record.activated = true;
-                                        itemEl.removeClass('icon-disable').addClass('icon-enable');
-                                    }
-                                    bulemine.ajaxJson({
-                                        url: "/service/tag/update",
-                                        masking: true,
-                                        params: {
-                                            data: {
-                                                channelId: record.channelId,
-                                                tagId: record.tagId,
-                                                activated: record.activated
-                                            }
-                                        },
-                                        callback: function (ok, data, msg, opts) {
-                                            if (ok) {
-
-                                            } else {
-                                                alert('[ERROR]' + msg);
-                                            }
-                                        }
-                                    });
-                                }
-                            }]
-                        }]
-                    });
-                });
-                //    ]]>
-            </script>
         </div>
     </div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+    //<![CDATA[
+
+    var event_handle = {};
+
+    bulemine.loader(function () {
+
+        event_handle.onTagActivated = function (val) {
+            var id = $(this).data('id');
+            var row = tagtree.treegrid('find', id);
+            bulemine.ajaxJson({
+                url: "/service/tag/update",
+                masking: true,
+                params: {
+                    data: {
+                        channelId: row.channelId,
+                        tagId: row.tagId,
+                        activated: val
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        };
+
+        event_handle.onTagDialog = function () {
+            var id = $(this).data('id');
+            var row = tagtree.treegrid('find', id);
+            tagdialog.find('[name="tagCrumbs"]').html(row.tagText);
+            tagdialog.data('binding', row).dialog('open');
+        }
+
+        event_handle.onRuleDialog = function (){
+            ruledialog.dialog('open');
+        }
+
+        var tagtree = $('.tags-datagrid .easyui-treegrid');
+        tagtree.treegrid({
+            data: TAGTREE_DATA,
+            idField: 'tagId',
+            treeField: 'tagText',
+            fitColumns: true,
+            onAfterEdit:function (row, change) {
+                $.parser.parse($('.tags-datagrid .datagrid-row'));
+            },
+            onCancelEdit:function (row) {
+                $.parser.parse($('.tags-datagrid .datagrid-row'));
+            },
+            onDblClickRow:function (row) {
+                var me=$(this);
+                var editingId = row[me.treegrid('options').idField];
+                if(!row.customizable || me.data('editingId') == editingId){
+                    return;
+                }
+
+                var panel = me.treegrid('getPanel');
+                panel.find('[group="tag-edit-button"]').linkbutton('enable');
+
+                me.treegrid('cancelEdit', me.data('editingId')).treegrid('beginEdit', editingId).data('editingId', editingId);
+            },
+            toolbar:[{
+                group:'tag-edit-button',
+                text:'save',
+                iconCls:'icon-save',
+                disabled:true,
+                handler:function(){alert('save')}
+            }, {
+                group:'tag-edit-button',
+                text:'cancel',
+                iconCls:'icon-cancel',
+                disabled:true,
+                handler:function(){
+                    var panel = tagtree.treegrid('getPanel');
+                    panel.find('[group="tag-edit-button"]').linkbutton('disable');
+                    tagtree.treegrid('cancelEdit', tagtree.data('editingId'));
+                    tagtree.data('editingId', -1);
+                }
+            }],
+            columns: [[
+                {
+                    field: 'tagText',
+                    title: '标签',
+                    width: 800,
+                    editor:{
+                        type:'validatebox',
+                        options:{
+                            validateOnCreate:false,
+                            validateOnBlur:true,
+                            required:true,
+                            validType:'length[1,10]'
+                        }
+                    }
+                }, {
+                    field: 'rules',
+                    title: '规则数',
+                    width: 100,
+                    editor:false,
+                    formatter: function (value, row, index) {
+                        return value.length;
+                    }
+                }, {
+                    title: '配置',
+                    field: 'customizable',
+                    width: 100,
+                    editor:false,
+                    formatter: function (value, row, index) {
+                        return '<a class="easyui-linkbutton button-tag" data-options="onClick:event_handle.onTagDialog" data-id="' + row.tagId + '">添加子级</a>' +
+                                '<a class="easyui-linkbutton button-rule"  data-options="onClick:event_handle.onRuleDialog" data-id="' + row.tagId + '">配置规则</a>';
+                    }
+                }, {
+                    title: '有效',
+                    field: 'activated',
+                    width: 100,
+                    editor:false,
+                    formatter: function (value, row, index) {
+                        return '<input data-id="' + row.tagId + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
+                                + ' data-options="onChange:event_handle.onTagActivated, width:50, height:24, onText:\'是\', offText:\'否\'"/>';
+                    }
+                }
+            ]]
+        });
+
+        var tagform = $('#tag-dialog form');
+
+        var tagdialog = $('#tag-dialog');
+        tagdialog.dialog({
+            modal: true,
+            resizable: false,
+            width: 500,
+            closed: true,
+            buttons: [{
+                width: 100,
+                height: 30,
+                text: '确定',
+                handler: function (e) {
+                    if (tagform.form('validate')) {
+                        var row = tagdialog.dialog('close').data('binding');
+                        bulemine.ajaxJson({
+                            url: "/service/tag/create",
+                            masking: true,
+                            params: {
+                                data: {
+                                    channelId: row.channelId,
+                                    parentId: row.tagId,
+                                    tagText: tagform.find('input[name="tagName"]').val()
+                                }
+                            },
+                            callback: function (ok, data, msg, opts) {
+                                if (ok) {
+                                    tagtree.treegrid('append', {
+                                        parent: row.tagId,
+                                        data: [data]
+                                    });
+                                    $.parser.parse($('.tags-datagrid .datagrid-row'));
+                                } else {
+                                    alert('[ERROR]' + msg);
+                                }
+                            }
+                        });
+                        tagform.form('reset');
+                    }
+                }
+            }, {
+                width: 100,
+                height: 30,
+                text: '取消',
+                handler: function (e) {
+                    tagdialog.dialog('close');
+                }
+            }]
+        });
+
+        var ruledialog=$('#rules-dialog');
+        ruledialog.dialog({
+            modal: true,
+            resizable: false,
+            width: 800,
+            height:600,
+            closed: true,
+            buttons: [{
+                width: 100,
+                height: 30,
+                text: '取消',
+                handler: function (e) {
+                    ruledialog.dialog('close');
+                }
+            }]
+        });
+
+        $.parser.parse($('.tags-datagrid .datagrid-row'));
+    });
+    //]]>
+</script>
 </body>
 </html>

@@ -26,7 +26,7 @@ input, button {
     outline: none;
 }
 
-a, ol, ul, li, span, select {
+ol, ul, li, span, select {
     list-style: none;
     outline: none;
     margin: 0px;
@@ -41,10 +41,19 @@ a, ol, ul, li, span, select {
     float: right;
 }
 
+a{
+    list-style: none;
+    outline: none;
+}
+
 a:link {
     text-decoration: none;
+    list-style: none;
+    outline: none;
 }
 
 a:hover {
     text-decoration: underline;
+    list-style: none;
+    outline: none;
 }

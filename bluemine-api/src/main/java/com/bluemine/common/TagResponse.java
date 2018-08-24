@@ -25,7 +25,7 @@ public class TagResponse implements Serializable {
 
     private boolean customizable;
 
-    private List<TagResponse> childrens = new ArrayList<TagResponse>();
+    private List<TagResponse> children = new ArrayList<TagResponse>();
 
     private List<RuleResponse> rules = new ArrayList<>();
 
@@ -86,15 +86,15 @@ public class TagResponse implements Serializable {
     }
 
     public void addChildren(TagResponse children){
-        childrens.add(children);
+        this.children.add(children);
     }
 
-    public List<TagResponse> getChildrens() {
-        return childrens;
+    public List<TagResponse> getChildren() {
+        return children;
     }
 
-    public void setChildrens(List<TagResponse> childrens) {
-        this.childrens = childrens;
+    public void setChildren(List<TagResponse> children) {
+        this.children = children;
     }
 
     public void addRule(RuleResponse rule){
@@ -114,7 +114,7 @@ public class TagResponse implements Serializable {
         return "TagResponse{" +
                 "activated=" + activated +
                 ", channelId=" + channelId +
-                ", childrens=" + childrens +
+                ", children=" + children +
                 ", parentId=" + parentId +
                 ", customizable=" + customizable +
                 ", rules=" + rules +

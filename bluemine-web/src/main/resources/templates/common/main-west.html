@@ -6,33 +6,33 @@
 </head>
 <body>
 <div th:fragment="main-west(first, second)" class="main-west">
-    <div class="accordion dark-blue">
-        <h3><img class="ui-accordion-header-icon" height="16" src="/theme/dark-blue/images/icons/icon-omsc.png"/>智慧运营</h3>
-        <div>
+    <div class="easyui-accordion">
+        <div title="智慧运营" data-options="iconCls:'icon-omsc'" style="overflow:auto;padding:10px;">
         </div>
-        <h3><img class="ui-accordion-header-icon" height="16" src="/theme/dark-blue/images/icons/icon-znzj.png"/>智能质检</h3>
-        <div>
+        <div title="智能质检" data-options="iconCls:'icon-znzj'" style="padding:10px;">
+            <ul data-options=''>
+                <li><a href="javascript:;">质检报告</a></li>
+                <li><a href="javascript:;">质检项分析</a></li>
+                <li><a href="javascript:;">员工分析</a></li>
+                <li><a href="javascript:;">质检结果列表</a></li>
+                <li><a href="javascript:;">质检结果明细</a></li>
+                <li><a href="javascript:;">质检规则配置</a></li>
+            </ul>
         </div>
-        <h3><img class="ui-accordion-header-icon" height="16" src="/theme/dark-blue/images/icons/icon-yyfx.png"/>语义分析</h3>
-        <div>
-            <ol class="ui-selectable">
-                <li th:class="${second} eq '3-1'?'selected-state':'default-state'"><a href="javascript:;">标签分析</a></li>
-            </ol>
+        <div title="语义分析" data-options="iconCls:'icon-yyfx'">
         </div>
-        <h3><img class="ui-accordion-header-icon"  height="16" src="/theme/dark-blue/images/icons/icon-gzpz.png"/>规则配置</h3>
-        <div>
-            <ol class="ui-selectable">
-                <li th:class="${second} eq '3-1'?'selected-state':'default-state'"><a href="javascript:;">标签管理</a></li>
-                <li th:class="${second} eq '3-2'?'selected-state':'default-state'"><a href="javascript:;">业务词配置</a></li>
-            </ol>
+        <div title="规则配置" data-options="iconCls:'icon-gzpz'">
+            <ul>
+                <li><a href="javascript:;">标签管理</a></li>
+                <li><a href="javascript:;">业务词配置</a></li>
+            </ul>
         </div>
     </div>
     <script type="text/javascript" th:inline="javascript">
         $(function () {
-            $(".accordion").accordion({
-                heightStyle: "content",
-                animate: 100,
-                active: [[${first}]]
+            $('.main-west .easyui-accordion').accordion({
+                animate: true,
+                selected: [[${first}]]
             });
         });
     </script>

@@ -1,0 +1,197 @@
+.l-btn:hover {
+    transition: background-color .2s;
+    color: #FFFFFF;
+    background: #2796FF;
+}
+
+.l-btn-disabled.l-btn:hover{
+    color: #777;
+    background:transparent;
+}
+
+.datagrid-row{
+    transition: background-color .2s;
+}
+
+input {
+    background-color: #E6F3FB;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #B4CBE7;
+    height: 24px;
+    color: #666666;
+    transition: background-color .2s;
+}
+
+.datagrid-header td, .datagrid-body td, .datagrid-footer td {
+    border-width: 0 0 1px 0;
+}
+
+/*editor*/
+.datagrid-row-editing .datagrid-editable-input {
+    background-color: #FFFFFF;
+}
+
+/*mask*/
+.window-mask.request-mask {
+    z-index: 99999999;
+    background-color: transparent;
+    text-align: center;
+}
+
+.window-mask.request-mask img {
+    margin-top: 20%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/*window*/
+.window {
+    padding: 0px;
+}
+
+.window .window-body {
+    border-left: 0;
+    border-right: 0;
+}
+
+.window .window-header {
+    padding: 0;
+}
+
+.window .panel-title {
+    color: #333333;
+    font-size: 16px;
+    font-weight: normal;
+    padding-left: 10px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.window .window-header .panel-tool {
+    right: 5px;
+}
+
+.window .dialog-button {
+    padding: 10px;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+/*main-west accordion*/
+.main-west .easyui-accordion {
+    background-color: #293547;
+    border: 0;
+}
+
+.main-west .easyui-accordion .panel-htop {
+    margin: 5px 0 0 0;
+}
+
+.main-west .accordion .accordion-header {
+    background-color: #293547;
+    border: 0;
+}
+
+.main-west .accordion .accordion-header-selected {
+    background-color: #006ee3;
+}
+
+.main-west .accordion .accordion-header .panel-title {
+    color: #FFF;
+    height: 30px;
+    line-height: 30px;
+    font-weight: normal;
+}
+
+.main-west .accordion .accordion-header .panel-tool {
+    right: 10px;
+}
+
+.main-west .accordion .accordion-header-selected .panel-title {
+    color: #FFF;
+}
+
+.main-west .accordion .accordion-header .panel-with-icon {
+    padding-left: 40px;
+}
+
+.main-west .accordion .accordion-header .panel-icon {
+    left: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.main-west .accordion .accordion-collapse.accordion-expand {
+    background: url("/theme/default/images/icons/icon-right-ffffff.png") no-repeat center center;
+}
+
+.main-west .accordion .accordion-collapse {
+    background: url("/theme/default/images/icons/icon-down-ffffff.png") no-repeat center center;
+}
+
+.main-west .accordion .accordion-body {
+    border: 0;
+}
+
+.main-west .accordion .accordion-body ul li {
+    height: 30px;
+    line-height: 30px;
+}
+
+.main-west .accordion .accordion-body ul li a {
+    color: #FFFFFF;
+    margin: 0 0 0 45px;
+}
+
+.main-west .accordion .panel-body {
+    background-color: #293547;
+}
+
+/*switchbutton-off*/
+.datagrid .switchbutton-on
+, .datagrid .switchbutton-off
+, .datagrid .switchbutton-handle {
+    font-size: 12px;
+}
+
+.switchbutton-on{
+    background: #2A9BF9;
+    color: #FFFFFF;
+}
+.switchbutton-off{
+    background: #EDEDED;
+    color: #999999;
+}
+
+.switchbutton-handle{
+    /*border-radius: 10px;*/
+    box-shadow: 1px 1px 2px #888888;
+}
+
+/*icon*/
+
+.icon-save {
+    background: url('../images/icons/icon-save.png') no-repeat center center;
+}
+
+.icon-cancel {
+    background: url('../images/icons/icon-cancel.png') no-repeat center center;
+}
+
+.icon-omsc {
+    background: url('../images/icons/icon-omsc.png') no-repeat center center;
+}
+
+.icon-znzj {
+    background: url('../images/icons/icon-znzj.png') no-repeat center center;
+}
+
+.icon-yyfx {
+    background: url('../images/icons/icon-yyfx.png') no-repeat center center;
+}
+
+.icon-gzpz {
+    background: url('../images/icons/icon-gzpz.png') no-repeat center center;
+}

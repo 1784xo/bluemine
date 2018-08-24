@@ -237,7 +237,7 @@ var bulemine = (function () {
                     }
                     var series = chart.getOption().series;
                     var results = [];
-                    var legenddata=null;
+                    var legenddata = null;
                     for (var result, i = 0, l = series.length; i < l; i++) {
                         result = {
                             yAxisIndex: i,
@@ -249,8 +249,8 @@ var bulemine = (function () {
                         }
                     }
                     chart.setOption({
-                        legend:{
-                            data:legenddata
+                        legend: {
+                            data: legenddata
                         },
                         series: results
                     });
@@ -297,7 +297,7 @@ var bulemine = (function () {
             var params = $.extend({}, _def_json, opts);
 
             if (!!params.masking) {
-                var mask = $('<div class="ui-widget-overlay ui-front" style="z-index:' + (_mask_count++) + ';"><img src="/theme/dark-blue/images/loading2.gif"/></div>');
+                var mask = $('<div class="window-mask request-mask" style="display: block; z-index: 9004; position: fixed;"><img src="/theme/default/images/loading2.gif"/></div>');
                 params.mask = mask;
                 $(document.body).append(mask);
             }
