@@ -1,7 +1,12 @@
+.l-btn{
+    border-radius: 3px;
+}
+
 .l-btn:hover {
     transition: background-color .2s;
     color: #FFFFFF;
     background: #2796FF;
+    border-radius: 3px;
 }
 
 .l-btn-disabled.l-btn:hover{
@@ -23,8 +28,23 @@ input {
     transition: background-color .2s;
 }
 
+/*panel*/
+.panel-tool-close{
+    background: url('../images/icons/panel-tool-close.png') no-repeat center center;
+}
+
+.panel-tool a:hover {
+    background-color: transparent;
+}
+
+/*datagrid*/
 .datagrid-header td, .datagrid-body td, .datagrid-footer td {
     border-width: 0 0 1px 0;
+}
+
+.datagrid-link{
+    color: #006FFF;
+    margin-right: 4px;
 }
 
 /*editor*/
@@ -57,10 +77,12 @@ input {
 
 .window .window-header {
     padding: 0;
+    /*background-color: #777e89;*/
+    background-color: #293547;
 }
 
 .window .panel-title {
-    color: #333333;
+    color: #ffffff;
     font-size: 16px;
     font-weight: normal;
     padding-left: 10px;
@@ -78,6 +100,12 @@ input {
     border-left: 0;
     border-right: 0;
 }
+
+.window .dialog-button .l-btn:hover{
+    background: #293547;
+}
+
+
 
 /*main-west accordion*/
 .main-west .easyui-accordion {
@@ -150,6 +178,11 @@ input {
 }
 
 /*switchbutton-off*/
+
+.datagrid .switchbutton{
+    border-radius: 3px;
+}
+
 .datagrid .switchbutton-on
 , .datagrid .switchbutton-off
 , .datagrid .switchbutton-handle {
@@ -170,14 +203,28 @@ input {
     box-shadow: 1px 1px 2px #888888;
 }
 
-/*icon*/
-
-.icon-save {
-    background: url('../images/icons/icon-save.png') no-repeat center center;
+/*textbox*/
+.textbox{
+    border: 1px solid #D0D0D0;
+    background-color:#ffffff;
 }
 
-.icon-cancel {
-    background: url('../images/icons/icon-cancel.png') no-repeat center center;
+.textbox input{
+    background-color:#ffffff;
+}
+
+/*combo*/
+.combo-arrow{
+    background: url('../images/icons/icon-collapse.png') no-repeat center center;
+}
+
+/*icon*/
+
+.icon-create-rule{
+    background: url('../images/icons/icon-create-rule.png') no-repeat center center;
+}
+.l-btn:hover .icon-create-rule{
+    background: url('../images/icons/icon-create-rule-ffffff.png') no-repeat center center;
 }
 
 .icon-omsc {

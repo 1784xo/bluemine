@@ -334,9 +334,32 @@ var bulemine = (function () {
     return me;
 }());
 
-$.default = function (a, b) {
-    return (((a + '') == '') || (a == undefined) || (a == null)) ? b : a;
-};
+$.extend({
+    valueFrom: function (a, b) {
+        return (((a + '') == '') || (a == undefined) || (a == null)) ? b : a;
+    },
+    uuid: function () {
+        var bits = new Date().getTime().toString(2);
+        var stub = parseInt(Math.random() * 100000) & 0xFFFF;
+        var low = parseInt(bits.substr(bits.length - 32, 32), 2);
+        var high = parseInt(bits.substring(0, bits.length - 32), 2);
+        // console.log(parseInt(bits, 2));
+        // console.log(stub);
+        // console.log('----------------------------');
+        //
+        // console.log(low & 0xFFFF);
+        // console.log(low >> 16);
+        // console.log(high & 0xFFFF);
+        // console.log(high >> 16);
+        //
+        // console.log((low & 0xFFFF) ^ (stub>>12));
+        // console.log((low >> 16) ^ ((stub & 0xF00)>>8));
+        // console.log((high & 0xFFFF) ^ ((stub & 0xF0)>>4));
+        // console.log((high >> 16) ^ (stub & 0xF));
+
+        return String((high >> 16) ^ (stub & 0xF))+String((high & 0xFFFF) ^ ((stub & 0xF0)>>4))+String((low >> 16) ^ ((stub & 0xF00)>>8))+String((low & 0xFFFF) ^ (stub>>12));
+    }
+});
 
 var TAGTREE_DATA = [];
 function loadTagTree(data) {
@@ -344,3 +367,47 @@ function loadTagTree(data) {
         TAGTREE_DATA = data.result;
     }
 }
+
+
+var formatter = {
+    combobox: function (value, profile) {
+        var data = profile.options.data;
+        var txtf = profile.options.textField;
+        var valf = profile.options.valueField;
+        for (var i = 0, l = data.length; i < l; i++) {
+            if (data[i][valf] == value) {
+                return data[i][txtf];
+            }
+        }
+        return value;
+    }
+};
+
+$.extend(true, $.fn.datagrid.defaults.editors, {
+    linkbutton: {
+        init: function (container, options) {
+            var el = $('<span></span>');
+            var input = $('<input width="0" height="0" type="hidden"/>').appendTo(el);
+            $.each(options.button, function (i) {
+                var me = this;
+                $('<a href="javascript:;" class="datagrid-link">' + me.text + '</a>').bind('click', function (e) {
+                    me.handler(input.val(), container, me, e, i);
+                }).appendTo(el);
+            });
+            el.appendTo(container);
+            return input;
+        },
+        destroy: function (target) {
+            $(target).remove();
+        },
+        getValue: function (target) {
+            return $(target).val();
+        },
+        setValue: function (target, value) {
+            $(target).val(value);
+        },
+        resize: function (target, width) {
+            $(target)._outerWidth(width);
+        }
+    }
+});

@@ -15,19 +15,28 @@
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
     <style>
 
-        .datagrid-row-over, .datagrid-row-selected{
-            background:transparent;
-        }
+        /*.datagrid-row-over, .datagrid-row-selected {*/
+        /*background: transparent;*/
+        /*}*/
 
-        .datagrid-row-editing{
+        .datagrid-row-editing {
             background: #e6f0fa;
         }
 
-        .tags-datagrid .datagrid-header{
+        .datagrid-row-editing .datagrid-link {
+            color: #666666;
+            margin: 0 0 0 4px;
+        }
+
+        .datagrid-row-editing .datagrid-link:hover {
+            color: #006FFF;
+        }
+
+        .datagrid-header {
             background-color: #F9F9F9;
         }
 
-        .tags-datagrid .datagrid-header-row, .datagrid .datagrid-row {
+        .datagrid-header-row, .datagrid .datagrid-row {
             height: 40px;
         }
 
@@ -51,6 +60,8 @@
         .tags-datagrid .datagrid-body .l-btn:hover {
             background-color: transparent;
         }
+
+
     </style>
 </head>
 <body>
@@ -77,49 +88,8 @@
 </div>
 
 <div title="配置规则" id="rules-dialog">
-    <form>
-        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tbody>
-            <tr>
-                <th style="width: 100px;">会话类型</th>
-                <th style="width: 100px;">数据角色</th>
-                <th>规则</th>
-                <th style="width: 100px;"></th>
-            </tr>
-            <tr>
-                <td>
-                <span>
-                    <select name="callType">
-                        <option value="ALL">全部</option>
-                        <option value="AUD">语音</option>
-                        <option value="CMT">评论</option>
-                        <option value="OL">在线</option>
-                    </select>
-                </span>
-                </td>
-                <td>
-                <span>
-                    <select name="roleType">
-                        <option value="ALL">全部</option>
-                        <option value="CSC">客服</option>
-                        <option value="CUST">客户</option>
-                    </select>
-                </span>
-                </td>
-                <td>
-                <span>
-                <input name="ruleExps" style="width: 90%;"/>
-                </span>
-                </td>
-                <td>
-                <span>
-                    <button class="rule-create">创建</button>
-                </span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </form>
+    <table class="rules-datagrid" width="100%" cellpadding="0" cellspacing="5" border="0">
+    </table>
 </div>
 
 <div class="main-center">
@@ -151,6 +121,19 @@
 
     bulemine.loader(function () {
 
+        var tagtree = $('.tags-datagrid .easyui-treegrid');
+        function refreshTree(){
+            $.parser.parse(tagtree.treegrid('getPanel').find('.datagrid-row'));
+        }
+
+
+        var tagdialog = $('#tag-dialog');
+        var tagform = tagdialog.find('form');
+
+        var ruledialog = $('#rules-dialog');
+        var rulegrid = ruledialog.find('.rules-datagrid');
+
+
         event_handle.onTagActivated = function (val) {
             var id = $(this).data('id');
             var row = tagtree.treegrid('find', id);
@@ -174,106 +157,146 @@
             });
         };
 
-        event_handle.onTagDialog = function () {
-            var id = $(this).data('id');
+        event_handle.onTagDialog = function (el) {
+            var id = $(el).data('tag-id');
             var row = tagtree.treegrid('find', id);
             tagdialog.find('[name="tagCrumbs"]').html(row.tagText);
             tagdialog.data('binding', row).dialog('open');
         }
 
-        event_handle.onRuleDialog = function (){
-            ruledialog.dialog('open');
+        event_handle.onRuleDialog = function (el) {
+            var id = $(el).data('tag-id');
+            var row = tagtree.treegrid('find', id);
+            ruledialog.data('binding', row).dialog('open');
+            rulegrid.datagrid('loadData', {
+                total: row.rules.length,
+                rows: row.rules
+            });
         }
 
-        var tagtree = $('.tags-datagrid .easyui-treegrid');
+        event_handle.onDeleteRule = function (el) {
+            var ruleId = $(el).data('rule-id');
+            var index = rulegrid.datagrid('getRowIndex', ruleId);
+            var row = rulegrid.datagrid("getRows")[index];
+            bulemine.ajaxJson({
+                url: "/service/rule/delete",
+                masking: true,
+                params: {
+                    data: {
+                        channelId: row.channelId,
+                        ruleId: ruleId
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+                        rulegrid.datagrid("deleteRow", index);
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        }
+
         tagtree.treegrid({
             data: TAGTREE_DATA,
             idField: 'tagId',
             treeField: 'tagText',
             fitColumns: true,
-            onAfterEdit:function (row, change) {
-                $.parser.parse($('.tags-datagrid .datagrid-row'));
+            onEndEdit: function (row, changes) {
+                if (!$.isEmptyObject(changes)) {
+                    bulemine.ajaxJson({
+                        url: "/service/tag/update",
+                        masking: true,
+                        params: {
+                            data: $.extend({
+                                channelId: row.channelId,
+                                tagId: row.tagId,
+                            }, changes)
+                        },
+                        callback: function (ok, data, msg, opts) {
+                            if (ok) {
+
+                            } else {
+                                alert('[ERROR]' + msg);
+                            }
+                        }
+                    });
+                }
             },
-            onCancelEdit:function (row) {
-                $.parser.parse($('.tags-datagrid .datagrid-row'));
+            onAfterEdit: function (row, change) {
+                var me = $(this);
+                me.treegrid('acceptChanges');
+                refreshTree();
             },
-            onDblClickRow:function (row) {
-                var me=$(this);
+            onCancelEdit: function (row) {
+                refreshTree();
+            },
+            onDblClickRow: function (row) {
+                var me = $(this);
                 var editingId = row[me.treegrid('options').idField];
-                if(!row.customizable || me.data('editingId') == editingId){
+                if (!row.customizable) {
                     return;
                 }
-
-                var panel = me.treegrid('getPanel');
-                panel.find('[group="tag-edit-button"]').linkbutton('enable');
-
-                me.treegrid('cancelEdit', me.data('editingId')).treegrid('beginEdit', editingId).data('editingId', editingId);
+                me.treegrid('beginEdit', editingId);
             },
-            toolbar:[{
-                group:'tag-edit-button',
-                text:'save',
-                iconCls:'icon-save',
-                disabled:true,
-                handler:function(){alert('save')}
-            }, {
-                group:'tag-edit-button',
-                text:'cancel',
-                iconCls:'icon-cancel',
-                disabled:true,
-                handler:function(){
-                    var panel = tagtree.treegrid('getPanel');
-                    panel.find('[group="tag-edit-button"]').linkbutton('disable');
-                    tagtree.treegrid('cancelEdit', tagtree.data('editingId'));
-                    tagtree.data('editingId', -1);
-                }
-            }],
             columns: [[
                 {
                     field: 'tagText',
                     title: '标签',
-                    width: 800,
-                    editor:{
-                        type:'validatebox',
-                        options:{
-                            validateOnCreate:false,
-                            validateOnBlur:true,
-                            required:true,
-                            validType:'length[1,10]'
+                    width: 700,
+                    editor: {
+                        type: 'validatebox',
+                        options: {
+                            validateOnCreate: false,
+                            validateOnBlur: true,
+                            required: true,
+                            validType: 'length[1,10]'
                         }
                     }
                 }, {
                     field: 'rules',
                     title: '规则数',
-                    width: 100,
-                    editor:false,
+                    width: 70,
+                    editor: false,
                     formatter: function (value, row, index) {
                         return value.length;
                     }
                 }, {
-                    title: '配置',
-                    field: 'customizable',
-                    width: 100,
-                    editor:false,
-                    formatter: function (value, row, index) {
-                        return '<a class="easyui-linkbutton button-tag" data-options="onClick:event_handle.onTagDialog" data-id="' + row.tagId + '">添加子级</a>' +
-                                '<a class="easyui-linkbutton button-rule"  data-options="onClick:event_handle.onRuleDialog" data-id="' + row.tagId + '">配置规则</a>';
-                    }
-                }, {
                     title: '有效',
                     field: 'activated',
-                    width: 100,
-                    editor:false,
+                    width: 70,
+                    editor: false,
                     formatter: function (value, row, index) {
                         return '<input data-id="' + row.tagId + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
                                 + ' data-options="onChange:event_handle.onTagActivated, width:50, height:24, onText:\'是\', offText:\'否\'"/>';
                     }
+                }, {
+                    title: '操作',
+                    field: 'tagId',
+//                    width: 120,
+                    editor: {
+                        type: 'linkbutton',
+                        options: {
+                            button: [{
+                                text: '确定',
+                                handler: function (val, c, el, e, i) {
+                                    tagtree.treegrid('endEdit', val);
+                                }
+                            }, {
+                                text: '取消',
+                                handler: function (val, c, el, e, i) {
+                                    tagtree.treegrid('cancelEdit', val);
+                                }
+                            }]
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:;" class="datagrid-link" onclick="event_handle.onTagDialog(this);" data-tag-id="' + value + '">添加子级</a>' +
+                                '<a href="javascript:;" class="datagrid-link" onclick="event_handle.onRuleDialog(this)" data-tag-id="' + value + '">配置规则</a>';
+                    }
                 }
             ]]
         });
-
-        var tagform = $('#tag-dialog form');
-
-        var tagdialog = $('#tag-dialog');
         tagdialog.dialog({
             modal: true,
             resizable: false,
@@ -285,30 +308,35 @@
                 text: '确定',
                 handler: function (e) {
                     if (tagform.form('validate')) {
-                        var row = tagdialog.dialog('close').data('binding');
-                        bulemine.ajaxJson({
-                            url: "/service/tag/create",
-                            masking: true,
-                            params: {
-                                data: {
-                                    channelId: row.channelId,
-                                    parentId: row.tagId,
-                                    tagText: tagform.find('input[name="tagName"]').val()
+                        var tag = tagdialog.data('binding');
+                        if(!!tag){
+                            bulemine.ajaxJson({
+                                url: "/service/tag/create",
+                                masking: true,
+                                params: {
+                                    data: {
+                                        channelId: tag.channelId,
+                                        parentId: tag.tagId,
+                                        tagText: tagform.find('input[name="tagName"]').val()
+                                    }
+                                },
+                                callback: function (ok, data, msg, opts) {
+                                    if (ok) {
+                                        tagform.form('reset');
+                                        tagdialog.dialog('close').data('binding', null);
+                                        tagtree.treegrid('append', {
+                                            parent: tag.tagId,
+                                            data: [data]
+                                        });
+                                        refreshTree();
+                                    } else {
+                                        alert('[ERROR]' + msg);
+                                    }
                                 }
-                            },
-                            callback: function (ok, data, msg, opts) {
-                                if (ok) {
-                                    tagtree.treegrid('append', {
-                                        parent: row.tagId,
-                                        data: [data]
-                                    });
-                                    $.parser.parse($('.tags-datagrid .datagrid-row'));
-                                } else {
-                                    alert('[ERROR]' + msg);
-                                }
-                            }
-                        });
-                        tagform.form('reset');
+                            });
+                        }else{
+                            alert('[ERROR]');
+                        }
                     }
                 }
             }, {
@@ -316,29 +344,210 @@
                 height: 30,
                 text: '取消',
                 handler: function (e) {
-                    tagdialog.dialog('close');
+                    tagdialog.dialog('close').data('binding', null);
                 }
             }]
         });
 
-        var ruledialog=$('#rules-dialog');
         ruledialog.dialog({
             modal: true,
             resizable: false,
             width: 800,
-            height:600,
+            height: 600,
             closed: true,
             buttons: [{
                 width: 100,
                 height: 30,
-                text: '取消',
+                text: '关闭',
                 handler: function (e) {
-                    ruledialog.dialog('close');
+                    var tag = ruledialog.data('binding');
+                    if(!!tag){
+                        ruledialog.data('binding', null).dialog('close');
+                        tagtree.treegrid('refresh', tag.tagId);
+                        refreshTree();
+                    }else{
+                        alert('[ERROR]');
+                    }
                 }
             }]
         });
+        rulegrid.datagrid({
+            idField: 'ruleId',
+            fitColumns: true,
+            singleSelect: true,
+            onEndEdit: function (index, row, changes) {
+                var me = $(this);
+                if (!!row.newest) {
+                    var tag = ruledialog.data('binding');
+                    bulemine.ajaxJson({
+                        url: '/service/rule/create',
+                        masking: true,
+                        params: {
+                            data: {
+                                channelId: tag.channelId,
+                                tagId: tag.tagId,
+                                callType: row.callType,
+                                roleType: row.roleType,
+                                ruleExps: row.ruleExps
+                            }
+                        },
+                        callback: function (ok, data, msg, opts) {
+                            if (ok) {
+                                rulegrid.datagrid('updateRow', {
+                                    index: index,
+                                    row: data
+                                });
+                            } else {
+                                alert('[ERROR]' + msg);
+                            }
+                        }
+                    });
+                } else {
+                    if (!$.isEmptyObject(changes)) {
+                        bulemine.ajaxJson({
+                            url: '/service/rule/update',
+                            masking: true,
+                            params: {
+                                data: {
+                                    channelId: row.channelId,
+                                    ruleId: row.ruleId,
+                                    callType: row.callType,
+                                    roleType: row.roleType,
+                                    ruleExps: row.ruleExps
+                                }
+                            },
+                            callback: function (ok, data, msg, opts) {
+                                if (ok) {
 
-        $.parser.parse($('.tags-datagrid .datagrid-row'));
+                                } else {
+                                    alert('[ERROR]' + msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            },
+            onDblClickRow: function (index, row) {
+                var me = $(this);
+                me.datagrid('beginEdit', index);
+            },
+            toolbar: [{
+                text: '添加规则',
+                iconCls: 'icon-create-rule',
+                handler: function () {
+                    rulegrid.datagrid('appendRow', {
+                        ruleId: $.uuid(),
+                        newest: true,
+                        callType: 'ALL',
+                        roleType: 'ALL'
+                    }).datagrid('beginEdit', rulegrid.datagrid('getRows').length - 1);
+                }
+            }],
+            columns: [[
+                {
+                    field: 'callType',
+                    title: '会话类型',
+                    width: 100,
+                    formatter: function (value, row, index) {
+                        return formatter.combobox(value, this.editor);
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            panelHeight: 'auto',
+                            editable: false,
+                            textField: 'text',
+                            valueField: 'value',
+                            data: [{
+                                text: '全部',
+                                value: 'ALL'
+                            }, {
+                                text: '语音',
+                                value: 'AUD'
+                            }, {
+                                text: '评论',
+                                value: 'CMT'
+                            }, {
+                                text: '在线',
+                                value: 'OL'
+                            }]
+                        }
+                    }
+                }, {
+                    field: 'roleType',
+                    title: '数据角色',
+                    width: 100,
+                    formatter: function (value, row, index) {
+                        return formatter.combobox(value, this.editor);
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            panelHeight: 'auto',
+                            editable: false,
+                            textField: 'text',
+                            valueField: 'value',
+                            data: [{
+                                text: '全部',
+                                value: 'ALL'
+                            }, {
+                                text: '客服',
+                                value: 'CSC'
+                            }, {
+                                text: '客户',
+                                value: 'CUST'
+                            }]
+                        }
+                    }
+                }, {
+                    field: 'ruleExps',
+                    title: '规则',
+                    width: 500,
+                    editor: {
+                        type: 'validatebox',
+                        options: {
+                            validateOnCreate: false,
+                            validateOnBlur: true,
+                            required: true,
+                            validType: 'length[1,200]'
+                        }
+                    }
+                }, {
+                    field: 'ruleId',
+                    title: '操作',
+                    width: 100,
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:;" onclick="event_handle.onDeleteRule(this)"' +
+                                ' class="datagrid-link" data-rule-id="' + row.ruleId + '">删除</a>';
+                    },
+                    editor: {
+                        type: 'linkbutton',
+                        options: {
+                            button: [{
+                                text: '确定',
+                                handler: function (val, c, el, e, i) {
+                                    var index = rulegrid.datagrid('getRowIndex', val);
+                                    var row = rulegrid.datagrid('getRows')[index];
+                                    rulegrid.datagrid('endEdit', index);
+                                }
+                            }, {
+                                text: '取消',
+                                handler: function (val, c, el, e, i) {
+//                                    console.log(arguments);
+                                    var index = rulegrid.datagrid('getRowIndex', val);
+                                    var row = rulegrid.datagrid('getRows')[index];
+                                    rulegrid.datagrid('cancelEdit', index);
+                                    if (!!row.newest) {
+                                        rulegrid.datagrid('deleteRow', index);
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                }
+            ]]
+        });
+        refreshTree();
     });
     //]]>
 </script>
