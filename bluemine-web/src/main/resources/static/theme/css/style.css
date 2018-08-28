@@ -47,7 +47,7 @@ header nav .logo {
 
 /*panel*/
 .main-center-panel {
-    margin: 0 0 10px 0;
+    margin: 0 5px 5px 5px;
     border: 1px solid #DEDEDE;
     border-radius: 0px;
 }

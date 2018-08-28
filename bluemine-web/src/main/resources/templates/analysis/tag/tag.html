@@ -4,22 +4,16 @@
     <title>标签分析 - 按标签</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script src="/theme/jquery/jquery-ui/jquery-2.2.4.js"></script>
-    <script src="/theme/jquery/jquery-ui/jquery-ui-1.12.1.js"></script>
+    <script src="/theme/jquery/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery/jquery-easyui/jquery-easyui-1.5.5.7.min.js"></script>
+    <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
-    <script src="/theme/echarts.min.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui-1.12.1.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/css/jquery-easyui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
-
-    <script src="/theme/jquery/jquery-xtreetable/jquery-xtreetable-1.0.0.js"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-xtreetable/css/jquery-xtreetable-1.0.0.css"/>
-
-    <script src="/theme/jquery/jquery-xform/jquery-xform-1.0.0.js"></script>
-
-    <script src="/theme/tag/options.js"></script>
-    <script src="/theme/tag/index.js"></script>
     <script type="text/javascript" th:inline="javascript">
         //    <![CDATA[
         var CHANNEL_ID = '49252889384718336';
@@ -29,89 +23,20 @@
 </head>
 <body>
 <div th:replace="/common/header::header"></div>
-<div th:replace="/common/main-west::main-west(2, '2-1')"></div>
-
-<div id="tags-dialog" style="display: none;" title="选择标签">
-    <div id="tags-tree">
-
-    </div>
-</div>
-<script type="text/javascript" th:inline="javascript">
-    //    <![CDATA[
-    bulemine.loader(function () {
-        $("#tags-dialog").dialog({
-            width: 800,
-            height: 500,
-            autoOpen: false,
-            resizable: false,
-            modal: true,
-            buttons: {
-                '关闭': function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-        $("#tags-tree").xtreetable({
-            data: TAGTREE_DATA,
-            width: '100%',
-            rowHeight: 36,
-            tree: {
-                title: '所有标签',
-                expand: true,
-                fieldName: 'tagText',
-                minWidth: 200,
-                whiteSpace: 10,
-                nodeSpace: 20,
-                root: {
-                    text: '全部',
-                    valueName: 'tagId',
-                    value: 0,
-                    visible: true
-                }
-            },
-            columns: [{
-                name: 'rules',
-                text: '规则数',
-                width: 100,
-                format: function (val, record) {
-                    if (val == undefined)
-                        return '';
-                    return val.length;
-                }
-            }, {
-                name: 'activated',
-                text: '有效',
-                width: 100,
-                format: function (val, record) {
-                    if (val == undefined)
-                        return '';
-                    return val ? '是' : '否';
-                }
-            }],
-            onSelect: function (row, e, data) {
-                var list = $("#tags-tree").xtreetable('crumbs', row);
-                $('#filter-form .tag-select').data('value', !data.tagId ? 0 : data.tagId).val(bulemine.crumbs(list));
-            }
-        });
-    });
-    //    ]]>
-</script>
+<div th:replace="/common/main-west::main-west(2, 204)"></div>
 
 <div class="main-center">
     <div class="main-center-box">
         <div class="main-center-row">
             <h2>标签分析</h2>
         </div>
+
         <div class="main-center-row">
-            <div class="dark-blue ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
-                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"
-                    role="tablist">
-                    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#"
-                                                                                                 class="ui-tabs-anchor">按标签</a>
-                    </li>
-                    <li class="ui-state-default ui-corner-top"><a href="date" class="ui-tabs-anchor">按日期</a></li>
-                </ul>
+            <div class="tab-box">
+                <div class="tab-item tab-item-selected"><a>按标签</a></div>
+                <div class="tab-item"><a>按日期</a></div>
+            </div>
+            <div class="tab-panel">
                 <div class="control-group">
                     <form id="filter-form">
                         <ul class="main-center-filter">
@@ -122,373 +47,104 @@
                                 <label>结束日期：</label><input class="daterange-to" name="daterangeTo" type="text"/>
                             </li>
                             <li>
-                                <label>标签：</label><input class="tag-select" name="tagIds" readonly="true"
-                                                         style="width: 300px;" value="全部 / "/>
+                                <label>标签：</label><input class="tag-select" name="tagIds" readonly="true" style="width: 300px;" value="全部 / "/>
                             </li>
                             <li>
                                 <button class="btn-search" type="button">查询</button>
                             </li>
                         </ul>
                     </form>
-                    <script type="text/javascript" th:inline="javascript">
-                        //    <![CDATA[
-                        bulemine.loader(function () {
-                            $('#filter-form .daterange-form').datepicker({
-                                dayNamesMin: ['一', '二', '三', '四', '五', '六', '日'],
-                                monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                                dateFormat: 'yy-mm-dd',
-                                changeMonth: true,
-                                changeYear: true
-                            }).datepicker('setDate', -30);
+                </div>
+                <!--近30天趋势图-->
+                <div class="main-center-panel">
+                    <div class="main-center-panel-header">
+                        近30天趋势图
+                    </div>
+                    <div class="main-center-panel-container">
+                        <ui class="panel-gadget">
+                            <!--<li class="panel-gadget-col">
+                                <select id="trend-gradient-date" name="trend-gradient-date" style="width:50px;">
+                                    <option selected="selected">日</option>
+                                    <option>周</option>
+                                    <option>月</option>
+                                </select>
+                            </li>-->
+                            <li class="panel-gadget-col">
+                                <button id="exportbtn">导出</button>
+                            </li>
+                        </ui>
+                        <div id="axis-call" class="panel-canvas"
+                             style="width: 100%; height: 400px;z-index: 1;">
 
-                            $('#filter-form .daterange-to').datepicker({
-                                dayNamesMin: ['一', '二', '三', '四', '五', '六', '日'],
-                                monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                                dateFormat: 'yy-mm-dd',
-                                changeMonth: true,
-                                changeYear: true
-                            }).datepicker('setDate', new Date());
-
-                            $('#filter-form .tag-select').data('value', 0).bind('click', function () {
-                                $("#tags-dialog").dialog('open');
-                            });
-
-                            $('#filter-form').xform({
-                                submit: $('#filter-form .btn-search'),
-                                onSubmit: function (vals, el, e, opts) {
-                                    vals.tagIds = vals.tagIds.split(',');
-                                    FILTER_QUEUE.each(function (i, chart) {
-                                        chart.reload({
-                                            data: vals
-                                        });
-                                    });
-                                }
-                            });
-                        });
-                        //    ]]>
-                    </script>
-
-                    <!--近30天趋势图-->
-                    <div class="main-center-panel">
-                        <div class="main-center-panel-header">
-                            近30天趋势图
-                        </div>
-                        <div class="main-center-panel-container">
-                            <ui class="panel-gadget">
-                                <!--<li class="panel-gadget-col">
-                                    <select id="trend-gradient-date" name="trend-gradient-date" style="width:50px;">
-                                        <option selected="selected">日</option>
-                                        <option>周</option>
-                                        <option>月</option>
-                                    </select>
-                                </li>-->
-                                <li class="panel-gadget-col">
-                                    <button id="exportbtn">导出</button>
-                                </li>
-                            </ui>
-                            <div id="axis-call" class="panel-canvas" style="width: 100%; height: 400px;z-index: 1;">
-
-                            </div>
                         </div>
                     </div>
-                    <!--子标签分布-->
-                    <div class="main-center-panel">
-                        <div class="main-center-panel-header">
-                            子标签分布
-                        </div>
-                        <div class="main-center-panel-container">
-                            <div id="pie-rule" class="sub-tag-pie"></div>
-                            <div id="pie-call" class="sub-tag-pie"></div>
-                        </div>
+                </div>
+
+                <!--子标签分布-->
+                <div class="main-center-panel">
+                    <div class="main-center-panel-header">
+                        子标签分布
                     </div>
-                    <script type="text/javascript" th:inline="javascript">
-                        //    <![CDATA[
-                        bulemine.loader(function () {
-                            var values = $('#filter-form').xform('getValues');
-                            var tagIds = String(values.tagIds).split(',');
+                    <div class="main-center-panel-container">
+                        <div id="pie-rule" class="sub-tag-pie"></div>
+                        <div id="pie-call" class="sub-tag-pie"></div>
+                    </div>
+                </div>
 
-                            var axisCall = bulemine.charts({
-                                export: null,
-                                canvas: $('#axis-call')[0],
-                                autoLoad: true,
-                                url: '/service/tag/collect/findOne',
-                                params: {
-                                    data: {
-                                        channelId: CHANNEL_ID,
-                                        daterangeForm: values.daterangeForm,
-                                        daterangeTo: values.daterangeTo,
-                                        tagIds: tagIds
-                                    }
-                                },
-                                option: AXIS_OPTION({
-                                    grid: {
-                                        left: 80,
-                                        top: 80,
-                                        right: 80,
-                                        bottom: 80
-                                    },
-                                    legend: {
-                                        orient: 'horizontal',
-                                        left: 'center'
-                                    },
-                                    series: [{
-                                        name: '次数',
-                                        field: 'rule',
-                                        type: 'line',
-                                        smooth: true,
-                                        symbolSize: 10,
-                                        itemStyle: {
-                                            normal: {
-                                                color: '#3F90F7',
-                                                borderColor: '#3F90F7',
-                                                borderWidth: 3
-                                            },
-                                            emphasis: {
-                                                color: '#3F90F7',
-                                                borderColor: '#FFFFFF',
-                                                borderWidth: 3
-                                            }
-                                        },
-                                        lineStyle: {
-                                            width: 3,
-                                            color: '#3F90F7'
-                                        }
-                                    }, {
-                                        name: '会话数',
-                                        field: 'call',
-                                        type: 'bar',
-                                        barWidth: '30%',
-                                        yAxis: {
-                                            splitLine: {
-                                                show: false
-                                            }
-                                        },
-                                        itemStyle: {
-                                            normal: {
-                                                color: '#FFA046'
-                                            }
-                                        }
-                                    }]
-                                }),
-                                afterload: function () {
-                                },
-                                beforeload: function () {
-                                },
-                                parsexAxisData: function (data, params) {
-                                    var list = [];
-                                    for (var i = 0, l = data.length; i < l; i++) {
-                                        list.push(data[i].callDate);
-                                    }
-                                    return list;
-                                },
-                                parseSeriesData: function (index, data, opts, params) {
-                                    var list = [];
-                                    for (var i = 0, l = data.length; i < l; i++) {
-                                        if (opts.field == 'rule') {
-                                            list.push(data[i].totalFrequency);
-                                        } else if (opts.field == 'call') {
-                                            list.push(data[i].callNum);
-                                        } else {
-                                            list.push(0);
-                                        }
-                                    }
-                                    return list;
-                                }
-                            });
-                            FILTER_QUEUE.push(axisCall);
-
-                            var pierule = bulemine.charts({
-                                name: '次数',
-                                export: null,
-                                canvas: $('#pie-rule')[0],
-                                autoLoad: true,
-                                url: '/service/tag/collect/findSubTop',
-                                params: {
-                                    data: {
-                                        channelId: CHANNEL_ID,
-                                        daterangeForm: values.daterangeForm,
-                                        daterangeTo: values.daterangeTo,
-                                        tagIds: tagIds,
-                                        limit: 10
-                                    },
-                                    paging: {
-                                        sort: [{
-                                            property: 'FREQ',
-                                            direction: 'DESC'
-                                        }]
-                                    }
-                                },
-                                option: PIE_OPTION({
-                                    title: {
-                                        text: '次数',
-                                        x: 'center'
-                                    },
-                                    legend: {
-                                        orient: 'vertical',
-                                        x: 'right',
-                                        y: 'center'
-                                    },
-                                    series: [{
-                                        name: '次数',
-                                        avoidLabelOverlap: false,
-                                        radius: ['50%', '75%'],
-                                        center: ['50%', '50%'],
-                                        label: {
-                                            normal: {
-                                                show: false,
-                                                position: 'center'
-                                            },
-                                            emphasis: {
-                                                show: true,
-                                                formatter: '{b}\r\n{c} ({d}%)',
-                                            }
-                                        }
-                                    }]
-                                }),
-                                parseLegendData: function (index, data, opts, params) {
-                                    var list = [];
-                                    for (var i = 0, l = data.length; i < l; i++) {
-                                        list.push(data[i].tagText);
-                                    }
-                                    return list;
-                                },
-                                parseSeriesData: function (index, data, opts, params) {
-                                    var list = [];
-                                    for (var i = 0, l = data.length; i < l; i++) {
-                                        list.push({
-                                            name: data[i].tagText,
-                                            value: data[i].totalFrequency
-                                        });
-                                    }
-                                    return list;
-                                }
-                            });
-                            FILTER_QUEUE.push(pierule);
-
-                            var piecall = bulemine.charts({
-                                name: '会话数',
-                                export: null,
-                                canvas: $('#pie-call')[0],
-                                autoLoad: true,
-                                url: '/service/tag/collect/findSubTop',
-                                params: {
-                                    data: {
-                                        channelId: CHANNEL_ID,
-                                        daterangeForm: values.daterangeForm,
-                                        daterangeTo: values.daterangeTo,
-                                        tagIds: tagIds,
-                                        limit: 10
-                                    },
-                                    paging: {
-                                        sort: [{
-                                            property: 'CALL',
-                                            direction: 'DESC'
-                                        }]
-                                    }
-                                },
-                                option: PIE_OPTION({
-                                    title: {
-                                        text: '会话数',
-                                        x: 'center'
-                                    },
-                                    legend: {
-                                        orient: 'vertical',
-                                        x: 'left',
-                                        y: 'center'
-                                    },
-                                    series: [{
-                                        name: '次数',
-                                        avoidLabelOverlap: false,
-                                        radius: ['50%', '75%'],
-                                        center: ['50%', '50%'],
-                                        label: {
-                                            normal: {
-                                                show: false,
-                                                position: 'center'
-                                            },
-                                            emphasis: {
-                                                show: true,
-                                                formatter: '{b}\r\n{c} ({d}%)',
-                                            }
-                                        }
-                                    }]
-                                }),
-                                parseLegendData: function (index, data, opts, params) {
-                                    var list = [];
-                                    for (var i = 0, l = data.length; i < l; i++) {
-                                        list.push(data[i].tagText);
-                                    }
-                                    return list;
-                                },
-                                parseSeriesData: function (index, data, opts, params) {
-                                    var list = [];
-                                    for (var i = 0, l = data.length; i < l; i++) {
-                                        list.push({
-                                            name: data[i].tagText,
-                                            value: data[i].callNum
-                                        });
-                                    }
-                                    return list;
-                                }
-                            });
-                            FILTER_QUEUE.push(piecall);
-                        });
-                        //    ]]>
-                    </script>
-
-                    <!--会话内容-->
-                    <div class="main-center-panel">
-                        <div class="main-center-panel-header">
-                            会话内容
-                        </div>
-                        <div class="main-center-panel-container">
-                            <table class="call-summary" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr>
-                                    <th colspan="3">会话ID - 会话类型 - 坐席</th>
-                                    <th class="call-daterange">开始时间 - 结束时间</th>
-                                </tr>
-                                <tr>
-                                    <td class="call-time">12:11:32</td>
-                                    <td class="call-member call-customer">客户:</td>
-                                    <td>XXXXX</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="call-time">12:11:32</td>
-                                    <td class="call-member">客服:</td>
-                                    <td>XXXXX</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="call-dock">
-                                        <button type="button">展开</button>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table class="call-summary" cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr>
-                                    <th colspan="3">会话ID - 会话类型 - 坐席</th>
-                                    <th class="call-daterange">开始时间 - 结束时间</th>
-                                </tr>
-                                <tr>
-                                    <td class="call-time">12:11:32</td>
-                                    <td class="call-member call-customer">客户:</td>
-                                    <td>XXXXX</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="call-time">12:11:32</td>
-                                    <td class="call-member">客服:</td>
-                                    <td>XXXXX</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="call-dock">
-                                        <button type="button" class="call-expand">收起</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                <!--会话内容-->
+                <div class="main-center-panel">
+                    <div class="main-center-panel-header">
+                        会话内容
+                    </div>
+                    <div class="main-center-panel-container">
+                        <table class="call-summary" cellpadding="0" cellspacing="0" border="0"
+                               width="100%">
+                            <tr>
+                                <th colspan="3">会话ID - 会话类型 - 坐席</th>
+                                <th class="call-daterange">开始时间 - 结束时间</th>
+                            </tr>
+                            <tr>
+                                <td class="call-time">12:11:32</td>
+                                <td class="call-member call-customer">客户:</td>
+                                <td>XXXXX</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="call-time">12:11:32</td>
+                                <td class="call-member">客服:</td>
+                                <td>XXXXX</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="call-dock">
+                                    <button type="button">展开</button>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="call-summary" cellpadding="0" cellspacing="0" border="0"
+                               width="100%">
+                            <tr>
+                                <th colspan="3">会话ID - 会话类型 - 坐席</th>
+                                <th class="call-daterange">开始时间 - 结束时间</th>
+                            </tr>
+                            <tr>
+                                <td class="call-time">12:11:32</td>
+                                <td class="call-member call-customer">客户:</td>
+                                <td>XXXXX</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="call-time">12:11:32</td>
+                                <td class="call-member">客服:</td>
+                                <td>XXXXX</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="call-dock">
+                                    <button type="button" class="call-expand">收起</button>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
