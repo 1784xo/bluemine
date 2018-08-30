@@ -4,121 +4,34 @@
     <title>标签分析 - 按日期</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script src="/theme/jquery/jquery-ui/jquery-2.2.4.js"></script>
-    <script src="/theme/jquery/jquery-ui/jquery-ui-1.12.1.js"></script>
+    <script src="/theme/echarts/echarts-2.0.min.js"></script>
+    <script src="/theme/jquery/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery/jquery-easyui/jquery-easyui-1.5.5.7.min.js"></script>
+    <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="/theme/jquery/jquery-easyui-extend/jquery-easyui-extend.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-ui/css/jquery-ui-1.12.1.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/dark-blue/css/jquery-ui-reset.css"/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/jquery-easyui-reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui-extend/css/jquery-easyui-extend.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
-
-    <script src="/theme/jquery/jquery-xtreetable/jquery-xtreetable-1.0.0.js"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-xtreetable/css/jquery-xtreetable-1.0.0.css"/>
-
-    <script src="/theme/jquery/jquery-xform/jquery-xform-1.0.0.js"></script>
-
-    <script src="/theme/echarts.min.js"></script>
-
-
+    <link rel="stylesheet" type="text/css" href="/theme/default/style.css"/>
+    <style>
+        .combo-panel .tree-icon {
+            display: none;
+        }
+    </style>
     <script type="text/javascript" th:inline="javascript">
         //    <![CDATA[
         var CHANNEL_ID = '49252889384718336';
-        var FILTER_QUEUE = bulemine.queue();
         //    ]]>
     </script>
-    <style>
-        .ui-menu {
-            width: 100px;
-        }
-
-        .x-menu-item .ui-menu {
-            width: auto;
-        }
-    </style>
 </head>
 <body>
 <div th:replace="/common/header::header"></div>
 <div th:replace="/common/main-west::main-west(2, '2-1')"></div>
 
-<div id="tags-dialog" style="display: none;" title="选择标签">
-    <div id="tags-tree">
-
-    </div>
-</div>
-<script type="text/javascript" th:inline="javascript">
-    //    <![CDATA[
-    bulemine.loader(function () {
-
-        var tagsTree = $("#tags-tree");
-
-        $("#tags-dialog").dialog({
-            width: 500,
-            height: 500,
-            autoOpen: false,
-            resizable: false,
-            modal: true,
-            buttons: {
-                '确认': function () {
-                    var str = [];
-                    var vals = [];
-                    var rows = tagsTree.xtreetable('checked');
-                    for (var i = 0, l = rows.length; i < l; i++) {
-                        str.push(rows[i].data.originData.tagText);
-                        vals.push(rows[i].data.originData.tagId);
-                    }
-                    $('#filter-form input[name="tagIds"]').data('value', vals).val(str);
-                    $(this).dialog("close");
-                },
-                '取消': function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-        tagsTree.xtreetable({
-            expand: true,
-            data: TAGTREE_DATA,
-            width: '100%',
-            rowHeight: 28,
-            selectable: false,
-            tree: {
-                title: '所有标签',
-                expand: true,
-                checked: true,
-                fieldName: 'tagText',
-                minWidth: 200,
-                whiteSpace: 10,
-                nodeSpace: 20,
-                root: {
-                    text: '全部',
-                    valueName: 'tagId',
-                    value: 0,
-                    visible: true
-                }
-            },
-            columns: [{
-                name: 'rules',
-                text: '规则数',
-                width: 100,
-                format: function (val, record) {
-                    if (val == undefined)
-                        return '';
-                    return val.length;
-                }
-            }, {
-                name: 'activated',
-                text: '有效',
-                width: 100,
-                format: function (val, record) {
-                    if (val == undefined)
-                        return '';
-                    return val ? '是' : '否';
-                }
-            }]
-        });
-    });
-    //    ]]>
-</script>
 
 <div class="main-center">
     <div class="main-center-box">
@@ -126,61 +39,25 @@
             <h2>标签分析</h2>
         </div>
         <div class="main-center-row">
-            <div class="dark-blue ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
-                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"
-                    role="tablist">
-                    <li class="ui-state-default ui-corner-top"><a href="tag" class="ui-tabs-anchor">按标签</a></li>
-                    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#"
-                                                                                                 class="ui-tabs-anchor">按日期</a>
-                    </li>
-                </ul>
+            <div class="tab-box">
+                <div class="tab-item"><a>按标签</a></div>
+                <div class="tab-item tab-item-selected"><a>按日期</a></div>
+            </div>
+            <div class="tab-panel">
                 <div class="control-group">
-                    <form id="filter-form">
+                    <form id="search-form">
                         <ul class="main-center-filter">
                             <li>
-                                <label>开始日期：</label><input class="daterange-form" name="daterangeForm" type="text"/>
+                                <input id="daterange" name="daterange" class="easyui-daterange" style="width:200px;" value="2018-01-01/new Date()"/>
                             </li>
                             <li>
-                                <label>结束日期：</label><input class="daterange-to" name="daterangeTo" type="text"/>
-                            </li>
-                            <li>
-                                <label>标签：</label><input type="text" class="tag-select" name="tagIds" readonly="true" style="width: 300px;" value="全部 / "/>
+                                <input id="tagIds" name="tagIds" class="easyui-combotree"/>
                             </li>
                             <li>
                                 <button class="btn-search" type="button">查询</button>
                             </li>
                         </ul>
                     </form>
-                    <script type="text/javascript" th:inline="javascript">
-                        //<![CDATA[
-                        $('#filter-form .daterange-form').datepicker({
-                            dayNamesMin: ['一', '二', '三', '四', '五', '六', '日'],
-                            monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                            dateFormat: 'yy-mm-dd',
-                            changeMonth: true,
-                            changeYear: true
-                        }).datepicker('setDate', -30);
-
-                        $('#filter-form .daterange-to').datepicker({
-                            dayNamesMin: ['一', '二', '三', '四', '五', '六', '日'],
-                            monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                            dateFormat: 'yy-mm-dd',
-                            changeMonth: true,
-                            changeYear: true
-                        }).datepicker('setDate', new Date());
-
-                        $('#filter-form .tag-select').data('value', 0).bind('click', function () {
-                            $("#tags-dialog").dialog('open');
-                        });
-
-                        $('#filter-form').xform({
-                            submit: $('#filter-form .btn-search'),
-                            onSubmit: function (vals, el, e, opts) {
-                                console.log(vals);
-                            }
-                        });
-                        //    ]]>
-                    </script>
                 </div>
             </div>
         </div>
@@ -188,9 +65,49 @@
 </div>
 <script type="text/javascript" th:inline="javascript">
     //    <![CDATA[
-    //    bulemine.loader(function () {
-    //        $("#tabs").tabs();
-    //    });
+    $(function () {
+        var queue = bulemine.queue();
+        var searchform = $('#search-form');
+        var searchbtn = $('.control-group .btn-search');
+        var daterange = $('#daterange');
+        var tagIds = $('#tagIds');
+
+        daterange.daterange({
+            labelWidth: 40,
+            labelAlign: 'right',
+            width: 250,
+            reversed: true,
+            separator: '/',
+            required: true,
+            label: '日期',
+            labelPosition: 'left'
+        });
+
+        tagIds.combotree({
+            label: '标签',
+            labelPosition: 'left',
+            labelWidth: 40,
+            labelAlign: 'right',
+            width: 250,
+            multiple:true,
+            checkbox:false,
+            cascadeCheck: false,
+            data: TAGTREE_DATA
+        });
+
+        function reload() {
+            var dates = daterange.daterange('getValue');
+            var ids = tagIds.combotree('getValue');
+            //add search code
+        }
+        reload();
+
+        searchbtn.bind('click', function () {
+            if (searchform.form('validate')) {
+                reload();
+            }
+        });
+    });
     //    ]]>
 </script>
 </body>

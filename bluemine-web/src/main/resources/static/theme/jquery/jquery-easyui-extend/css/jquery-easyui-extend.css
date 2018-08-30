@@ -1,0 +1,79 @@
+@import url("../../jquery-easyui/css/calendar.css");
+.easyui-daterange .textbox-addon{
+    background-color: #E6F3FB;
+}
+
+.easyui-daterange .textbox-addon .combo-arrow{
+    background: url(images/icon-calendar.png) no-repeat center center;
+}
+
+.easyui-datarange-panel{
+    overflow: hidden;
+}
+
+.easyui-datarange-panel .calendar{
+    display: inline-block;
+}
+
+.easyui-datarange-panel .calendar table td{
+    transition: background-color .2s;
+}
+
+.easyui-datarange-panel  .calendar-header{
+    background: #2796FF;
+    color: #FFF;
+}
+
+.easyui-datarange-panel  .calendar-header .calendar-text{
+    transition: background-color .2s;
+}
+
+.easyui-datarange-panel .calendar-prevmonth{
+    background: url(images/icon-left-ffffff.png) no-repeat  center center;
+}
+
+.easyui-datarange-panel .calendar-nextmonth{
+    background: url(images/icon-right-ffffff.png) no-repeat center center;
+}
+
+.easyui-datarange-panel  .calendar-prevyear{
+    background: url(images/icon-dleft-ffffff.png) no-repeat  center center;
+}
+
+.easyui-datarange-panel .calendar-nextyear{
+    background: url(images/icon-dright-ffffff.png) no-repeat  center center;
+}
+
+/*.easyui-datarange-panel  .calendar-body{*/
+    /*background-color: #f6fcff;*/
+/*}*/
+
+.easyui-datarange-panel .calendar-body th
+, .easyui-datarange-panel .calendar-menu-month{
+    color: #5B5B5B;
+}
+
+.easyui-datarange-panel .calendar-day{
+    color: #5B5B5B;
+}
+
+.easyui-datarange-panel .calendar-sunday{
+    color: #cc6f18 ;
+}
+.easyui-datarange-panel  .calendar-saturday{
+    color:#cc6f18;
+}
+
+.easyui-datarange-panel .calendar-nav-hover{
+    color: #FFF;
+}
+
+.easyui-datarange-panel .calendar-body .calendar-nav-hover
+, .easyui-datarange-panel .calendar-header .calendar-nav-hover{
+    background-color: #71BDFB;
+}
+
+.easyui-datarange-panel .calendar-body .calendar-selected{
+    background-color: #2796FF;
+    color: #FFF;
+}

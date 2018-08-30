@@ -1,6 +1,12 @@
 /**
  * Created by hechao on 2018/7/25.
  */
+var TAGTREE_DATA = [];
+function loadTagTree(data) {
+    if ((!!data) && (data.status == '200') && (!!data.result)) {
+        TAGTREE_DATA = data.result;
+    }
+}
 
 var PIE_OPTION = (function (template) {
     return function (opt) {
@@ -172,6 +178,7 @@ var AXIS_OPTION = (function (template) {
 });
 
 var bulemine = (function () {
+
     var LOAD_QUEUE = [];
 
     var _mask_count = 200;
@@ -305,7 +312,10 @@ var bulemine = (function () {
                 data: opts.params,
                 callback: function (status, data, msg) {
                     if (!!params.mask) {
-                        params.mask.remove();
+                        params.mask.fadeTo(500, 0, function () {
+                            params.mask = null;
+                            $(this).remove();
+                        });
                     }
                     opts.callback(status == 'success', data, msg, params);
                 },
@@ -335,79 +345,16 @@ var bulemine = (function () {
 }());
 
 $.extend({
-    valueFrom: function (a, b) {
-        return (((a + '') == '') || (a == undefined) || (a == null)) ? b : a;
+    valueFrom: function (a, b, c) {
+        if ((a === undefined) || (a === null))
+            return b;
+        return !c? a: (a+''=='')? b: a;
     },
     uuid: function () {
         var bits = new Date().getTime().toString(2);
         var stub = parseInt(Math.random() * 100000) & 0xFFFF;
         var low = parseInt(bits.substr(bits.length - 32, 32), 2);
         var high = parseInt(bits.substring(0, bits.length - 32), 2);
-        // console.log(parseInt(bits, 2));
-        // console.log(stub);
-        // console.log('----------------------------');
-        //
-        // console.log(low & 0xFFFF);
-        // console.log(low >> 16);
-        // console.log(high & 0xFFFF);
-        // console.log(high >> 16);
-        //
-        // console.log((low & 0xFFFF) ^ (stub>>12));
-        // console.log((low >> 16) ^ ((stub & 0xF00)>>8));
-        // console.log((high & 0xFFFF) ^ ((stub & 0xF0)>>4));
-        // console.log((high >> 16) ^ (stub & 0xF));
-
-        return String((high >> 16) ^ (stub & 0xF))+String((high & 0xFFFF) ^ ((stub & 0xF0)>>4))+String((low >> 16) ^ ((stub & 0xF00)>>8))+String((low & 0xFFFF) ^ (stub>>12));
-    }
-});
-
-var TAGTREE_DATA = [];
-function loadTagTree(data) {
-    if ((!!data) && (data.status == '200') && (!!data.result)) {
-        TAGTREE_DATA = data.result;
-    }
-}
-
-
-var formatter = {
-    combobox: function (value, profile) {
-        var data = profile.options.data;
-        var txtf = profile.options.textField;
-        var valf = profile.options.valueField;
-        for (var i = 0, l = data.length; i < l; i++) {
-            if (data[i][valf] == value) {
-                return data[i][txtf];
-            }
-        }
-        return value;
-    }
-};
-
-$.extend(true, $.fn.datagrid.defaults.editors, {
-    linkbutton: {
-        init: function (container, options) {
-            var el = $('<span></span>');
-            var input = $('<input width="0" height="0" type="hidden"/>').appendTo(el);
-            $.each(options.button, function (i) {
-                var me = this;
-                $('<a href="javascript:;" class="datagrid-link">' + me.text + '</a>').bind('click', function (e) {
-                    me.handler(input.val(), container, me, e, i);
-                }).appendTo(el);
-            });
-            el.appendTo(container);
-            return input;
-        },
-        destroy: function (target) {
-            $(target).remove();
-        },
-        getValue: function (target) {
-            return $(target).val();
-        },
-        setValue: function (target, value) {
-            $(target).val(value);
-        },
-        resize: function (target, width) {
-            $(target)._outerWidth(width);
-        }
+        return String(((high >>> 16) * 31) ^ (stub & 0xF)) + String((high & 0xFFFF) ^ ((stub & 0xF0) >> 4)) + String((low >>> 16) ^ ((stub & 0xF00) >> 8)) + String((low & 0xFFFF) ^ ((stub >> 12) * 31));
     }
 });

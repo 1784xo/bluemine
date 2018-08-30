@@ -10,8 +10,7 @@ public class TagCollectRequest implements Serializable {
     private static final long serialVersionUID = 2573158003745547629L;
     private Long channelId;
     private Long[] tagIds;
-    private LocalDate daterangeForm;
-    private LocalDate daterangeTo;
+    private LocalDate[] daterange;
     private String callType;
     private String roleType;
     private Integer limit;
@@ -32,20 +31,24 @@ public class TagCollectRequest implements Serializable {
         this.tagIds = tagIds;
     }
 
-    public LocalDate getDaterangeForm() {
-        return daterangeForm;
+    public LocalDate[] getDaterange() {
+        return daterange;
     }
 
-    public void setDaterangeForm(LocalDate daterangeForm) {
-        this.daterangeForm = daterangeForm;
+    public void setDaterange(LocalDate[] daterange) {
+        this.daterange = daterange;
     }
 
-    public LocalDate getDaterangeTo() {
-        return daterangeTo;
+    public int  daterangeSize(){
+        return daterange==null? -1: daterange.length;
     }
 
-    public void setDaterangeTo(LocalDate daterangeTo) {
-        this.daterangeTo = daterangeTo;
+    public LocalDate getStartDate(){
+        return daterange[0];
+    }
+
+    public LocalDate getEndDate(){
+        return daterange[1];
     }
 
     public String getCallType() {

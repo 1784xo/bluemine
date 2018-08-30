@@ -96,6 +96,7 @@ header nav .logo {
 .main-center .main-center-box .main-center-row h2 {
     font-size: 2em;
     font-weight: normal;
+    font-family: "Microsoft YaHei", \u5fae\u8f6f\u96c5\u9ed1, "微软雅黑";
 }
 
 /*filter*/
@@ -198,12 +199,12 @@ header nav .logo {
     width: 110px;
     height: 30px;
     border: 0px;
-    background-image: url("/theme/dark-blue/images/icon-collapse.png");
+    background-image: url("../default/images/icon-collapse.png");
     background-repeat: no-repeat;
     background-position: 80px center;
     border-radius: 3px;
 }
 
 .call-summary .call-dock .call-expand{
-    background-image: url("/theme/dark-blue/images/icon-expand.png");
+    background-image: url("../default/images/icon-expand.png");
 }

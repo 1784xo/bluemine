@@ -170,7 +170,7 @@ public class CallCollectService {
             return null;
         }
         Map<Long, TagCollectEntity> venation = new LinkedHashMap<>();
-        long tagId = tag.getTagId();
+        long tagId = tag.getId();
         TagCollectEntity tagCollect = createTabCollect(tag, call, context);
         venation.put(tagId, tagCollect);
         Long parentId = tag.getParentId();
@@ -198,7 +198,7 @@ public class CallCollectService {
         while (!venation.empty()) {
             tagCollect = venation.pop();
             tagCollect.ruleId(rule.getRuleId()).callType(rule.getCallType()).roleType(rule.getRoleType()).totleFrequency(tagCollect.getTotleFrequency()+frequency);
-            if (tagCollect.getTagId().compareTo(tag.getTagId()) == 0) {
+            if (tagCollect.getTagId().compareTo(tag.getId()) == 0) {
                 tagCollect.frequency(frequency).ruleExps(rule.getRuleExps());
             } else {
                 tagCollect.subTotal(tagCollect.getSubTotal() + 1)
@@ -221,10 +221,10 @@ public class CallCollectService {
                 .collectId(idWorker.nextId())
                 .channelId(channelId)
                 .callNo(callNo)
-                .tagId(tag.getTagId())
+                .tagId(tag.getId())
                 .ruleId(0L)
                 .parentId(tag.getParentId())
-                .tagText(tag.getTagText())
+                .tagText(tag.getText())
                 .callDate(callDate)
                 .callYear(callDate.getYear())
                 .callMonth(callDate.getMonthValue())

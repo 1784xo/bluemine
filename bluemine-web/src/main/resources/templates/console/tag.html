@@ -6,18 +6,24 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="/theme/jquery/jquery-2.2.4.js"></script>
     <script src="/theme/jquery/jquery-easyui/jquery-easyui-1.5.5.7.min.js"></script>
+    <script src="/theme/jquery/jquery-easyui-extend/jquery-easyui-extend.js"></script>
     <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
     <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
 
     <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/default/css/jquery-easyui-reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/jquery-easyui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
     <style>
 
-        /*.datagrid-row-over, .datagrid-row-selected {*/
-        /*background: transparent;*/
-        /*}*/
+        .datagrid-row{
+            cursor: pointer;
+        }
+
+        .datagrid-row-selected
+        , .datagrid-row-over{
+            background-color: transparent;
+        }
 
         .datagrid-row-editing {
             background: #e6f0fa;
@@ -36,7 +42,8 @@
             background-color: #F9F9F9;
         }
 
-        .datagrid-header-row, .datagrid .datagrid-row {
+        .datagrid-header-row td
+        , .datagrid .datagrid-row td{
             height: 40px;
         }
 
@@ -122,7 +129,8 @@
     bulemine.loader(function () {
 
         var tagtree = $('.tags-datagrid .easyui-treegrid');
-        function refreshTree(){
+
+        function refreshTree() {
             $.parser.parse(tagtree.treegrid('getPanel').find('.datagrid-row'));
         }
 
@@ -143,7 +151,7 @@
                 params: {
                     data: {
                         channelId: row.channelId,
-                        tagId: row.tagId,
+                        tagId: row.id,
                         activated: val
                     }
                 },
@@ -160,7 +168,7 @@
         event_handle.onTagDialog = function (el) {
             var id = $(el).data('tag-id');
             var row = tagtree.treegrid('find', id);
-            tagdialog.find('[name="tagCrumbs"]').html(row.tagText);
+            tagdialog.find('[name="tagCrumbs"]').html(row.text);
             tagdialog.data('binding', row).dialog('open');
         }
 
@@ -199,8 +207,8 @@
 
         tagtree.treegrid({
             data: TAGTREE_DATA,
-            idField: 'tagId',
-            treeField: 'tagText',
+            idField: 'id',
+            treeField: 'text',
             fitColumns: true,
             onEndEdit: function (row, changes) {
                 if (!$.isEmptyObject(changes)) {
@@ -210,7 +218,7 @@
                         params: {
                             data: $.extend({
                                 channelId: row.channelId,
-                                tagId: row.tagId,
+                                tagId: row.id,
                             }, changes)
                         },
                         callback: function (ok, data, msg, opts) {
@@ -241,7 +249,7 @@
             },
             columns: [[
                 {
-                    field: 'tagText',
+                    field: 'text',
                     title: '标签',
                     width: 700,
                     editor: {
@@ -267,12 +275,12 @@
                     width: 70,
                     editor: false,
                     formatter: function (value, row, index) {
-                        return '<input data-id="' + row.tagId + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
+                        return '<input data-id="' + row.id + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
                                 + ' data-options="onChange:event_handle.onTagActivated, width:50, height:24, onText:\'是\', offText:\'否\'"/>';
                     }
                 }, {
                     title: '操作',
-                    field: 'tagId',
+                    field: 'id',
 //                    width: 120,
                     editor: {
                         type: 'linkbutton',
@@ -309,14 +317,14 @@
                 handler: function (e) {
                     if (tagform.form('validate')) {
                         var tag = tagdialog.data('binding');
-                        if(!!tag){
+                        if (!!tag) {
                             bulemine.ajaxJson({
                                 url: "/service/tag/create",
                                 masking: true,
                                 params: {
                                     data: {
                                         channelId: tag.channelId,
-                                        parentId: tag.tagId,
+                                        parentId: tag.id,
                                         tagText: tagform.find('input[name="tagName"]').val()
                                     }
                                 },
@@ -325,7 +333,7 @@
                                         tagform.form('reset');
                                         tagdialog.dialog('close').data('binding', null);
                                         tagtree.treegrid('append', {
-                                            parent: tag.tagId,
+                                            parent: tag.id,
                                             data: [data]
                                         });
                                         refreshTree();
@@ -334,7 +342,7 @@
                                     }
                                 }
                             });
-                        }else{
+                        } else {
                             alert('[ERROR]');
                         }
                     }
@@ -344,6 +352,7 @@
                 height: 30,
                 text: '取消',
                 handler: function (e) {
+                    tagform.form('reset');
                     tagdialog.dialog('close').data('binding', null);
                 }
             }]
@@ -361,11 +370,11 @@
                 text: '关闭',
                 handler: function (e) {
                     var tag = ruledialog.data('binding');
-                    if(!!tag){
+                    if (!!tag) {
                         ruledialog.data('binding', null).dialog('close');
-                        tagtree.treegrid('refresh', tag.tagId);
+                        tagtree.treegrid('refresh', tag.id);
                         refreshTree();
-                    }else{
+                    } else {
                         alert('[ERROR]');
                     }
                 }
@@ -375,6 +384,7 @@
             idField: 'ruleId',
             fitColumns: true,
             singleSelect: true,
+            autoRowHeight: false,
             onEndEdit: function (index, row, changes) {
                 var me = $(this);
                 if (!!row.newest) {
@@ -385,7 +395,7 @@
                         params: {
                             data: {
                                 channelId: tag.channelId,
-                                tagId: tag.tagId,
+                                tagId: tag.id,
                                 callType: row.callType,
                                 roleType: row.roleType,
                                 ruleExps: row.ruleExps
@@ -395,7 +405,9 @@
                             if (ok) {
                                 rulegrid.datagrid('updateRow', {
                                     index: index,
-                                    row: data
+                                    row: $.extend(data, {
+                                        newest: null
+                                    })
                                 });
                             } else {
                                 alert('[ERROR]' + msg);
@@ -449,7 +461,7 @@
                     title: '会话类型',
                     width: 100,
                     formatter: function (value, row, index) {
-                        return formatter.combobox(value, this.editor);
+                        return $.easyui.formatter.combobox(value, this.editor);
                     },
                     editor: {
                         type: 'combobox',
@@ -478,7 +490,7 @@
                     title: '数据角色',
                     width: 100,
                     formatter: function (value, row, index) {
-                        return formatter.combobox(value, this.editor);
+                        return $.easyui.formatter.combobox(value, this.editor);
                     },
                     editor: {
                         type: 'combobox',

@@ -17,7 +17,7 @@ public abstract class EntityUtils {
         TagResponse tagResponse;
         for (TagEntity tag : tags) {
             tagResponse = toResponse(tag);
-            map.put(tagResponse.getTagId(), tagResponse);
+            map.put(tagResponse.getId(), tagResponse);
         }
 
         for (RuleEntity rule : rules) {
@@ -39,7 +39,7 @@ public abstract class EntityUtils {
 
         for (TagEntity tag : tags) {
             response = toResponse(tag);
-            temp.put(response.getTagId(), response);
+            temp.put(response.getId(), response);
             if (response.getParentId() == 0) {
                 responses.add(response);
             } else {
@@ -73,8 +73,8 @@ public abstract class EntityUtils {
         response.setParentId(tag.getParentId());
         response.setCustomizable(tag.getCustomizable());
         response.setTagNo(tag.getTagNo());
-        response.setTagId(tag.getTagId());
-        response.setTagText(tag.getTagText());
+        response.setId(tag.getTagId());
+        response.setText(tag.getTagText());
         return response;
     }
 
@@ -100,13 +100,13 @@ public abstract class EntityUtils {
 //            Object[] tagCells = (Object[]) tag;
 //            response.setCallDate(String.valueOf(tagCells[0]));
 //            response.setFrequency(Integer.valueOf(String.valueOf(tagCells[1])));
-//            response.setTagId(Long.valueOf(String.valueOf(tagCells[2])));
-//            response.setTagText(String.valueOf(tagCells[3]));
+//            response.setId(Long.valueOf(String.valueOf(tagCells[2])));
+//            response.setText(String.valueOf(tagCells[3]));
 //            response.setCallNum(Long.valueOf(String.valueOf(tagCells[4])));
 //
 //            for (TagEntity tg : listTag) {
-//                if (Long.valueOf(String.valueOf(tagCells[2])).equals(tg.getTagId())) {
-//                    response.setTagText(tg.getTagText());
+//                if (Long.valueOf(String.valueOf(tagCells[2])).equals(tg.getId())) {
+//                    response.setText(tg.getText());
 //                    break;
 //                }
 //            }
@@ -140,16 +140,16 @@ public abstract class EntityUtils {
 //
 //            Object[] tagCells = (Object[]) tag;
 //            response.setFrequency(Integer.valueOf(String.valueOf(tagCells[0])));
-//            response.setTagId(Long.valueOf(String.valueOf(tagCells[1])));
-//            response.setTagText(String.valueOf(tagCells[2]));
+//            response.setId(Long.valueOf(String.valueOf(tagCells[1])));
+//            response.setText(String.valueOf(tagCells[2]));
 //            response.setCallNum(Long.valueOf(String.valueOf(tagCells[3])));
 //
 //            if (String.valueOf(tagCells[1]).equals("0")) {
-//                response.setTagText("其他");
+//                response.setText("其他");
 //            } else {
 //                for (TagEntity tg : listTag) {
-//                    if (Long.valueOf(String.valueOf(tagCells[1])).equals(tg.getTagId())) {
-//                        response.setTagText(tg.getTagText());
+//                    if (Long.valueOf(String.valueOf(tagCells[1])).equals(tg.getId())) {
+//                        response.setText(tg.getText());
 //                        break;
 //                    }
 //                }
@@ -166,13 +166,13 @@ public abstract class EntityUtils {
 //        for (TagEntity tag : allTags) {
 //            if (tagId == 0) {
 //                //if (tag.getParentId() != 0) tagIds.add(tag.getTagIds());
-//                tagIds.add(tag.getTagId());
+//                tagIds.add(tag.getId());
 //            } else {
 //                if (tagId.equals(tag.getParentId())) {
-//                    tagIds.add(tag.getTagId());
+//                    tagIds.add(tag.getId());
 //                    for (TagEntity cTag : allTags) {
-//                        if (tag.getTagId().equals(cTag.getParentId())) {
-//                            tagIds.add(cTag.getTagId());
+//                        if (tag.getId().equals(cTag.getParentId())) {
+//                            tagIds.add(cTag.getId());
 //                        }
 //                    }
 //                }
@@ -186,7 +186,7 @@ public abstract class EntityUtils {
 //        List<Long> tagIds = new ArrayList<>();
 //        for (TagEntity tag : allTags) {
 //            if (tagId.equals(tag.getParentId())) {
-//                tagIds.add(tag.getTagId());
+//                tagIds.add(tag.getId());
 //            }
 //        }
 //        return tagIds;
@@ -196,11 +196,11 @@ public abstract class EntityUtils {
 //    public static List<Long> getTagCircle(List<Long> tagIds, Long tagId, List<TagEntity> allTags) {
 //        for (TagEntity tag : allTags) {
 //            if (tagId == 0) {
-//                if (tag.getParentId() != 0) tagIds.add(tag.getTagId());
+//                if (tag.getParentId() != 0) tagIds.add(tag.getId());
 //            } else {
 //                if (tagId.equals(tag.getParentId())) {
-//                    tagIds.add(tag.getTagId());
-//                    getTagCircle(tagIds, tag.getTagId(), allTags);
+//                    tagIds.add(tag.getId());
+//                    getTagCircle(tagIds, tag.getId(), allTags);
 //                }
 //            }
 //        }

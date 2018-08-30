@@ -11,7 +11,7 @@ public class TagResponse implements Serializable {
 
     private static final long serialVersionUID = 8493736150628716726L;
 
-    private long tagId;
+    private long id;
 
     private boolean activated;
 
@@ -19,7 +19,7 @@ public class TagResponse implements Serializable {
 
     private int tagNo;
 
-    private String tagText;
+    private String text;
 
     private long parentId;
 
@@ -29,12 +29,12 @@ public class TagResponse implements Serializable {
 
     private List<RuleResponse> rules = new ArrayList<>();
 
-    public long getTagId() {
-        return tagId;
+    public long getId() {
+        return id;
     }
 
-    public void setTagId(long tagId) {
-        this.tagId = tagId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public boolean getActivated() {
@@ -61,12 +61,12 @@ public class TagResponse implements Serializable {
         this.tagNo = tagNo;
     }
 
-    public String getTagText() {
-        return tagText;
+    public String getText() {
+        return text;
     }
 
-    public void setTagText(String tagText) {
-        this.tagText = tagText;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public long getParentId() {
@@ -119,8 +119,8 @@ public class TagResponse implements Serializable {
                 ", customizable=" + customizable +
                 ", rules=" + rules +
                 ", tagNo='" + tagNo + '\'' +
-                ", tagId=" + tagId +
-                ", tagText='" + tagText + '\'' +
+                ", id=" + id +
+                ", text='" + text + '\'' +
                 '}';
     }
 }

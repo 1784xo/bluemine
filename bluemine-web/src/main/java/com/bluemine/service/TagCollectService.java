@@ -32,6 +32,9 @@ public class TagCollectService {
     public List<TagCollectResponse> findOne(RestfulRequest<TagCollectRequest> request) {
 
         TagCollectRequest data = request.getData();
+
+        AssertUtils.isTrue(data.daterangeSize() == 2, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
         Long channelId = data.getChannelId();
         AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
@@ -42,11 +45,11 @@ public class TagCollectService {
         Long tagId = tagIds[0];
         AssertUtils.notNull(tagId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
-        LocalDate form = data.getDaterangeForm();
-        AssertUtils.notNull(form, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        LocalDate startDate = data.getStartDate();
+        AssertUtils.notNull(startDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
-        LocalDate to = data.getDaterangeTo();
-        AssertUtils.notNull(to, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        LocalDate endDate = data.getEndDate();
+        AssertUtils.notNull(endDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
         String callType = data.getCallType();
         String roleType = data.getRoleType();
@@ -55,19 +58,19 @@ public class TagCollectService {
         if (tagId.compareTo(0L) == 0) {
             if (callType == null) {
                 if (roleType == null) {
-                    collect = tagCollectVirtualRespository.findAll(channelId, form, to);
+                    collect = tagCollectVirtualRespository.findAll(channelId, startDate, endDate);
                 } else {
-                    collect = tagCollectVirtualRespository.findAll(channelId, form, to, roleType);
+                    collect = tagCollectVirtualRespository.findAll(channelId, startDate, endDate, roleType);
                 }
             } else {
                 if (roleType == null) {
-                    collect = tagCollectVirtualRespository.findAll(channelId, callType, form, to);
+                    collect = tagCollectVirtualRespository.findAll(channelId, callType, startDate, endDate);
                 } else {
-                    collect = tagCollectVirtualRespository.findAll(channelId, callType, form, to, roleType);
+                    collect = tagCollectVirtualRespository.findAll(channelId, callType, startDate, endDate, roleType);
                 }
             }
         } else {
-            collect = tagCollectVirtualRespository.findOne(channelId, tagId, form, to);
+            collect = tagCollectVirtualRespository.findOne(channelId, tagId, startDate, endDate);
         }
 
         List<TagCollectResponse> responses = new LinkedList<>();
@@ -80,6 +83,9 @@ public class TagCollectService {
 
     public List<TagCollectResponse> findSubTop(RestfulPageRequest<TagCollectRequest, TagCollectSort> request) {
         TagCollectRequest data = request.getData();
+
+        AssertUtils.isTrue(data.daterangeSize() == 2, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
         Long channelId = data.getChannelId();
         AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
@@ -90,11 +96,11 @@ public class TagCollectService {
         Long tagId = tagIds[0];
         AssertUtils.notNull(tagId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
-        LocalDate form = data.getDaterangeForm();
-        AssertUtils.notNull(form, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        LocalDate startDate = data.getStartDate();
+        AssertUtils.notNull(startDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
-        LocalDate to = data.getDaterangeTo();
-        AssertUtils.notNull(to, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        LocalDate endDate = data.getEndDate();
+        AssertUtils.notNull(endDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
         int i = 1;
         Integer limit = data.getLimit();
@@ -106,34 +112,36 @@ public class TagCollectService {
         RequestContext<TagCollectRequest> context = request.getContext();
         ServerApplicationContext applicationContext = context.getParent();
 
-        List<TagCollectVirtualEntity> collect = tagCollectVirtualRespository.findAll(channelId, tagId, form, to, pageRequest.getSort());
+        List<TagCollectVirtualEntity> collect = tagCollectVirtualRespository.findAll(channelId, tagId, startDate, endDate, pageRequest.getSort());
         List<TagCollectResponse> responses = new LinkedList<>();
         TagCollectVirtualEntity other = new TagCollectVirtualEntity();
         other.setFrequency(0);
         other.setSubFrequency(0);
         other.setTotleFrequency(0);
         other.setCallNum(0);
+        other.setTagText(applicationContext.getMessage("tag.collect.other.total"));
 
         for (TagCollectVirtualEntity entity : collect) {
             if (i < limit) {
                 responses.add(WebEntityUtils.toResponse(entity));
-            }else{
+            } else {
                 other.setCallDate(entity.getCallDate());
                 other.setCallDay(entity.getCallDay());
                 other.setCallYear(entity.getCallYear());
                 other.setCallMonth(entity.getCallMonth());
                 other.setCallWeek(entity.getCallWeek());
-                other.setTotleFrequency(other.getTotleFrequency()+entity.getTotleFrequency());
-                other.setSubFrequency(other.getSubFrequency()+entity.getSubFrequency());
-                other.setFrequency(other.getFrequency()+entity.getFrequency());
-                other.setCallNum(other.getCallNum()+entity.getCallNum());
+                other.setTotleFrequency(other.getTotleFrequency() + entity.getTotleFrequency());
+                other.setSubFrequency(other.getSubFrequency() + entity.getSubFrequency());
+                other.setFrequency(other.getFrequency() + entity.getFrequency());
+                other.setCallNum(other.getCallNum() + entity.getCallNum());
                 other.setParentId(entity.getParentId());
                 other.setTagId(entity.getTagId());
-                other.setTagText(applicationContext.getMessage("tag.collect.other.total"));
             }
             i++;
         }
-        responses.add(WebEntityUtils.toResponse(other));
+        if (other.getTotleFrequency() + other.getCallNum() > 0) {
+            responses.add(WebEntityUtils.toResponse(other));
+        }
         return responses;
     }
 }

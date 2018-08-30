@@ -6,7 +6,7 @@ html {
 }
 
 body {
-    font-family: "Microsoft YaHei", \u5fae\u8f6f\u96c5\u9ed1, "微软雅黑", "Hiragino Sans GB", MingLiu, tahoma, arial, simsun, "宋体";
+    font-family: tahoma, simsun, arial, "\5b8b\4f53", "宋体", "Microsoft YaHei", \u5fae\u8f6f\u96c5\u9ed1, "微软雅黑", "Hiragino Sans GB", MingLiu;
     margin: 0px;
     padding: 0px;
     font-size: 12px;
@@ -41,7 +41,7 @@ ol, ul, li, span, select {
     float: right;
 }
 
-a{
+a {
     list-style: none;
     outline: none;
 }

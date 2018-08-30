@@ -36,7 +36,7 @@ public class TagCollectController extends AbstractController {
 
     @ResponseBody
     @PostMapping("findOne")
-    public ResponseEntity find(@RequestBody RestfulRequest<TagCollectRequest> restfulRequest, HttpServletResponse res) {
+    public ResponseEntity find(@RequestBody RestfulRequest<TagCollectRequest> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         List<TagCollectResponse> response = tagCollectService.findOne(restfulRequest);

@@ -1,0 +1,332 @@
+.l-btn {
+    border-radius: 3px;
+}
+
+.l-btn:hover {
+    transition: background-color .2s;
+    color: #FFFFFF;
+    background: #2796FF;
+    border-radius: 3px;
+}
+
+.l-btn-disabled.l-btn:hover {
+    color: #777;
+    background: transparent;
+}
+
+.datagrid-row {
+    transition: background-color .2s;
+}
+
+/*textbox*/
+.textbox {
+    border: 1px solid #D0D0D0;
+    background-color: #ffffff;
+    border-radius: 3px;
+}
+
+.textbox input, .textbox .textbox-text {
+    font-size: 12px;
+    background-color: #E6F3FB;
+    color: #666666;
+    transition: background-color .2s;
+}
+
+/*validatebox*/
+.validatebox-text {
+    background-color: #E6F3FB;
+    color: #666666;
+    line-height: 28px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #B4CBE7;
+    transition: background-color .2s;
+}
+
+.validatebox-invalid {
+    border-color: #ffa8a8;
+    background-color: #fff3f3;
+}
+
+/*panel*/
+.panel-tool-close {
+    background: url('images/panel-tool-close.png') no-repeat center center;
+}
+
+.panel-tool a:hover {
+    background-color: transparent;
+}
+
+/*datagrid*/
+.datagrid-header td, .datagrid-body td, .datagrid-footer td {
+    border-width: 0 0 1px 0;
+}
+
+.datagrid-link {
+    color: #006FFF;
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+/*mask*/
+.window-mask.request-mask {
+    z-index: 99999999;
+    background-color: transparent;
+    text-align: center;
+}
+
+.window-mask.request-mask img {
+    margin-top: 20%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/*window*/
+.window {
+    padding: 0px;
+}
+
+.window .window-body {
+    border-left: 0;
+    border-right: 0;
+}
+
+.window .window-header {
+    padding: 0;
+    /*background-color: #777e89;*/
+    background-color: #293547;
+}
+
+.window .panel-title {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: normal;
+    padding-left: 10px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.window .window-header .panel-tool {
+    right: 5px;
+}
+
+.window .dialog-button {
+    padding: 10px;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.window .dialog-button .l-btn:hover {
+    background: #293547;
+}
+
+/*main-west accordion*/
+.main-west .easyui-accordion {
+    background-color: #293547;
+    border: 0;
+}
+
+.main-west .easyui-accordion .panel-htop {
+    margin: 5px 0 0 0;
+}
+
+.main-west .accordion .accordion-header {
+    background-color: #293547;
+    border: 0;
+}
+
+.main-west .accordion .accordion-header-selected {
+    background-color: #006ee3;
+}
+
+.main-west .accordion .accordion-header .panel-title {
+    color: #FFF;
+    height: 30px;
+    line-height: 30px;
+    font-weight: normal;
+}
+
+.main-west .accordion .accordion-header .panel-tool {
+    right: 10px;
+}
+
+.main-west .accordion .accordion-header-selected .panel-title {
+    color: #FFF;
+}
+
+.main-west .accordion .accordion-header .panel-with-icon {
+    padding-left: 40px;
+}
+
+.main-west .accordion .accordion-header .panel-icon {
+    left: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.main-west .accordion .accordion-collapse.accordion-expand {
+    background: url("images/icon-right-ffffff.png") no-repeat center center;
+}
+
+.main-west .accordion .accordion-collapse {
+    background: url("images/icon-down-ffffff.png") no-repeat center center;
+}
+
+.main-west .accordion .accordion-body {
+    border: 0;
+}
+
+.main-west .accordion .accordion-body ul li {
+    height: 30px;
+    line-height: 30px;
+}
+
+.main-west .accordion .accordion-body ul li a {
+    color: #FFFFFF;
+    margin: 0 0 0 45px;
+}
+
+.main-west .accordion .panel-body {
+    background-color: #293547;
+}
+
+/*datagrid switchbutton*/
+.datagrid .switchbutton {
+    border-radius: 3px;
+}
+
+.datagrid .switchbutton-on, .datagrid .switchbutton-off, .datagrid .switchbutton-handle {
+    font-size: 12px;
+}
+
+.datagrid .switchbutton-on {
+    background: #2A9BF9;
+    color: #FFFFFF;
+}
+
+.datagrid .switchbutton-off {
+    background: #EDEDED;
+    color: #999999;
+}
+
+.datagrid .switchbutton-handle {
+    /*border-radius: 10px;*/
+    box-shadow: 1px 1px 2px #888888;
+}
+
+.datagrid .textbox input {
+    background-color: #FFF;
+}
+
+/*combo textbox*/
+.combo.textbox {
+    border: 1px solid #B4CBE7;
+    background-color: #E6F3FB;
+}
+
+/*combo*/
+.combo .combo-arrow {
+    background: url('images/icon-collapse.png') no-repeat center center;
+}
+
+.combo .combo-arrow {
+    background-color: #E6F3FB;
+}
+
+.combo .combo-arrow:hover {
+    background-color: transparent;
+}
+
+/*.combo-panel.panel-body{*/
+/*background-color:#f6fcff;*/
+/*}*/
+
+.combo-panel .combobox-item {
+    font-size: 12px;
+}
+
+.combo-panel .tree-node {
+    transition: background-color .2s;
+    height: 30px;
+}
+
+.combo-panel .tree-title {
+    font-size: 12px;
+}
+
+.combo-panel .tree-node-hover {
+    background-color: #C9E6FE;
+}
+
+.combo-panel .tree-node-selected {
+    background-color: transparent;
+}
+
+.combo-panel .tree-checkbox0 {
+    background: url('images/checkbox-default.png') no-repeat center center;
+}
+
+.combo-panel .tree-checkbox1 {
+    background: url('images/checkbox-parent.png') no-repeat center center;
+    /*background: url('images/checkbox-checked.png') no-repeat center center;*/
+}
+
+.combo-panel .tree-checkbox2 {
+    background: url('images/checkbox-parent.png') no-repeat center center;
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+.combo-panel.panel-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+.combo-panel.panel-body::-webkit-scrollbar-track {
+    background-color: #ffffff;
+}
+
+/*定义滑块 内阴影+圆角*/
+.combo-panel.panel-body::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: #c1c1c1;
+}
+
+/*datagrid-editable textbox*/
+.datagrid-editable .textbox {
+    border: 1px solid #D0D0D0;
+    background-color: #FFF;
+}
+
+.datagrid-row-editing .datagrid-editable-input {
+    background-color: #FFF;
+}
+
+.datagrid-row-editing .combo .combo-arrow {
+    background-color: #FFF;
+}
+
+/*icon*/
+.icon-create-rule {
+    background: url('images/icon-create-rule.png') no-repeat center center;
+}
+
+.l-btn:hover .icon-create-rule {
+    background: url('images/icon-create-rule-ffffff.png') no-repeat center center;
+}
+
+.icon-omsc {
+    background: url('images/icon-omsc.png') no-repeat center center;
+}
+
+.icon-znzj {
+    background: url('images/icon-znzj.png') no-repeat center center;
+}
+
+.icon-yyfx {
+    background: url('images/icon-yyfx.png') no-repeat center center;
+}
+
+.icon-gzpz {
+    background: url('images/icon-gzpz.png') no-repeat center center;
+}
