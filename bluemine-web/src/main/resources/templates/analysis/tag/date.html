@@ -61,6 +61,18 @@
                 </div>
             </div>
         </div>
+        <div class="tags-datagrid">
+            <table id="tagtab" class="easyui-treegrid" width="100%">
+                <tr id="firsttr" height="42" style="background-color: #f9f9f9;font-weight: bold;">
+                    <td>序号</td>
+                    <td>日期</td>
+                    <td>标签</td>
+                    <td>次数</td>
+                    <td>会话数</td>
+                </tr>
+            </table>
+        </div>
+
     </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
@@ -97,8 +109,74 @@
 
         function reload() {
             var dates = daterange.daterange('getValue');
-            var ids = tagIds.combotree('getValue');
+            var ids = tagIds.combotree('getValues');
             //add search code
+            console.log(dates);
+            console.log(ids);
+            try {
+                console.log($.valueFrom(ids, 0, true));
+            } catch (e) {}
+
+            bulemine.ajaxJson({
+                url: "/service/tag/collect/findAll",
+                masking: true,
+                params: {
+                    data: {
+                        channelId: CHANNEL_ID,
+                        daterange: dates,
+                        tagIds: [$.valueFrom(ids, 0, true)]
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+                        console.log(data);
+                        $('#tagtab').datagrid({
+                            columns: [
+                                //{ headerText: "", headerAlign: "center", dataAlign: "center", width: "20", handler: "customCheckBox" },
+                                { headerText: "序号", headerAlign: "left", dataAlign: "left", width: "5" },
+                                { headerText: "日期", dataField: "callDate", headerAlign: "left",width: "100" },
+                                { headerText: "标签", dataField: "tagText", headerAlign: "left", dataAlign: "left", width: "100" },
+                                { headerText: "次数", dataField: "frequency", headerAlign: "left", dataAlign: "left", width: "50" },
+                                { headerText: "会话数", dataField: "callNum", headerAlign: "left", dataAlign: "left", width: "100" }
+                            ],
+                            //data: data
+                            data: [
+                                {
+                                    "callDate": "1",
+                                    "tagText": "2",
+                                    "frequency": "3",
+                                    "callNum": "4"
+                                },
+                                {
+                                    "callDate": "1",
+                                    "tagText": "2",
+                                    "frequency": "3",
+                                    "callNum": "4"
+                                }
+                            ]
+                        });
+
+                        /*$("#firsttr").nextAll().remove();
+                        var html = "";
+                        for(n in data) {
+                            html += "<tr style='height: 30px;'>" +
+                                    "<td>" + (n+1) + "</td>" +
+                                    "<td>" + data[n].callDate + "</td>" +
+                                    "<td>" + data[n].tagText + "</td>" +
+                                    "<td>" + data[n].frequency + "</td>" +
+                                    "<td>" + data[n].callNum + "</td>" +
+                                    "</tr>";
+                        }
+
+                        $("#firsttr").after(html);*/
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+
+
+
         }
         reload();
 

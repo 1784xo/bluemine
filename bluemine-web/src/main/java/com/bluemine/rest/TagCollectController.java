@@ -55,4 +55,15 @@ public class TagCollectController extends AbstractController {
 
         return ResponseEntity.ok(restfulResponse);
     }
+
+    @ResponseBody
+    @PostMapping("findAll")
+    public ResponseEntity findAll(@RequestBody RestfulRequest<TagCollectRequest> restfulRequest) {
+        HttpRestfulResponse restfulResponse = createRestfulResponse();
+
+        List<TagCollectResponse> response = tagCollectService.findAll(restfulRequest);
+        restfulResponse.setResult(response);
+
+        return ResponseEntity.ok(restfulResponse);
+    }
 }

@@ -144,4 +144,56 @@ public class TagCollectService {
         }
         return responses;
     }
+
+    public List<TagCollectResponse> findAll(RestfulRequest<TagCollectRequest> request) {
+
+        TagCollectRequest data = request.getData();
+
+        //AssertUtils.isTrue(data.daterangeSize() == 2, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        Long channelId = data.getChannelId();
+        AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        Long[] tagIds = data.getTagIds();
+        AssertUtils.notNull(tagIds, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        AssertUtils.isTrue(tagIds.length == 1, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        Long tagId = tagIds[0];
+        AssertUtils.notNull(tagId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        LocalDate startDate = data.getStartDate();
+        AssertUtils.notNull(startDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        LocalDate endDate = data.getEndDate();
+        AssertUtils.notNull(endDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        String callType = data.getCallType();
+        String roleType = data.getRoleType();
+
+        List<TagCollectVirtualEntity> collect = null;
+        if (tagId.compareTo(0L) == 0) {
+            if (callType == null) {
+                if (roleType == null) {
+                    collect = tagCollectVirtualRespository.findAll(channelId, startDate, endDate);
+                } else {
+                    collect = tagCollectVirtualRespository.findAll(channelId, startDate, endDate, roleType);
+                }
+            } else {
+                if (roleType == null) {
+                    collect = tagCollectVirtualRespository.findAll(channelId, callType, startDate, endDate);
+                } else {
+                    collect = tagCollectVirtualRespository.findAll(channelId, callType, startDate, endDate, roleType);
+                }
+            }
+        } else {
+            collect = tagCollectVirtualRespository.findOne(channelId, tagId, startDate, endDate);
+        }
+
+        List<TagCollectResponse> responses = new LinkedList<>();
+        for (TagCollectVirtualEntity entity : collect) {
+            responses.add(WebEntityUtils.toResponse(entity));
+        }
+
+        return responses;
+    }
 }
