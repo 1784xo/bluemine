@@ -10,29 +10,29 @@ else
     KILL=kill
 fi
 
-if readlink -f "$0" > /dev/null 2>&1 
+if readlink -f "$0" > /dev/null 2>&1
 then
-  CRACKBIN=$(readlink -f $0)
+  APP_BIN=$(readlink -f $0)
 else
-  CRACKBIN=$(pwd -P)
+  APP_BIN=$(pwd -P)
 fi
 
-CRACKHOME=${CRACKBIN%'/bin'*}
+APP_HOME=${APP_BIN%'/bin'*}
 
-echo "[INFO]Terminate the crack server; home=$CRACKHOME"
+echo "[INFO]Terminate the server; home=$APP_HOME"
 
-CRACKPS=$(ps -e -opid,cmd | grep -i "^[0-9]* .*java .*-Dapplication.home=$CRACKHOME .*com.lefeng.bi.crack.server.CrackServerMain$" | head -n 1 | sed 's/^ //')
+CPS=$(ps -e -opid,cmd | grep -i "^[0-9]* .*java .*-Dapplication.home=$APP_HOME .*-Dconfig.file=$APP_HOME/config/application.properties .*bluemine.*\.jar$" | head -n 1 | sed 's/^ //')
 
-if [ -z "$CRACKPS" ]; then
-  echo "[INFO]Crack server is not running" 
-  exit 1 
+if [ -z "$CPS" ]; then
+  echo "[INFO]server is not running"
+  exit 1
 else
-  PSID=${CRACKPS%% *}
+  PSID=${CPS%% *}
   if [ $PSID -eq 0 ]; then
     echo "[ERROR]Not found PID"
     exit 1
   else
     $KILL -15 $PSID
-    echo "[INFO]Stopped crack server; home=$CRACKHOME; PID=$PSID"
+    echo "[INFO]Stopped server; home=$APP_HOME; PID=$PSID"
   fi
 fi
