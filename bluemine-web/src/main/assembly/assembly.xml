@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<assembly>
+    <id>development</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>bin</directory>
+            <outputDirectory>/bin</outputDirectory>
+            <includes>
+                <include>shutdown.sh</include>
+                <include>startup.sh</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>logs</directory>
+            <outputDirectory>/logs</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>config</directory>
+            <outputDirectory>/config</outputDirectory>
+        </fileSet>
+    </fileSets>
+    <!--将指定的文件到包中-->
+    <files>
+        <file>
+            <source>target/bluemine-web.jar</source>
+            <outputDirectory>/</outputDirectory>
+            <destName>bluemine-web.jar</destName>
+        </file>
+    </files>
+</assembly>
