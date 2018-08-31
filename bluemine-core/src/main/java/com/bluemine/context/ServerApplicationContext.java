@@ -47,6 +47,10 @@ public class ServerApplicationContext {
         return parent.getMessage(resolvable, locale);
     }
 
+    public String getMessage(String code, Locale locale) {
+        return parent.getMessage(code, null, locale);
+    }
+
     public String getMessage(String code, Object[] args, String defaultMessage, Locale locale) {
         return parent.getMessage(code, args, defaultMessage, locale);
     }

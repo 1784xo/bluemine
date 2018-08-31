@@ -22,6 +22,6 @@ public class ViewResolver {
     @RequestMapping(value = "**")
     public String view(Model model, HttpServletRequest request) {
         model.addAttribute("token", webApplicationConfiguration.getToken());
-        return request.getRequestURI().substring(5);
+        return request.getRequestURI().substring(6);
     }
 }
