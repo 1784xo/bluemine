@@ -11,11 +11,13 @@ import com.bluemine.repository.TagRepository;
 import com.bluemine.util.AssertUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by hechao on 2018/8/10.
@@ -81,8 +83,11 @@ public class TagCollectService {
         return responses;
     }
 
-    public List<TagCollectResponse> findSubTop(RestfulPageRequest<TagCollectRequest, TagCollectSort> request) {
+    public List<TagCollectResponse> findSubTop(HttpRestfulPageRequest<TagCollectRequest, TagCollectSort> request) {
         TagCollectRequest data = request.getData();
+
+        Locale locale = RequestContextUtils.getLocale(request.getHttpRequest());
+        AssertUtils.notNull(locale, ExceptionMessageEnum.SYSINTR_EXCEPTION);
 
         AssertUtils.isTrue(data.daterangeSize() == 2, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
@@ -119,7 +124,7 @@ public class TagCollectService {
         other.setSubFrequency(0);
         other.setTotleFrequency(0);
         other.setCallNum(0);
-        other.setTagText(applicationContext.getMessage("tag.collect.other.total"));
+        other.setTagText(applicationContext.getMessage("tag.collect.other.total", locale));
 
         for (TagCollectVirtualEntity entity : collect) {
             if (i < limit) {

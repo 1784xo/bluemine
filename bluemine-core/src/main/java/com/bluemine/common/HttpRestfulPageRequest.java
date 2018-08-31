@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by hechao on 2018/8/21.
  */
 public class HttpRestfulPageRequest<D, S extends SortRequest> extends RestfulPageRequest<D, S>{
-    public HttpServletRequest getRequest() {
+    public HttpServletRequest getHttpRequest() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     }
 }

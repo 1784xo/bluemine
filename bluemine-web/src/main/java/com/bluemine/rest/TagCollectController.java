@@ -47,7 +47,7 @@ public class TagCollectController extends AbstractController {
 
     @ResponseBody
     @PostMapping("findSubTop")
-    public ResponseEntity findSubTop(@RequestBody RestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
+    public ResponseEntity findSubTop(@RequestBody HttpRestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         List<TagCollectResponse> response = tagCollectService.findSubTop(restfulRequest);

@@ -9,8 +9,7 @@
     <script src="/theme/jquery/jquery-easyui-extend/jquery-easyui-extend.js"></script>
     <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
-    <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
-
+    <script th:src="@{'/service/tag/findAll/'+${token}+'?callback=loadTagTree'}"></script>
     <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/default/jquery-easyui-reset.css"/>
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
@@ -67,13 +66,11 @@
         .tags-datagrid .datagrid-body .l-btn:hover {
             background-color: transparent;
         }
-
-
     </style>
 </head>
 <body>
-<div th:replace="/common/header::header"></div>
-<div th:replace="/common/main-west::main-west(3, 301)"></div>
+<div th:replace="common/header::header"></div>
+<div th:replace="common/main-west::main-west(3, 301)"></div>
 
 <div title="添加子标签" id="tag-dialog">
     <form>
@@ -125,14 +122,13 @@
 
     var event_handle = {};
 
-    bulemine.loader(function () {
-
+    $(function () {
+        var channelId = [[${token}]];
         var tagtree = $('.tags-datagrid .easyui-treegrid');
 
         function refreshTree() {
             $.parser.parse(tagtree.treegrid('getPanel').find('.datagrid-row'));
         }
-
 
         var tagdialog = $('#tag-dialog');
         var tagform = tagdialog.find('form');
