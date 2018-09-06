@@ -123,7 +123,7 @@ public class CallBatchExecutor {
                 updateStatus(triggerId, BatchTriggerStatus.STARTING, BatchTriggerStatus.valueOf(jobExecution.getStatus().name()), jobExecution.getAllFailureExceptions().toString());
             }
             if (log.isInfoEnabled())
-                log.info("end execute call batch task. call: {}");
+                log.info("end execute call batch task. call: {}", triggerId.getCallNo());
         }
     }
 }
