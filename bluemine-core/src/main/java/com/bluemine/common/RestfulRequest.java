@@ -42,7 +42,7 @@ public class RestfulRequest<T> {
 
     public synchronized RequestContext<T> getContext(){
         if(context == null){
-            context = new RequestContext<T>(this);
+            context = new RequestContext<T>();
         }
         return context;
     }

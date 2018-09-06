@@ -1,8 +1,10 @@
 package com.bluemine.domain.entity;
 
+import com.bluemine.struct.BatchTriggerStatus;
+
 import javax.persistence.*;
+import javax.persistence.EnumType;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -10,19 +12,16 @@ import java.util.Objects;
  * Created by hechao on 2018/7/19.
  */
 @Entity
-@Table(name = "call_collect_trigger")
-public class CallCollectTriggerEntity extends PartitionEntity implements Serializable{
+@Table(name = "call_batch_trigger")
+public class CallBatchTriggerEntity extends PartitionEntity implements Serializable{
 
     private static final long serialVersionUID = 546553193863082042L;
 
     @EmbeddedId
-    private CallCollectTriggerId id;
+    private CallBatchTriggerId id;
 
     @Column(name = "TRIGGER_DATE", nullable = false)
     private LocalDateTime triggerDate;
-
-    @Column(name = "TRIGGER_TYPE", nullable = false, updatable = false, length = 4)
-    private String triggerType;
 
     @Column(name = "REQUEST_TIME", nullable = false, updatable = false)
     private LocalDateTime requestTime;
@@ -30,14 +29,15 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
     @Column(name = "EXECUTIVE_NO", nullable = false)
     private Integer executiveNo;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS_CODE", nullable = false, length = 255)
-    private String statusCode;
+    private BatchTriggerStatus statusCode;
 
-    public CallCollectTriggerId getId() {
+    public CallBatchTriggerId getId() {
         return id;
     }
 
-    public void setId(CallCollectTriggerId id) {
+    public void setId(CallBatchTriggerId id) {
         this.id = id;
     }
 
@@ -47,14 +47,6 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
 
     public void setTriggerDate(LocalDateTime triggerDate) {
         this.triggerDate = triggerDate;
-    }
-
-    public String getTriggerType() {
-        return triggerType;
-    }
-
-    public void setTriggerType(String triggerType) {
-        this.triggerType = triggerType;
     }
 
     public LocalDateTime getRequestTime() {
@@ -73,11 +65,11 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
         this.executiveNo = executiveNo;
     }
 
-    public String getStatusCode() {
+    public BatchTriggerStatus getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(BatchTriggerStatus statusCode) {
         this.statusCode = statusCode;
     }
 
@@ -85,8 +77,14 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CallCollectTriggerEntity that = (CallCollectTriggerEntity) o;
+        CallBatchTriggerEntity that = (CallBatchTriggerEntity) o;
         return Objects.equals(id, that.id);
+    }
+
+    @Override
+    @Column(name = "DESC_TEXT", nullable = true, length = 2500)
+    public void setDescText(String descText) {
+        super.setDescText(descText);
     }
 
     @Override
@@ -101,43 +99,37 @@ public class CallCollectTriggerEntity extends PartitionEntity implements Seriali
 
     @Override
     public String toString() {
-        return "CallCollectTriggerEntity{" +
+        return "CallBatchTriggerEntity{" +
                 "executiveNo=" + executiveNo +
                 ", id=" + id +
                 ", requestTime=" + requestTime +
-                ", statusCode='" + statusCode + '\'' +
+                ", statusCode=" + statusCode +
                 ", triggerDate=" + triggerDate +
-                ", triggerType='" + triggerType + '\'' +
                 "} " + super.toString();
     }
 
 
-    public CallCollectTriggerEntity id(CallCollectTriggerId id) {
+    public CallBatchTriggerEntity id(CallBatchTriggerId id) {
         this.id = id;
         return this;
     }
 
-    public CallCollectTriggerEntity triggerDate(LocalDateTime triggerDate) {
+    public CallBatchTriggerEntity triggerDate(LocalDateTime triggerDate) {
         this.triggerDate = triggerDate;
         return this;
     }
 
-    public CallCollectTriggerEntity triggerType(String triggerType) {
-        this.triggerType = triggerType;
-        return this;
-    }
-
-    public CallCollectTriggerEntity requestTime(LocalDateTime requestTime) {
+    public CallBatchTriggerEntity requestTime(LocalDateTime requestTime) {
         this.requestTime = requestTime;
         return this;
     }
 
-    public CallCollectTriggerEntity executiveNo(Integer executiveNo) {
+    public CallBatchTriggerEntity executiveNo(Integer executiveNo) {
         this.executiveNo = executiveNo;
         return this;
     }
 
-    public CallCollectTriggerEntity statusCode(String statusCode) {
+    public CallBatchTriggerEntity statusCode(BatchTriggerStatus statusCode) {
         this.statusCode = statusCode;
         return this;
     }

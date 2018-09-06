@@ -206,15 +206,16 @@
             treeField: 'text',
             fitColumns: true,
             onEndEdit: function (row, changes) {
-                if (!$.isEmptyObject(changes)) {
+                if (!!changes.text) {
                     bulemine.ajaxJson({
                         url: "/service/tag/update",
                         masking: true,
                         params: {
-                            data: $.extend({
+                            data: {
                                 channelId: row.channelId,
                                 tagId: row.id,
-                            }, changes)
+                                tagText:changes.text
+                            }
                         },
                         callback: function (ok, data, msg, opts) {
                             if (ok) {

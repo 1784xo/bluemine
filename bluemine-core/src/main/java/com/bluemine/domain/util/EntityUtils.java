@@ -12,7 +12,7 @@ import java.util.*;
 public abstract class EntityUtils {
 
 
-    public static Map<Long, TagResponse> toTagMap(List<TagEntity> tags, List<RuleEntity> rules) {
+    public static Map<Long, TagResponse> mergeToMap(List<TagEntity> tags, List<RuleEntity> rules) {
         Map<Long, TagResponse> map = new LinkedHashMap<>();
         TagResponse tagResponse;
         for (TagEntity tag : tags) {

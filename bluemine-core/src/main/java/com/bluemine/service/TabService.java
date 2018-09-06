@@ -49,7 +49,7 @@ public class TabService {
 
         Collections.sort(tags, TAG_DESC);
 
-        return EntityUtils.toTagMap(tags, rules);
+        return EntityUtils.mergeToMap(tags, rules);
     }
 
     public List<TagResponse> findTreeWithRule(long channelId) {

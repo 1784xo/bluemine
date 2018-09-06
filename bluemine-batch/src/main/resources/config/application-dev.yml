@@ -13,10 +13,16 @@
 spring:
     devtools:
         restart:
-            enabled: false
+            enabled: true
         livereload:
-            enabled: false # we use gulp + BrowserSync for livereload
-    datasource:
-        url: jdbc:mysql://140.143.19.85:3306/bluemine?useUnicode=true&characterEncoding=UTF-8
-        username: hc
-        password: Cf10lbrn!@#$
+            enabled: true # we use gulp + BrowserSync for livereload
+
+
+bluemine:
+    call-batch:
+        corePoolSize: 1
+        maxPoolSize: 50
+        queueCapacity: 25
+        keepAliveSeconds: 300
+    tag-cache:
+        expire: 1800

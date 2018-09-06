@@ -32,6 +32,7 @@
         <HikariCP.version>2.5.1</HikariCP.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <guava.version>21.0</guava.version>
+        <httpclient.version>4.5</httpclient.version>
     </properties>
 
     <profiles>

@@ -114,7 +114,7 @@ public class RuleEntity extends PartitionEntity implements Serializable {
     public String toString() {
         return "RuleEntity{" +
                 "callType='" + callType + '\'' +
-                ", channelNo=" + channelId +
+                ", channelId=" + channelId +
                 ", priorityNo=" + priorityNo +
                 ", roleType='" + roleType + '\'' +
                 ", ruleExps='" + ruleExps + '\'' +
