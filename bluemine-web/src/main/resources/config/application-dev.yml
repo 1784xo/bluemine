@@ -16,3 +16,7 @@ spring:
             enabled: true
         livereload:
             enabled: true # we use gulp + BrowserSync for livereload
+    datasource:
+        url: "jdbc:mysql://127.0.0.1:3306/bluemine_1.0.0?useUnicode=true&characterEncoding=UTF-8"
+        username: root
+        password: 111111
