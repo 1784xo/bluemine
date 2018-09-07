@@ -16,13 +16,7 @@ spring:
             enabled: true
         livereload:
             enabled: true # we use gulp + BrowserSync for livereload
-
-
-bluemine:
-    call-batch:
-        corePoolSize: 1
-        maxPoolSize: 50
-        queueCapacity: 25
-        keepAliveSeconds: 300
-    tag-cache:
-        expire: 1800
+    datasource:
+        url: "jdbc:mysql://127.0.0.1:3306/bluemine_1.0.0?useUnicode=true&characterEncoding=UTF-8"
+        username: root
+        password: 111111

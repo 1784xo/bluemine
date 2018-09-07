@@ -1,7 +1,6 @@
 package com.bluemine.service;
 
-import com.bluemine.context.RequestContext;
-import com.bluemine.domain.entity.CallBatchTriggerEntity;
+import com.bluemine.context.SessionContext;
 import com.bluemine.domain.entity.CallBatchTriggerId;
 
 /**
@@ -13,9 +12,9 @@ public class CallBatchThread implements Runnable {
 
     private CallBatchExecutor executor;
 
-    private RequestContext context;
+    private SessionContext context;
 
-    public CallBatchThread(CallBatchTriggerId triggerId, CallBatchExecutor executor, RequestContext context) {
+    public CallBatchThread(CallBatchTriggerId triggerId, CallBatchExecutor executor, SessionContext context) {
         this.triggerId = triggerId;
         this.executor = executor;
         this.context = context;
@@ -24,7 +23,10 @@ public class CallBatchThread implements Runnable {
     @Override
     public void run() {
         try {
+//            Thread.sleep(5000);
             executor.execute(triggerId, context);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
         } finally {
 
         }

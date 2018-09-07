@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,17 +47,37 @@ public class CallBatchService {
     }
 
     public void execute(LocalDateTime triggerDate, RequestContext context) {
-        Page<CallBatchTriggerEntity> page = callBatchTriggerRepository.findAll(BatchTriggerStatus.WAIT, triggerDate, new PageRequest(0, 5));
+        execute(callBatchExecutor.getCorePoolSize(), triggerDate, context);
+    }
+
+    private void execute(int number, LocalDateTime triggerDate, RequestContext context) {
+        Page<CallBatchTriggerEntity> page = callBatchTriggerRepository.findAll(BatchTriggerStatus.WAIT, triggerDate, new PageRequest(0, number));
+        long waiting = page.getTotalElements() - page.getNumberOfElements();
+
+        if (page.getNumberOfElements() == 0)
+            return;
+
+        if (log.isInfoEnabled())
+            log.info(">>>push call batchs to executor. number: {}; waiting: {}", number, waiting);
+
         List<CallBatchTriggerEntity> content = page.getContent();
         for (CallBatchTriggerEntity trigger : content) {
-            callBatchExecutor.start(trigger.getId(), context);
+            callBatchExecutor.prepare(trigger.getId(), context).start();
         }
+
+        if (waiting == 0)
+            return;
+
+        while (callBatchExecutor.getIdleCoreCount() != number) {
+        }
+
+        execute(number, triggerDate, context);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void writeTrigger(CallBatchRequest[] requests, LocalDateTime businessTime) {
         if (log.isDebugEnabled())
-            log.debug("start write triggers.");
+            log.debug(">>>start write call batch triggers.");
         List<CallBatchTriggerEntity> entityList = new LinkedList<>();
         ChannelEntity channel;
         CallBatchTriggerEntity trigger;

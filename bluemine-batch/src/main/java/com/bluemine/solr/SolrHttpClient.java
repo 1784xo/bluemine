@@ -2,6 +2,7 @@ package com.bluemine.solr;
 
 import com.bluemine.ExceptionMessageEnum;
 import com.bluemine.common.SolrResponse;
+import com.bluemine.config.SolrRestConfiguration;
 import com.bluemine.util.AssertUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,11 @@ public class SolrHttpClient {
     @Inject
     private RestTemplate solrRestTemplate;
 
-    public SolrResponse get(String sessionId, String expression) {
-//        TODO:配置化
-        ResponseEntity<SolrResponse> responseEntity = solrRestTemplate.getForEntity("http://140.143.19.85:8983/solr/blueminecore/select?q=SessionID:{1} AND {2}", SolrResponse.class, sessionId, expression);
+    @Inject
+    private SolrRestConfiguration solrRestConfiguration;
+
+    public SolrResponse getTagCollect(String sessionId, String expression) {
+        ResponseEntity<SolrResponse> responseEntity = solrRestTemplate.getForEntity(solrRestConfiguration.getTagCollectUrl(), SolrResponse.class, sessionId, expression);
         AssertUtils.isTrue(responseEntity.getStatusCode() == HttpStatus.OK, ExceptionMessageEnum.HTTP_STATUS_EXCEPTION);
         return responseEntity.getBody();
     }

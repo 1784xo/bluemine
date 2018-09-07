@@ -62,12 +62,6 @@ public class TagCollectJobConfiguration implements ItemProcessor<TagCollectItem,
     private StepBuilderFactory stepBuilderFactory;
 
     @Inject
-    private EntityManagerFactory entityManagerFactory;
-
-    @Inject
-    private ChannelRepository channelRepository;
-
-    @Inject
     private SeatRepository seatRepository;
 
     @Bean
@@ -126,7 +120,7 @@ public class TagCollectJobConfiguration implements ItemProcessor<TagCollectItem,
             if ((venation != null) && (venation.size() > 0)) {
                 rules = tag.getRules();
                 for (RuleResponse rule : rules) {
-                    SolrResponse solrResponse = solrHttpClient.get(item.getCallNo(), RuleResolver.resolve(rule.getRuleExps()));
+                    SolrResponse solrResponse = solrHttpClient.getTagCollect(item.getCallNo(), RuleResolver.resolve(rule.getRuleExps()));
                     frequency = solrResponse.getResponse().getNumFound();
                     if (frequency > 0) {
                         collects.addAll(collect(tag, venation, rule, frequency));

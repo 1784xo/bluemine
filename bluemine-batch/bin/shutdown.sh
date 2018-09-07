@@ -17,7 +17,7 @@ else
   APP_BIN=$(pwd -P)
 fi
 
-APP_HOME=${APP_BIN%"/bin"*}
+APP_HOME=${APP_BIN%'/bin'*}
 
 echo "[INFO]Terminate the server; home=$APP_HOME"
 

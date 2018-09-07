@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -27,8 +28,9 @@ import java.util.Properties;
  * Created by hechao on 2018/6/25.
  */
 @ComponentScan
-@EnableBatchProcessing
+@EnableAsync
 @EnableAutoConfiguration
+@EnableBatchProcessing
 @EnableConfigurationProperties(ApplicationConfiguration.class)
 public class Bootstrap extends ApplicationContextLoader {
     @Inject

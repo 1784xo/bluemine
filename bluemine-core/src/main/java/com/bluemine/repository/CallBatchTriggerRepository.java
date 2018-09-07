@@ -27,7 +27,7 @@ public interface CallBatchTriggerRepository extends JpaRepository<CallBatchTrigg
     /**
      * 更新trigger状态
      *
-     * @param channelNo
+     * @param channelId
      * @param callNo
      * @param callDate
      * @param seatNo

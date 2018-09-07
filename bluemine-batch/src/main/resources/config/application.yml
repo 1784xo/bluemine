@@ -86,7 +86,6 @@ security:
         enabled: false
 
 server:
-    port: 8091
     session:
         cookie:
             http-only: true

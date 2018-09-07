@@ -1,6 +1,7 @@
 package com.bluemine.rest;
 
 import com.bluemine.common.CallBatchRequest;
+import com.bluemine.common.HttpRestfulResponse;
 import com.bluemine.common.RestfulRequest;
 import com.bluemine.service.CallBatchService;
 import org.slf4j.Logger;
@@ -27,12 +28,15 @@ public class CallTriggerController extends AbstractController {
     public ResponseEntity batch(@RequestBody RestfulRequest<CallBatchRequest[]> restfulRequest) {
 
         if (log.isDebugEnabled())
-            log.debug(">>>REST Request  batch. {}", restfulRequest);
+            log.debug(">>>REST Request call batch. {}", restfulRequest);
+
+        HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         callBatchService.writeAndExecute(restfulRequest.getData(), restfulRequest.getBusinessTime(), restfulRequest.getContext());
 
         if (log.isDebugEnabled())
-            log.debug("<<<REST Response batch. {}", restfulRequest);
-        return null;
+            log.debug("<<<REST Response call batch. {}", restfulResponse);
+
+        return ResponseEntity.ok().body(restfulResponse);
     }
 }

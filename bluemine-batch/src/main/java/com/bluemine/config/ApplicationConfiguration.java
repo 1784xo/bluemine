@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by hechao on 2017/11/23.
  */
-@ConfigurationProperties(prefix = "bluemine", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "bluemine", ignoreUnknownFields = true)
 public class ApplicationConfiguration extends BootConfiguration {
 
     private CallBatchConfiguration callBatch;

@@ -13,7 +13,8 @@
 		"cd638e75-e0a0-4c54-8c9f-a2c0e57c9a85",
 		"5e56bec8-557d-4ba5-93de-e39dbcb6df04",
 		"3fd0fe9d-3f1e-455e-bbf6-597282db3d71",
-		"0159c30d-78ee-4099-955f-fd1c033043a5"
+		"0159c30d-78ee-4099-955f-fd1c033043a5",
+		"7f8e0af9-a588-44fe-a9ce-a37c58d23ceb"
 	],
 	"folders_order": [],
 	"folders": [],
@@ -39,7 +40,7 @@
 			"auth": null,
 			"events": [],
 			"folder": null,
-			"rawModeData": "{\n\t\"data\":[{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"c4a9649b-fb9d-4409-b3d3-de31a701cf30\",\n\t\t\"callDate\":\"2018-08-31\",\n\t\t\"seatNo\":\"1\"\n\t}, {\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"4550b739-ec3c-4b8e-9394-c44abc3a707d\",\n\t\t\"callDate\":\"2018-08-31\",\n\t\t\"seatNo\":\"1\"\n\t},  {\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"2d197154-34b1-43b0-9947-054655d0fb96\",\n\t\t\"callDate\":\"2018-08-31\",\n\t\t\"seatNo\":\"2\"\t\n\t},  {\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"8674b37f-9987-4fe8-b873-24869a7ef3dc\",\n\t\t\"callDate\":\"2018-08-31\",\n\t\t\"seatNo\":\"2\"\t\n\t},  {\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"a412d19c-313d-4330-82d9-500379af75e4\",\n\t\t\"callDate\":\"2018-08-31\",\n\t\t\"seatNo\":\"2\"\t\n\t}]\n}",
+			"rawModeData": "{\n\t\"data\":[{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"c4a9649b-fb9d-4409-b3d3-de31a701cf30\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"4550b739-ec3c-4b8e-9394-c44abc3a707d\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"2d197154-34b1-43b0-9947-054655d0fb96\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"8674b37f-9987-4fe8-b873-24869a7ef3dc\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"a412d19c-313d-4330-82d9-500379af75e4\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t}]\n}",
 			"headers": "Content-Type: application/json;charset=UTF-8\n",
 			"pathVariables": {}
 		},
@@ -174,6 +175,37 @@
 			"folder": null,
 			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelId\":49704275516883968,\n\t\t\"tagText\":\"意愿度\",\n\t\t\"parentId\":12333419319264256\n\t}\n}",
 			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "7f8e0af9-a588-44fe-a9ce-a37c58d23ceb",
+			"name": "跑批监控",
+			"url": "http://batch.bluemine.com:8091/service/monitor/batch",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Cache-Control",
+					"value": "no-cache",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "",
+			"headers": "Content-Type: application/json;charset=UTF-8\nCache-Control: no-cache\n",
 			"pathVariables": {}
 		},
 		{
