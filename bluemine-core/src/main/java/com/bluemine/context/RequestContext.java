@@ -10,17 +10,4 @@ import com.bluemine.common.RestfulRequest;
  */
 public class RequestContext<T> extends SessionContext {
 
-    private RestfulRequest<T> request;
-
-    public RequestContext(RestfulRequest<T> request) {
-        this.request = request;
-    }
-
-    /**
-     * 得到请求对象
-     * @return
-     */
-    public RestfulRequest<T> getRequest() {
-        return request;
-    }
 }

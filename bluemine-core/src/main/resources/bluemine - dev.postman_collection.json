@@ -10,11 +10,40 @@
 		"7d955bdd-475d-4a48-9129-d2d7523cdf64",
 		"8871a33a-f250-4248-927d-16b15261e964",
 		"1c3e431c-1812-4d21-803f-d5c0083c2108",
-		"cd638e75-e0a0-4c54-8c9f-a2c0e57c9a85"
+		"cd638e75-e0a0-4c54-8c9f-a2c0e57c9a85",
+		"5e56bec8-557d-4ba5-93de-e39dbcb6df04",
+		"3fd0fe9d-3f1e-455e-bbf6-597282db3d71",
+		"0159c30d-78ee-4099-955f-fd1c033043a5",
+		"7f8e0af9-a588-44fe-a9ce-a37c58d23ceb"
 	],
 	"folders_order": [],
 	"folders": [],
 	"requests": [
+		{
+			"id": "0159c30d-78ee-4099-955f-fd1c033043a5",
+			"name": " 跑批触发接口",
+			"url": "http://batch.bluemine.com:8091/service/call/trigger/batch",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "{\n\t\"data\":[{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"c4a9649b-fb9d-4409-b3d3-de31a701cf30\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"4550b739-ec3c-4b8e-9394-c44abc3a707d\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"2d197154-34b1-43b0-9947-054655d0fb96\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"8674b37f-9987-4fe8-b873-24869a7ef3dc\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"a412d19c-313d-4330-82d9-500379af75e4\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t}]\n}",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
 		{
 			"id": "1c3e431c-1812-4d21-803f-d5c0083c2108",
 			"name": "删除规则",
@@ -41,9 +70,67 @@
 			"pathVariables": {}
 		},
 		{
+			"id": "3fd0fe9d-3f1e-455e-bbf6-597282db3d71",
+			"name": "搜索接口",
+			"url": "http://140.143.19.85:8983/solr/blueminecore/select?q=SessionID:c4a9649b-fb9d-4409-b3d3-de31a701cf30",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "q",
+					"value": "SessionID:c4a9649b-fb9d-4409-b3d3-de31a701cf30",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "5e56bec8-557d-4ba5-93de-e39dbcb6df04",
+			"name": "修改规则",
+			"url": "http://www.bluemine.com:8080/service/rule/update",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelId\":\"49252889384718336\",\n\t\t\"callType\":\"AUD\",\n\t\t\"roleType\":\"ALL\",\n\t\t\"ruleExps\":\"(脑子&慢)|傻|没希望|笨111\",\n\t\t\"ruleId\":\"49706274247443456\"\n\t}\n}",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
 			"id": "7cd3eb49-4e31-43d6-b41d-cda304fc93db",
 			"name": "查找全部标签",
-			"url": "http://www.bluemine.com:8080/service/tag/findAll",
+			"url": "http://www.bluemine.com:8080/service/tag/findAll/49252889384718336",
 			"description": "",
 			"data": [],
 			"dataMode": "raw",
@@ -91,6 +178,37 @@
 			"pathVariables": {}
 		},
 		{
+			"id": "7f8e0af9-a588-44fe-a9ce-a37c58d23ceb",
+			"name": "跑批监控",
+			"url": "http://batch.bluemine.com:8091/service/monitor/batch",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Cache-Control",
+					"value": "no-cache",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "",
+			"headers": "Content-Type: application/json;charset=UTF-8\nCache-Control: no-cache\n",
+			"pathVariables": {}
+		},
+		{
 			"id": "8871a33a-f250-4248-927d-16b15261e964",
 			"name": "创建规则",
 			"url": "http://www.bluemine.com:8080/service/rule/create",
@@ -117,7 +235,7 @@
 		},
 		{
 			"id": "cd638e75-e0a0-4c54-8c9f-a2c0e57c9a85",
-			"name": "修盖标签",
+			"name": "修改标签",
 			"url": "http://www.bluemine.com:8080/service/tag/update",
 			"description": "",
 			"data": [],
@@ -136,7 +254,7 @@
 			"auth": null,
 			"events": [],
 			"folder": null,
-			"rawModeData": "{\n\t\"data\":{\n\t\t\"tagId\":12333421078250496,\n\t\t\"channelId\":49252889384718336,\n\t\t\"tagText\":\"平板电脑\",\n\t\t\"parentId\":49254048771084289,\n\t\t\"activatedFlag\":true\n\t}\n}",
+			"rawModeData": "{\n\t\"data\":{\n\t\t\"tagId\":198819111277563904,\n\t\t\"channelId\":49252889384718336,\n\t\t\"tagText\":\"电视11\",\n\t\t\"parentId\":198818923355967488,\n\t\t\"activated\":true\n\t}\n}",
 			"headers": "Content-Type: application/json;charset=UTF-8\n",
 			"pathVariables": {}
 		}

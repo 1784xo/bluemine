@@ -64,7 +64,7 @@ public abstract class RepositoryProxy<T extends BaseEntity>{
         return bigTable.get(rowKey, colKey);
     }
 
-    public abstract void commitAndFlush(T entity);
+    public abstract Object commitAndFlush(T entity);
 
     public abstract void commit(T entity);
 

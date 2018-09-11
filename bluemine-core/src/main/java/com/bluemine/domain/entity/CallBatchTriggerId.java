@@ -10,11 +10,11 @@ import java.util.Objects;
  * Created by hechao on 2018/7/20.
  */
 @Embeddable
-public class CallCollectTriggerId implements Serializable{
+public class CallBatchTriggerId implements Serializable{
     private static final long serialVersionUID = 552604337690063175L;
 
-    @Column(name = "CHANNEL_NO", nullable = false, length = 64, updatable = false)
-    private String channelNo;
+    @Column(name = "CHANNEL_ID", nullable = false, updatable = false)
+    private Long channelId;
 
     @Column(name = "CALL_NO", nullable = false, length = 64, updatable = false)
     private String callNo;
@@ -26,12 +26,12 @@ public class CallCollectTriggerId implements Serializable{
     private String seatNo;
 
 
-    public String getChannelNo() {
-        return channelNo;
+    public Long getChannelId() {
+        return channelId;
     }
 
-    public void setChannelNo(String channelNo) {
-        this.channelNo = channelNo;
+    public void setChannelId(Long channelNo) {
+        this.channelId = channelNo;
     }
 
     public String getCallNo() {
@@ -62,8 +62,8 @@ public class CallCollectTriggerId implements Serializable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CallCollectTriggerId that = (CallCollectTriggerId) o;
-        return Objects.equals(channelNo, that.channelNo) &&
+        CallBatchTriggerId that = (CallBatchTriggerId) o;
+        return Objects.equals(channelId, that.channelId) &&
                 Objects.equals(callNo, that.callNo) &&
                 Objects.equals(callDate, that.callDate) &&
                 Objects.equals(seatNo, that.seatNo);
@@ -71,36 +71,36 @@ public class CallCollectTriggerId implements Serializable{
 
     @Override
     public int hashCode() {
-        return Objects.hash(channelNo, callNo, callDate, seatNo);
+        return Objects.hash(channelId, callNo, callDate, seatNo);
     }
 
     @Override
     public String toString() {
-        return "CallCollectTriggerId{" +
+        return "CallBatchTriggerId{" +
                 "callDate=" + callDate +
                 ", callNo='" + callNo + '\'' +
-                ", channelNo='" + channelNo + '\'' +
+                ", channelId='" + channelId + '\'' +
                 ", seatNo='" + seatNo + '\'' +
                 '}';
     }
 
 
-    public CallCollectTriggerId channelNo(String channelNo) {
-        this.channelNo = channelNo;
+    public CallBatchTriggerId channelId(Long channelId) {
+        this.channelId = channelId;
         return this;
     }
 
-    public CallCollectTriggerId callNo(String callNo) {
+    public CallBatchTriggerId callNo(String callNo) {
         this.callNo = callNo;
         return this;
     }
 
-    public CallCollectTriggerId callDate(LocalDate callDate) {
+    public CallBatchTriggerId callDate(LocalDate callDate) {
         this.callDate = callDate;
         return this;
     }
 
-    public CallCollectTriggerId seatNo(String seatNo) {
+    public CallBatchTriggerId seatNo(String seatNo) {
         this.seatNo = seatNo;
         return this;
     }

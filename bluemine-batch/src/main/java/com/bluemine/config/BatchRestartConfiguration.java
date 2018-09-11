@@ -4,6 +4,7 @@ package com.bluemine.config;
  * Created by hechao on 2018/7/20.
  */
 public class BatchRestartConfiguration {
+
     private Long delayTime;
 
     private Integer executiveLimit;

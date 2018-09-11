@@ -17,7 +17,7 @@ else
   APP_BIN=$(pwd -P)
 fi
 
-APP_HOME=${APP_BIN%'/bin'*}
+APP_HOME=${APP_BIN%"/bin"*}
 
 echo "[INFO]Terminate the server; home=$APP_HOME"
 
@@ -27,7 +27,7 @@ if [ -z "$CPS" ]; then
   echo "[INFO]server is not running"
   exit 1
 else
-  PSID=${CPS%% *}
+  PSID=${CPS%%" /"*}
   if [ $PSID -eq 0 ]; then
     echo "[ERROR]Not found PID"
     exit 1

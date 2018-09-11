@@ -8,7 +8,7 @@ import org.springframework.data.repository.support.Repositories;
 /**
  * Created by hechao on 2017/9/11.
  */
-public class JapRepositoryProxy extends RepositoryProxy {
+public class JapRepositoryProxy<T extends BaseEntity> extends RepositoryProxy {
 
     private Repositories repositories;
 
@@ -30,9 +30,9 @@ public class JapRepositoryProxy extends RepositoryProxy {
     }
 
     @Override
-    public void commitAndFlush(BaseEntity entity) {
+    public Object commitAndFlush(BaseEntity entity) {
         JpaRepository repository = getRepository(entity.getClass());
-        repository.saveAndFlush(entity);
+        return repository.saveAndFlush(entity);
     }
 
     public JpaRepository getRepository(Class cls) {

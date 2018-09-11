@@ -81,8 +81,8 @@ public class ChannelEntity extends PartitionEntity implements Serializable {
         return "ChannelEntity{" +
                 "activated=" + activatedFlag +
                 ", channelCode='" + channelCode + '\'' +
-                ", channelNo=" + channelId +
-                ", channelNo='" + channelNo + '\'' +
+                ", channelId=" + channelId +
+                ", channelId='" + channelNo + '\'' +
                 ", channelType='" + channelType + '\'' +
                 "} " + super.toString();
     }

@@ -17,10 +17,4 @@ public abstract class AbstractController {
     public HttpRestfulResponse createRestfulResponse(){
         return new HttpRestfulResponse();
     }
-
-    public HttpRestfulResponse createRestfulResponse(RequestContext context){
-        RestfulRequest request = context.getRequest();
-        RestfulGenericRequest generic = request.getGeneric();
-        return new HttpRestfulResponse(true, generic.getReceipt());
-    }
 }

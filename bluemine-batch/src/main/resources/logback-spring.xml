@@ -4,6 +4,7 @@
 
     <springProperty scope="context" name="path" source="log.path"></springProperty>
     <springProperty scope="context" name="level" source="log.level"></springProperty>
+    <springProperty scope="context" name="serverId" source="server.id"></springProperty>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
@@ -16,7 +17,7 @@
         </rollingPolicy>
         <encoder>
             <charset>utf-8</charset>
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%p][%X{sessionId}][%X{traceId}][%X{cip}:%X{cPort}][%X{sip}:%X{sPort}][PID${server.id}|${spring.profiles.active}][%X{userId}][%t|%logger{1.}|%M|%X{ctime}] - %msg %ex{full}%n</Pattern>
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%p][%X{sessionId}][%X{traceId}][%X{cip}:%X{cPort}][%X{sip}:%X{sPort}][PID${serverId}|${spring.profiles.active}][%X{userId}][%t|%logger{1.}|%M|%X{ctime}] - %msg %ex{full}%n</Pattern>
         </encoder>
     </appender>
     <appender name="ASYNC_ROLLINGFILE" class="ch.qos.logback.classic.AsyncAppender">

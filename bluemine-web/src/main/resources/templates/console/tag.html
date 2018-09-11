@@ -164,13 +164,13 @@
             var id = $(el).data('tag-id');
             var row = tagtree.treegrid('find', id);
             tagdialog.find('[name="tagCrumbs"]').html(row.text);
-            tagdialog.data('binding', row).dialog('open');
+            tagdialog.data('binding', row).dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(tagdialog).height()/2)});
         }
 
         event_handle.onRuleDialog = function (el) {
             var id = $(el).data('tag-id');
             var row = tagtree.treegrid('find', id);
-            ruledialog.data('binding', row).dialog('open');
+            ruledialog.data('binding', row).dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(ruledialog).height()/2)});
             rulegrid.datagrid('loadData', {
                 total: row.rules.length,
                 rows: row.rules
@@ -206,15 +206,16 @@
             treeField: 'text',
             fitColumns: true,
             onEndEdit: function (row, changes) {
-                if (!$.isEmptyObject(changes)) {
+                if (!!changes.text) {
                     bulemine.ajaxJson({
                         url: "/service/tag/update",
                         masking: true,
                         params: {
-                            data: $.extend({
+                            data: {
                                 channelId: row.channelId,
                                 tagId: row.id,
-                            }, changes)
+                                tagText:changes.text
+                            }
                         },
                         callback: function (ok, data, msg, opts) {
                             if (ok) {
