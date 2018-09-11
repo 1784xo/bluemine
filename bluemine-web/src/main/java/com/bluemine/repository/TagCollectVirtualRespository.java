@@ -1,6 +1,7 @@
 package com.bluemine.repository;
 
 import com.bluemine.domain.entity.TagCollectVirtualEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -225,4 +226,263 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
             "AND CALL_DATE >= ?3 AND CALL_DATE<=?4 " +
             "GROUP BY TAG_ID ORDER BY ?#{#sort}", nativeQuery = true)
     List<TagCollectVirtualEntity> findAll(long channelId, long parentId, LocalDate start, LocalDate end, Sort sort);
+
+        /**
+         * 按日期:日(全部)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "GROUP BY CALL_DATE,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllDay(long channelId, LocalDate start, LocalDate end, Pageable pageable);
+
+        /**
+         * 按日期:周(全部)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "GROUP BY CALL_WEEK,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllWeek(long channelId, LocalDate start, LocalDate end, Pageable pageable);
+
+        /**
+         * 按日期:月(全部)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "GROUP BY CALL_YEAR+CALL_MONTH,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllMonth(long channelId, LocalDate start, LocalDate end, Pageable pageable);
+
+
+        /**
+         * 按日期:日(标签)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "AND TAG_ID in (?4) " +
+                "GROUP BY CALL_DATE,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllDayInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
+
+        /**
+         * 按日期:周(标签)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "AND TAG_ID in (?4) " +
+                "GROUP BY CALL_WEEK,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllWeekInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
+
+        /**
+         * 按日期:月(标签)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "AND TAG_ID in (?4) " +
+                "GROUP BY CALL_YEAR+CALL_MONTH,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllMonthInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
+
+        /**
+         * 按日期:标签下钻(日)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "AND PARENT_ID = ?4 " +
+                "GROUP BY CALL_DATE,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllDayByParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
+
+        /**
+         * 按日期:标签下钻(日)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "AND PARENT_ID = ?4 " +
+                "GROUP BY CALL_WEEK,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllWeekByParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
+
+        /**
+         * 按日期:标签下钻(日)
+         *
+         * @param channelId
+         * @param start
+         * @param end
+         * @return
+         */
+        @Query(value = "SELECT COLLECT_ID AS COLLECT_ID " +
+                ", TAG_ID AS TAG_ID " +
+                ", PARENT_ID AS PARENT_ID " +
+                ", TAG_TEXT AS TAG_TEXT " +
+                ", SUM(SUB_FREQUENCY) AS SUB_FREQUENCY " +
+                ", SUM(FREQUENCY) AS FREQUENCY " +
+                ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
+                ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
+                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_YEAR AS  CALL_YEAR " +
+                ", CALL_MONTH AS CALL_MONTH " +
+                ", CALL_DAY AS CALL_DAY " +
+                ", CALL_WEEK AS CALL_WEEK " +
+                "FROM tag_collect WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
+                "AND PARENT_ID = ?4 " +
+                "GROUP BY CALL_YEAR+CALL_MONTH,TAG_ID " +
+                "ORDER BY ?#{#pageable} ", nativeQuery = true)
+        List<TagCollectVirtualEntity> findAllMonthByParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
 }

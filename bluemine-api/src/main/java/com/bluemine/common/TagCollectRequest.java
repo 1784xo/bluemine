@@ -11,6 +11,8 @@ public class TagCollectRequest implements Serializable {
     private Long channelId;
     private Long[] tagIds;
     private LocalDate[] daterange;
+    private String dateType;
+    private Long parentId;
     private String callType;
     private String roleType;
     private Integer limit;
@@ -49,6 +51,22 @@ public class TagCollectRequest implements Serializable {
 
     public LocalDate getEndDate(){
         return daterange[1];
+    }
+
+    public String getDateType() {
+        return dateType;
+    }
+
+    public void setDateType(String dateType) {
+        this.dateType = dateType;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public String getCallType() {

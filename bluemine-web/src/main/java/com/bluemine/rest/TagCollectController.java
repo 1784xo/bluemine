@@ -1,6 +1,7 @@
 package com.bluemine.rest;
 
 import com.bluemine.common.*;
+import com.bluemine.domain.entity.Tagresult;
 import com.bluemine.service.TagCollectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -58,12 +58,24 @@ public class TagCollectController extends AbstractController {
 
     @ResponseBody
     @PostMapping("findAll")
-    public ResponseEntity findAll(@RequestBody RestfulRequest<TagCollectRequest> restfulRequest) {
+    public ResponseEntity findAll(@RequestBody RestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
-        List<TagCollectResponse> response = tagCollectService.findAll(restfulRequest);
+        Tagresult response = tagCollectService.findAll(restfulRequest);
         restfulResponse.setResult(response);
 
         return ResponseEntity.ok(restfulResponse);
     }
+
+    @ResponseBody
+    @PostMapping("findAllParent")
+    public ResponseEntity findAllParent(@RequestBody RestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
+        HttpRestfulResponse restfulResponse = createRestfulResponse();
+
+        List<TagCollectResponse> response = tagCollectService.findAllParent(restfulRequest);
+        restfulResponse.setResult(response);
+
+        return ResponseEntity.ok(restfulResponse);
+    }
+
 }

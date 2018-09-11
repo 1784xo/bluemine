@@ -1,30 +1,82 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
+<html>
 <head>
     <title>标签分析 - 按日期</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="/theme/echarts/echarts-2.0.min.js"></script>
     <script src="/theme/jquery/jquery-2.2.4.js"></script>
     <script src="/theme/jquery/jquery-easyui/jquery-easyui-1.5.5.7.min.js"></script>
     <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script src="/theme/jquery/jquery-easyui-extend/jquery-easyui-extend.js"></script>
     <script src="/theme/jquery/bulemine-core.js"></script>
-    <script th:src="@{'/service/tag/findAll/'+${token}+'?callback=loadTagTree'}"></script>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/default/jquery-easyui-reset.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui-extend/css/jquery-easyui-extend.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="/theme/default/style.css"/>
+    <script src="/service/tag/findAll/49252889384718336?callback=loadTagTree"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css" />
+    <link rel="stylesheet" type="text/css" href="/theme/default/jquery-easyui-reset.css" />
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui-extend/css/jquery-easyui-extend.css" />
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/theme/default/style.css" />
     <style>
         .combo-panel .tree-icon {
             display: none;
         }
+        .datagrid-header-row td{background-color:#f9f9f9;color:#000;text-align:center}
+        .tagrow {
+            color: #00f;
+        }
     </style>
 </head>
 <body>
-<div th:replace="common/header::header"></div>
-<div th:replace="common/main-west::main-west(2, '2-1')"></div>
+<header>
+    <nav>
+        <div class="logo">
+            <a href="javascript:;">
+                <!--<img src="/theme/dark-blue/images/logo.png" width="146" height="31"/>-->
+            </a>
+        </div>
+    </nav>
+</header>
+<div class="main-west">
+    <div class="easyui-accordion">
+        <div title="智慧运营" data-options="iconCls:'icon-omsc'">
+        </div>
+        <div title="智能质检" data-options="iconCls:'icon-znzj'">
+            <ul>
+                <li><a href="javascript:;">质检报告</a></li>
+                <li><a href="javascript:;">质检项分析</a></li>
+                <li><a href="javascript:;">员工分析</a></li>
+                <li><a href="javascript:;">质检结果列表</a></li>
+                <li><a href="javascript:;">质检结果明细</a></li>
+                <li><a href="javascript:;">质检规则配置</a></li>
+            </ul>
+        </div>
+        <div title="语义分析" data-options="iconCls:'icon-yyfx'">
+            <ul>
+                <li><a href="javascript:;">词频分析</a></li>
+                <li><a href="javascript:;">聚类分析</a></li>
+                <li><a href="javascript:;">关联分析</a></li>
+                <li><a href="/view/analysis/tag/tag">标签分析</a></li>
+                <li><a href="javascript:;">文本检索</a></li>
+            </ul>
+        </div>
+        <div title="规则配置" data-options="iconCls:'icon-gzpz'">
+            <ul>
+                <li><a href="/view/console/tag">标签管理</a></li>
+                <li><a href="javascript:;">业务词配置</a></li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('.main-west .easyui-accordion').accordion({
+                animate: true,
+                selected: 2
+            });
+        });
+    </script>
+</div>
 
 
 <div class="main-center">
@@ -42,10 +94,13 @@
                     <form id="search-form">
                         <ul class="main-center-filter">
                             <li>
-                                <input id="daterange" name="daterange" class="easyui-daterange" style="width:200px;" value="2018-01-01/new Date()"/>
+                                <input id="dateType" name="dateType" class="easyui-combotree" value="day" />
                             </li>
                             <li>
-                                <input id="tagIds" name="tagIds" class="easyui-combotree"/>
+                                <input id="daterange" name="daterange" class="easyui-daterange" style="width:200px;" value="2018-01-01/new Date()" />
+                            </li>
+                            <li>
+                                <input id="tagIds" name="tagIds" class="easyui-combotree" />
                             </li>
                             <li>
                                 <button class="btn-search" type="button">查询</button>
@@ -56,28 +111,56 @@
             </div>
         </div>
         <div class="tags-datagrid">
-            <table id="tagtab" class="easyui-treegrid" width="100%">
-                <tr id="firsttr" height="42" style="background-color: #f9f9f9;font-weight: bold;">
-                    <td>序号</td>
-                    <td>日期</td>
-                    <td>标签</td>
-                    <td>次数</td>
-                    <td>会话数</td>
+            <table id="tagtab" class="easyui-datagrid" style="width:100%;min-height:389px" data-options="fitColumns:true,singleSelect:true">
+                <thead>
+                <tr>
+                    <th data-options="field:'callDate',width:'15%',align:'center'"><b>日期</b></th>
+                    <th data-options="field:'tagText',width:'25%',align:'center'"><b>标签</b></th>
+                    <th data-options="field:'totalFrequency',width:'30%',align:'center',sortable:true"><b>次数</b></th>
+                    <th data-options="field:'callNum',width:'30%',align:'center',sortable:true"><b>会话数</b></th>
                 </tr>
+                </thead>
             </table>
         </div>
 
     </div>
 </div>
-<script type="text/javascript" th:inline="javascript">
+<script type="text/javascript">
     //    <![CDATA[
     $(function () {
-        var channelId = [[${token}]];
-        var queue = bulemine.queue();
+        var channelId = '49252889384718336';
         var searchform = $('#search-form');
         var searchbtn = $('.control-group .btn-search');
+        var valueList = [];
+        var dType = $('#dateType');
         var daterange = $('#daterange');
         var tagIds = $('#tagIds');
+        var sort = [];
+
+
+        dType.combotree({
+            label: '',
+            labelPosition: 'center',
+            labelWidth: 40,
+            labelAlign: 'right',
+            width: 50,
+            multiple: false,
+            checkbox: false,
+            cascadeCheck: false,
+            panelHeight:95,
+            data: [
+                {
+                    "id": "day",
+                    "text": "日"
+                }, {
+                    "id": "week",
+                    "text": "周"
+                }, {
+                    "id": "month",
+                    "text": "月"
+                }
+            ]
+        });
 
         daterange.daterange({
             labelWidth: 40,
@@ -102,82 +185,179 @@
             data: TAGTREE_DATA
         });
 
-        function reload() {
-            var dates = daterange.daterange('getValue');
-            var ids = tagIds.combotree('getValues');
-            //add search code
-            console.log(dates);
-            console.log(ids);
-            try {
-                console.log($.valueFrom(ids, 0, true));
-            } catch (e) {}
-
-            bulemine.ajaxJson({
-                url: "/service/tag/collect/findAll",
-                masking: true,
-                params: {
-                    data: {
-                        channelId: CHANNEL_ID,
-                        daterange: dates,
-                        tagIds: [$.valueFrom(ids, 0, true)]
-                    }
-                },
-                callback: function (ok, data, msg, opts) {
-                    if (ok) {
-                        console.log(data);
-                        $('#tagtab').datagrid({
-                            columns: [
-                                //{ headerText: "", headerAlign: "center", dataAlign: "center", width: "20", handler: "customCheckBox" },
-                                { headerText: "序号", headerAlign: "left", dataAlign: "left", width: "5" },
-                                { headerText: "日期", dataField: "callDate", headerAlign: "left",width: "100" },
-                                { headerText: "标签", dataField: "tagText", headerAlign: "left", dataAlign: "left", width: "100" },
-                                { headerText: "次数", dataField: "frequency", headerAlign: "left", dataAlign: "left", width: "50" },
-                                { headerText: "会话数", dataField: "callNum", headerAlign: "left", dataAlign: "left", width: "100" }
-                            ],
-                            //data: data
-                            data: [
-                                {
-                                    "callDate": "1",
-                                    "tagText": "2",
-                                    "frequency": "3",
-                                    "callNum": "4"
-                                },
-                                {
-                                    "callDate": "1",
-                                    "tagText": "2",
-                                    "frequency": "3",
-                                    "callNum": "4"
-                                }
-                            ]
-                        });
-
-                        /*$("#firsttr").nextAll().remove();
-                        var html = "";
-                        for(n in data) {
-                            html += "<tr style='height: 30px;'>" +
-                                    "<td>" + (n+1) + "</td>" +
-                                    "<td>" + data[n].callDate + "</td>" +
-                                    "<td>" + data[n].tagText + "</td>" +
-                                    "<td>" + data[n].frequency + "</td>" +
-                                    "<td>" + data[n].callNum + "</td>" +
-                                    "</tr>";
-                        }
-
-                        $("#firsttr").after(html);*/
-                    } else {
-                        alert('[ERROR]' + msg);
-                    }
+        //分页功能
+        function pagerFilter(data){
+            if (typeof data.length == 'number' && typeof data.splice == 'function'){
+                data = {
+                    total: data.length,
+                    rows: data
+                }
+            }
+            var dg = $(this);
+            var opts = dg.datagrid('options');
+            var pager = dg.datagrid('getPager');
+            pager.pagination({
+                onSelectPage:function(pageNum, pageSize){
+                    opts.pageNumber = pageNum;
+                    opts.pageSize = pageSize;
+                    pager.pagination('refresh',{
+                        pageNumber:pageNum,
+                        pageSize:pageSize
+                    });
+                    dg.datagrid('loadData',data);
                 }
             });
+            if (!data.originalRows) {
+                data.originalRows = (data.rows);
+            }
+            var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+            var end = start + parseInt(opts.pageSize);
+            data.rows = (data.originalRows.slice(start, end));
+            return data;
+        }
+        function appendZero(obj) {
+            if (obj < 10) return "0" + "" + obj;
+            else return obj;
+        }
 
+        function checkTree(tags, pid) {
+            for (var i = 0; i < tags.length; i++) {
+                var child = tags[i].children;
+                if (tags[i].id == pid) {
 
+                    for (var j = 0; j < child.length; j++) {
+                        valueList.push(child[j].id);
+                    }
+                    break;
+                } else {
+                    checkTree(child, pid);
+                }
+            }
+        }
+
+        function reload(pid) {
+            if (pid != "") {
+                var allTag = $('#tagIds').combotree('tree').tree('getRoots');
+                valueList = [];
+                checkTree(allTag, pid);
+                $("#tagIds").combotree('setValue', valueList);
+            }
+
+            var dates = daterange.daterange('getValue');
+            var ids = tagIds.combotree('getValues');
+            var dateType = dType.combotree('getValues')[0];
+            //add search code
+            if($.valueFrom(ids, 0, true)==0) {
+                taglist = [0]
+            } else {
+                taglist = $.valueFrom(ids, 0, true)
+            }
+            var url = "/service/tag/collect/findAll";
+            if (pid != "") {
+                url = "/service/tag/collect/findAllParent";
+            }
+
+            $('#tagtab').datagrid({
+                rownumbers: true,
+                fitColumns: true,
+                pagination: true,
+                remoteSort: true,
+                pageSize: ($(".pagination-page-list").val()==undefined?10:$(".pagination-page-list").val()),
+                pageList: [10, 20, 30],
+                pageNumber: 1,
+                sortable: true,
+                onSortColumn: function (s, o) {
+                    if (s == "totalFrequency") {
+                        s = "FREQ";
+                    }
+                    if (s == "callNum") {
+                        s = "CALL";
+                    }
+                    sort = [{
+                        property: s,
+                        direction: o
+                    }]
+                    reload("");
+                },
+                loader: function (param, success, error) {
+                    var cpageSize = $(".pagination-page-list").val();
+                    var cpage = $(".pagination-num").val();
+
+                    bulemine.ajaxJson({
+                        url: url,
+                        masking: true,
+                        params: {
+                            data: {
+                                channelId: channelId,
+                                dateType: dateType,
+                                daterange: dates,
+                                tagIds: taglist,
+                                parentId: pid
+                            },
+                            paging: {
+                                size: cpageSize,
+                                page: cpage,
+                                sort: sort
+                            }
+                        },
+                        callback: function (ok, data, msg, opts) {
+                            if (ok) {
+                                if (pid != "") {
+                                    for (k in data) {
+                                        if (dateType == "week") {
+                                            var wk = data[k].callWeek.toString();
+                                            data[k].callDate = wk.substring(0, 4) + "年第" + wk.substring(wk.length - 2) + "周";
+                                        }
+                                        if (dateType == "month") {
+                                            data[k].callDate = data[k].callYear + "-" + appendZero(data[k].callMonth);
+                                        }
+                                        data[k].tagText = "<a href='javascript:void(0);' class='tagrow' data='" + data[k].tagId + "'>" + data[k].tagText + "</a>";
+                                    }
+                                    success(data);
+                                } else {
+                                    for (k in data.rows) {
+                                        if (dateType == "week") {
+                                            var wk = data.rows[k].callWeek.toString();
+                                            data.rows[k].callDate = wk.substring(0, 4) + "年第" + wk.substring(wk.length - 2) + "周";
+                                        }
+                                        if (dateType == "month") {
+                                            data.rows[k].callDate = data.rows[k].callYear + "-" + appendZero(data.rows[k].callMonth);
+                                        }
+                                        data.rows[k].tagText = "<a href='javascript:void(0);' class='tagrow' data='" + data.rows[k].tagId + "'>" + data.rows[k].tagText + "</a>";
+                                    }
+                                    success(data);
+                                }
+                            } else {
+                                alert('[ERROR]' + msg);
+                            }
+                        }
+                    });
+                },
+                onLoadError: function () {
+                    alert("err");
+                },
+                onLoadSuccess: function (data) {
+                    $(".tagrow").click(function () {
+                        reload($(this).attr("data"));
+                    });
+                },
+                onClickRow: function (rowIndex, rowData) {
+
+                }
+            });
+//            $('#tagtab').datagrid('options').sortName='callDate';
+//            $('#tagtab').datagrid('options').order='desc'
 
         }
-        reload();
+        reload("");
 
         searchbtn.bind('click', function () {
             if (searchform.form('validate')) {
-                reload();
+                reload("");
+
+
+
+
             }
         });
     });
