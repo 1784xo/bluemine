@@ -1,7 +1,8 @@
-package com.bluemine.service;
+package com.bluemine.scheduling;
 
 import com.bluemine.context.SessionContext;
 import com.bluemine.domain.entity.CallBatchTriggerId;
+import com.bluemine.scheduling.CallBatchExecutor;
 
 /**
  * Created by hechao on 2018/9/4.

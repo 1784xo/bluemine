@@ -9,18 +9,16 @@ import com.bluemine.domain.entity.Tagresult;
 import com.bluemine.domain.util.WebEntityUtils;
 import com.bluemine.repository.TagCollectVirtualRespository;
 import com.bluemine.repository.TagRepository;
-import com.bluemine.struct.TagCollectSortEnum;
 import com.bluemine.util.AssertUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.RequestContextUtils;
-import sun.rmi.runtime.Log;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -156,10 +154,16 @@ public class TagCollectService {
         return responses;
     }
 
-    public Tagresult findAll(RestfulPageRequest<TagCollectRequest, TagCollectSort> request) {
+    public Page<TagCollectResponse> findAll(RestfulPageRequest<TagCollectRequest, TagCollectSort> request) {
 
         TagCollectRequest data = request.getData();
         AssertUtils.isTrue(data.daterangeSize() == 2, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        LocalDate startDate = data.getStartDate();
+        AssertUtils.notNull(startDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        LocalDate endDate = data.getEndDate();
+        AssertUtils.notNull(endDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
         Long channelId = data.getChannelId();
         AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
@@ -168,83 +172,41 @@ public class TagCollectService {
         AssertUtils.notNull(dateType, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
         Long[] tagIds = data.getTagIds();
-        AssertUtils.notNull(tagIds, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
-
-        Long tagId = tagIds[0];
-        AssertUtils.notNull(tagId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
-
-        LocalDate startDate = data.getStartDate();
-        AssertUtils.notNull(startDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
-
-        LocalDate endDate = data.getEndDate();
-        AssertUtils.notNull(endDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        AssertUtils.isTrue(tagIds != null, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
         //分页
-        int pageNumber = request.getPaging().getPage();
-        int pageSize = request.getPaging().getSize();
+        PageRequest pageable = request.getPageRequest();
 
-        TagCollectSort[] tsort = request.getPaging().getSort();
-        Pageable pageable;
-        if (tsort.length > 0) {
-            String direction = tsort[0].getDirection();
-            String property = tsort[0].getProperty();
-
-            Sort.Direction dire;
-            if (direction.equals("desc")) {
-                dire = Sort.Direction.DESC;
-            } else {
-                dire = Sort.Direction.ASC;
+        Page<TagCollectVirtualEntity> page = null;
+        if (tagIds.length == 0) {
+            if (dateType.equals("day")) {
+                page = tagCollectVirtualRespository.findAllByDay(channelId, startDate, endDate, pageable);
             }
-
-            String prop;
-            if (property.equals("TOTAL_FREQUENCY")) {
-                prop = TagCollectSortEnum.FREQ.getValue();
-            } else {
-                prop = TagCollectSortEnum.CALL.getValue();
-            }
-
-            Sort.Order order = new Sort.Order(dire, String.valueOf(prop));
-            List<Sort.Order> list = new ArrayList<>();
-            list.add(order);
-            Sort sort = new Sort(list);
-            pageable = new PageRequest(pageNumber, pageSize, sort);
+//            if (dateType.equals("week")) {
+//                collect = tagCollectVirtualRespository.findAllWeek(channelId, startDate, endDate, pageable);
+//            }
+//            if (dateType.equals("month")) {
+//                collect = tagCollectVirtualRespository.findAllMonth(channelId, startDate, endDate, pageable);
+//            }
         } else {
-            pageable = new PageRequest(pageNumber, pageSize);
+//            if (dateType.equals("day")) {
+//                collect = tagCollectVirtualRespository.findAllDayInTagId(channelId, startDate, endDate, tagIds, pageable);
+//            }
+//            if (dateType.equals("week")) {
+//                collect = tagCollectVirtualRespository.findAllWeekInTagId(channelId, startDate, endDate, tagIds, pageable);
+//            }
+//            if (dateType.equals("month")) {
+//                collect = tagCollectVirtualRespository.findAllMonthInTagId(channelId, startDate, endDate, tagIds, pageable);
+//            }
         }
 
-        List<TagCollectVirtualEntity> collect = null;
-        if (tagId.compareTo(0L) == 0) {
-            if (dateType.equals("day")) {
-                collect = tagCollectVirtualRespository.findAllDay(channelId, startDate, endDate, pageable);
-            }
-            if (dateType.equals("week")) {
-                collect = tagCollectVirtualRespository.findAllWeek(channelId, startDate, endDate, pageable);
-            }
-            if (dateType.equals("month")) {
-                collect = tagCollectVirtualRespository.findAllMonth(channelId, startDate, endDate, pageable);
-            }
-        } else {
-            if (dateType.equals("day")) {
-                collect = tagCollectVirtualRespository.findAllDayInTagId(channelId, startDate, endDate, tagIds, pageable);
-            }
-            if (dateType.equals("week")) {
-                collect = tagCollectVirtualRespository.findAllWeekInTagId(channelId, startDate, endDate, tagIds, pageable);
-            }
-            if (dateType.equals("month")) {
-                collect = tagCollectVirtualRespository.findAllMonthInTagId(channelId, startDate, endDate, tagIds, pageable);
-            }
-        }
-
+        List<TagCollectVirtualEntity> content = page.getContent();
         List<TagCollectResponse> responses = new LinkedList<>();
-        for (TagCollectVirtualEntity entity : collect) {
+        for (TagCollectVirtualEntity entity : content) {
             responses.add(WebEntityUtils.toResponse(entity));
         }
 
-        Tagresult tagresult = new Tagresult();
-        tagresult.setTotal(171);
-        tagresult.setRows(responses);
-        return tagresult;
-        //return responses;
+        return new PageImpl<TagCollectResponse>(responses, pageable, page.getTotalElements());
     }
 
     public List<TagCollectResponse> findAllParent(RestfulPageRequest<TagCollectRequest, TagCollectSort> request) {

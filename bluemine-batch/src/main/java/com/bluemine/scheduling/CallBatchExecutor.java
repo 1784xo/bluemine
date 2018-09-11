@@ -1,10 +1,9 @@
-package com.bluemine.service;
+package com.bluemine.scheduling;
 
 import com.bluemine.ExceptionMessageEnum;
 import com.bluemine.ServerConstants;
 import com.bluemine.SysintrException;
 import com.bluemine.common.TagResponse;
-import com.bluemine.context.RequestContext;
 import com.bluemine.context.SessionContext;
 import com.bluemine.domain.entity.CallBatchTriggerId;
 import com.bluemine.domain.entity.RuleEntity;
@@ -26,7 +25,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.cache.Cache;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -38,7 +37,7 @@ import java.util.Map;
  * 调用{@link OperateBuilder#start()}方法开始执行跑批。</p>
  * Created by hechao on 2018/9/5.
  */
-@Service
+@Component
 public class CallBatchExecutor {
 
     private static final Logger log = LoggerFactory.getLogger(CallBatchExecutor.class);
@@ -131,24 +130,32 @@ public class CallBatchExecutor {
         }
     }
 
-    public int getMaxPoolSize(){
+    public int getMaxPoolSize() {
         return callBatchTaskExecutor.getMaxPoolSize();
     }
 
-    public int getPoolSize(){
+    public int getPoolSize() {
         return callBatchTaskExecutor.getPoolSize();
     }
 
-    public int getActiveCount(){
+    public int getActiveCount() {
         return callBatchTaskExecutor.getActiveCount();
     }
 
-    public int getCorePoolSize(){
+    public int getCorePoolSize() {
         return callBatchTaskExecutor.getCorePoolSize();
     }
 
     public int getIdleCoreCount() {
         return callBatchTaskExecutor.getCorePoolSize() - callBatchTaskExecutor.getActiveCount();
+    }
+
+    public long getCompletedTaskCount() {
+        return callBatchTaskExecutor.getThreadPoolExecutor().getCompletedTaskCount();
+    }
+
+    public long getTaskCount() {
+        return callBatchTaskExecutor.getThreadPoolExecutor().getTaskCount();
     }
 
     public class OperateBuilder {

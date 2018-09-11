@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ import java.util.Properties;
 @EnableAsync
 @EnableAutoConfiguration
 @EnableBatchProcessing
+@EnableScheduling
 @EnableConfigurationProperties(ApplicationConfiguration.class)
 public class Bootstrap extends ApplicationContextLoader {
     @Inject

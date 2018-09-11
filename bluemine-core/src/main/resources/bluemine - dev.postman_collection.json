@@ -14,7 +14,8 @@
 		"5e56bec8-557d-4ba5-93de-e39dbcb6df04",
 		"3fd0fe9d-3f1e-455e-bbf6-597282db3d71",
 		"0159c30d-78ee-4099-955f-fd1c033043a5",
-		"7f8e0af9-a588-44fe-a9ce-a37c58d23ceb"
+		"7f8e0af9-a588-44fe-a9ce-a37c58d23ceb",
+		"a8336e4f-e610-4618-a5c9-75e0f81ba8f5"
 	],
 	"folders_order": [],
 	"folders": [],
@@ -72,7 +73,7 @@
 		{
 			"id": "3fd0fe9d-3f1e-455e-bbf6-597282db3d71",
 			"name": "搜索接口",
-			"url": "http://140.143.19.85:8983/solr/blueminecore/select?q=SessionID:c4a9649b-fb9d-4409-b3d3-de31a701cf30",
+			"url": "http://140.143.19.85:8983/solr/blueminecore/select?q=SessionID:c1cb67f5-9e5a-4134-b0cc-50d7ae7d0f35",
 			"description": "",
 			"data": [],
 			"dataMode": "raw",
@@ -89,7 +90,7 @@
 			"queryParams": [
 				{
 					"key": "q",
-					"value": "SessionID:c4a9649b-fb9d-4409-b3d3-de31a701cf30",
+					"value": "SessionID:c1cb67f5-9e5a-4134-b0cc-50d7ae7d0f35",
 					"equals": true,
 					"description": "",
 					"enabled": true
@@ -231,6 +232,45 @@
 			"folder": null,
 			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelId\":49252889384718336,\n\t\t\"tagId\":198819304509149184,\n\t\t\"callType\":\"AUD\",\n\t\t\"roleType\":\"ALL\",\n\t\t\"priorityNo\":0,\n\t\t\"ruleExps\":\"试听|(感觉&不错)|(怎么&报名)\"\n\t}\n}",
 			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "a8336e4f-e610-4618-a5c9-75e0f81ba8f5",
+			"name": "会话去重查询",
+			"url": "http://140.143.19.85:8983/solr/blueminecore/select?q=*:*&group=true&group.field=SessionID",
+			"description": "",
+			"data": null,
+			"dataMode": "params",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "q",
+					"value": "*:*",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "group",
+					"value": "true",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "group.field",
+					"value": "SessionID",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"headers": "",
 			"pathVariables": {}
 		},
 		{

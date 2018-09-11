@@ -32,7 +32,7 @@ public class CallTriggerController extends AbstractController {
 
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
-        callBatchService.writeAndExecute(restfulRequest.getData(), restfulRequest.getBusinessTime(), restfulRequest.getContext());
+        callBatchService.writeAndSchedule(restfulRequest.getData(), restfulRequest.getBusinessTime(), restfulRequest.getContext());
 
         if (log.isDebugEnabled())
             log.debug("<<<REST Response call batch. {}", restfulResponse);

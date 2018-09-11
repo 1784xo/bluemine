@@ -6,6 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.guava.GuavaCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +48,7 @@ public class ApplicationConfiguration extends BootConfiguration {
     }
 
     @Bean
-    public GuavaCache tagCache(){
+    public GuavaCache tagCache() {
         GuavaCache cache = new GuavaCache("tag cache", CacheBuilder.newBuilder()
                 .expireAfterAccess(tagCache.getExpire(), TimeUnit.SECONDS).build());
         return cache;
@@ -55,11 +57,13 @@ public class ApplicationConfiguration extends BootConfiguration {
     @Bean
     public ThreadPoolTaskExecutor callBatchTaskExecutor() {
         ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
+        pool.setThreadNamePrefix("call-batch-executor-");
         pool.setKeepAliveSeconds(callBatch.getKeepAliveSeconds());
         pool.setCorePoolSize(callBatch.getCorePoolSize());//核心线程池数
         pool.setMaxPoolSize(callBatch.getMaxPoolSize()); // 最大线程
         pool.setQueueCapacity(callBatch.getQueueCapacity());//队列容量
         pool.setRejectedExecutionHandler(new java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy()); //队列满，线程被拒绝执行策略
+        pool.afterPropertiesSet();
         return pool;
     }
 }

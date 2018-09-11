@@ -1,10 +1,12 @@
 package com.bluemine.repository;
 
 import com.bluemine.domain.entity.TagCollectVirtualEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -163,7 +165,7 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
             "AND TAG_ID IN ?2 " +
             "AND CALL_DATE >= ?3 AND CALL_DATE<=?4 " +
             "GROUP BY CALL_DATE " +
-            "ORDER BY CALL_DATE ASC ", nativeQuery = true)
+            "ORDER BY CALL_DATE ASC ",   nativeQuery = true)
     List<TagCollectVirtualEntity> findAllInTagId(long channelId, Long[] tagIds, LocalDate start, LocalDate end);
 
     /**
@@ -251,9 +253,15 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "FROM tag_collect WHERE " +
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
-                "GROUP BY CALL_DATE,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllDay(long channelId, LocalDate start, LocalDate end, Pageable pageable);
+                "GROUP BY CALL_DATE, TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "GROUP BY CALL_DATE, TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findAllByDay(long channelId, LocalDate start, LocalDate end, Pageable pageable);
 
         /**
          * 按日期:周(全部)

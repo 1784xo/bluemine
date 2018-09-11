@@ -5,6 +5,7 @@ import com.bluemine.domain.entity.Tagresult;
 import com.bluemine.service.TagCollectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,48 +24,28 @@ public class TagCollectController extends AbstractController {
     @Inject
     private TagCollectService tagCollectService;
 
-//    @ResponseBody
-//    @PostMapping("findByDate")
-//    public ResponseEntity findByDate(@RequestBody HttpRestfulRequest<TagCollectRequest> restfulRequest) {
-//        HttpRestfulResponse restfulResponse = createRestfulResponse();
-//
-//        List<TagCollectResponse> response = tagCollectService.findByDate(restfulRequest);
-//        restfulResponse.setResult(response);
-//
-//        return ResponseEntity.ok(restfulResponse);
-//    }
-
     @ResponseBody
     @PostMapping("findOne")
     public ResponseEntity find(@RequestBody RestfulRequest<TagCollectRequest> restfulRequest) {
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         List<TagCollectResponse> response = tagCollectService.findOne(restfulRequest);
-        restfulResponse.setResult(response);
 
-        return ResponseEntity.ok(restfulResponse);
+        return ResponseEntity.ok(createRestfulResponse().result(response));
     }
 
     @ResponseBody
     @PostMapping("findSubTop")
     public ResponseEntity findSubTop(@RequestBody HttpRestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
 
         List<TagCollectResponse> response = tagCollectService.findSubTop(restfulRequest);
-        restfulResponse.setResult(response);
-
-        return ResponseEntity.ok(restfulResponse);
+        return ResponseEntity.ok(createRestfulResponse().result(response));
     }
 
     @ResponseBody
     @PostMapping("findAll")
     public ResponseEntity findAll(@RequestBody RestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
-        Tagresult response = tagCollectService.findAll(restfulRequest);
-        restfulResponse.setResult(response);
-
-        return ResponseEntity.ok(restfulResponse);
+        Page<TagCollectResponse> page = tagCollectService.findAll(restfulRequest);
+        return ResponseEntity.ok(createRestfulResponse(page));
     }
 
     @ResponseBody

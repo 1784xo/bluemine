@@ -19,6 +19,8 @@ public class RestfulPageRequest<D, S extends SortRequest>extends RestfulRequest<
 
     public Sort getSort() {
         SortRequest[] sort = paging.getSort();
+        if(sort.length==0)
+            return null;
         Sort.Order[] orders = new Sort.Order[sort.length];
         for (int i = 0, l = sort.length; i < l; i++) {
             orders[i] = new Sort.Order(Sort.Direction.valueOf(sort[i].getDirection()), sort[i].getProperty());

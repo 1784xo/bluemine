@@ -9,6 +9,8 @@ public class BatchMonitorResponse {
     private int corePoolSize;
     private int maxPoolSize;
     private int poolSize;
+    private long completedTaskCount;
+    private long taskCount;
 
     public int getIdleCoreCount() {
         return idleCoreCount;
@@ -48,5 +50,21 @@ public class BatchMonitorResponse {
 
     public void setPoolSize(int poolSize) {
         this.poolSize = poolSize;
+    }
+
+    public long getTaskCount() {
+        return taskCount;
+    }
+
+    public void setTaskCount(long taskCount) {
+        this.taskCount = taskCount;
+    }
+
+    public long getCompletedTaskCount() {
+        return completedTaskCount;
+    }
+
+    public void setCompletedTaskCount(long completedTaskCount) {
+        this.completedTaskCount = completedTaskCount;
     }
 }

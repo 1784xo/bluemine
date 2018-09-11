@@ -1,5 +1,6 @@
 package com.bluemine.common;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
@@ -93,4 +94,6 @@ public class HttpRestfulResponse<T> implements Serializable{
                 ", success=" + success +
                 '}';
     }
+
+
 }

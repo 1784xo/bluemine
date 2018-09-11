@@ -8,19 +8,23 @@ import com.bluemine.domain.entity.CallBatchTriggerId;
 import com.bluemine.domain.entity.ChannelEntity;
 import com.bluemine.repository.CallBatchTriggerRepository;
 import com.bluemine.repository.ChannelRepository;
+import com.bluemine.scheduling.CallBatchExecutor;
+import com.bluemine.scheduling.CallBatchScheduler;
 import com.bluemine.struct.BatchTriggerStatus;
 import com.bluemine.util.AssertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,43 +45,79 @@ public class CallBatchService {
     @Inject
     private CallBatchExecutor callBatchExecutor;
 
-    public void writeAndExecute(CallBatchRequest[] requests, LocalDateTime businessTime, RequestContext context) {
+    @Inject
+    private CallBatchScheduler callBatchScheduler;
+
+
+    public void check(){
+        AssertUtils.isTrue(callBatchScheduler.getCompletedTaskCount() == callBatchScheduler.getTaskCount()
+                , ExceptionMessageEnum.LOGIC_EXCEPTION, "调度存在未执行完的任务，不能完成本次操作，请稍后重试。");
+    }
+    /**
+     * 写入跑批元数据并加入调度
+     * @param requests
+     * @param businessTime
+     * @param context
+     */
+    public void writeAndSchedule(CallBatchRequest[] requests, LocalDateTime businessTime, RequestContext context) {
+        check();
         writeTrigger(requests, businessTime);
-        execute(LocalDateTime.now(), context);
+        schedule(LocalDateTime.now(), context);
     }
 
-    public void execute(LocalDateTime triggerDate, RequestContext context) {
-        execute(callBatchExecutor.getCorePoolSize(), triggerDate, context);
-    }
-
-    private void execute(int number, LocalDateTime triggerDate, RequestContext context) {
-        Page<CallBatchTriggerEntity> page = callBatchTriggerRepository.findAll(BatchTriggerStatus.WAIT, triggerDate, new PageRequest(0, number));
-        long waiting = page.getTotalElements() - page.getNumberOfElements();
-
-        if (page.getNumberOfElements() == 0)
-            return;
-
+    /**
+     * 创建一个新跑批触发时间的调度
+     * @param triggerDate
+     * @param context
+     */
+    public void schedule(final LocalDateTime triggerDate, final RequestContext context) {
+        check();
+        final CallBatchService me = this;
+        final int number = callBatchExecutor.getCorePoolSize();
+        LocalDateTime dateTime = triggerDate.plusSeconds(10);
+        ZonedDateTime zdt = dateTime.atZone(ZoneId.systemDefault());
+        Date date = Date.from(zdt.toInstant());
         if (log.isInfoEnabled())
-            log.info(">>>push call batchs to executor. number: {}; waiting: {}", number, waiting);
+            log.info(">>>add trigger task to scheduler. number: {}; trigger: {}", number, triggerDate);
+        callBatchScheduler.addTriggerTask(new Runnable() {
+            @Override
+            public void run() {
+                me.execute(number, triggerDate, context);
+            }
+        }, date);
+    }
 
-        List<CallBatchTriggerEntity> content = page.getContent();
-        for (CallBatchTriggerEntity trigger : content) {
-            callBatchExecutor.prepare(trigger.getId(), context).start();
+    /**
+     * @param number      跑批批次线程数量
+     * @param triggerTime 跑批触发时间
+     * @param context     设备上下文
+     */
+    public void execute(int number, LocalDateTime triggerTime, RequestContext context) {
+        long waiting = 1;
+        while (waiting > 0) {
+            Page<CallBatchTriggerEntity> page = callBatchTriggerRepository.findAll(BatchTriggerStatus.WAIT, triggerTime, new PageRequest(0, number));
+            waiting = page.getTotalElements() - page.getNumberOfElements();
+
+            if (page.getNumberOfElements() == 0)
+                return;
+
+            if (log.isInfoEnabled())
+                log.info(">>>push call batchs to executor. number: {}; waiting: {}", number, waiting);
+
+            List<CallBatchTriggerEntity> content = page.getContent();
+            for (CallBatchTriggerEntity trigger : content) {
+                callBatchExecutor.prepare(trigger.getId(), context).start();
+            }
+
+            while (callBatchExecutor.getIdleCoreCount() != number) {
+            }
         }
-
-        if (waiting == 0)
-            return;
-
-        while (callBatchExecutor.getIdleCoreCount() != number) {
-        }
-
-        execute(number, triggerDate, context);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void writeTrigger(CallBatchRequest[] requests, LocalDateTime businessTime) {
         if (log.isDebugEnabled())
-            log.debug(">>>start write call batch triggers.");
+            log.debug(">>>write call batch triggers.");
         List<CallBatchTriggerEntity> entityList = new LinkedList<>();
         ChannelEntity channel;
         CallBatchTriggerEntity trigger;
