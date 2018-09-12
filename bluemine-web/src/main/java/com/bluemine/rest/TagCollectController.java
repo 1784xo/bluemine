@@ -49,14 +49,10 @@ public class TagCollectController extends AbstractController {
     }
 
     @ResponseBody
-    @PostMapping("findAllParent")
-    public ResponseEntity findAllParent(@RequestBody RestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
-        List<TagCollectResponse> response = tagCollectService.findAllParent(restfulRequest);
-        restfulResponse.setResult(response);
-
-        return ResponseEntity.ok(restfulResponse);
+    @PostMapping("findSub")
+    public ResponseEntity findSub(@RequestBody RestfulPageRequest<TagCollectRequest, TagCollectSort> restfulRequest) {
+        Page<TagCollectResponse> page = tagCollectService.findSub(restfulRequest);
+        return ResponseEntity.ok(createRestfulResponse(page));
     }
 
 }

@@ -287,9 +287,15 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "FROM tag_collect WHERE " +
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
-                "GROUP BY CALL_WEEK,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllWeek(long channelId, LocalDate start, LocalDate end, Pageable pageable);
+                "GROUP BY CALL_WEEK, TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "GROUP BY CALL_WEEK, TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findAllByWeek(long channelId, LocalDate start, LocalDate end, Pageable pageable);
 
         /**
          * 按日期:月(全部)
@@ -315,9 +321,15 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "FROM tag_collect WHERE " +
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
-                "GROUP BY CALL_YEAR+CALL_MONTH,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllMonth(long channelId, LocalDate start, LocalDate end, Pageable pageable);
+                "GROUP BY CALL_YEAR + CALL_MONTH, TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "GROUP BY CALL_YEAR + CALL_MONTH, TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findAllByMonth(long channelId, LocalDate start, LocalDate end, Pageable pageable);
 
 
         /**
@@ -336,7 +348,7 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 ", SUM(FREQUENCY) AS FREQUENCY " +
                 ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
                 ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
-                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_DATE AS CALL_DATE " +
                 ", CALL_YEAR AS  CALL_YEAR " +
                 ", CALL_MONTH AS CALL_MONTH " +
                 ", CALL_DAY AS CALL_DAY " +
@@ -345,9 +357,16 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
                 "AND TAG_ID in (?4) " +
-                "GROUP BY CALL_DATE,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllDayInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
+                "GROUP BY CALL_DATE, TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "AND TAG_ID in (?4) " +
+                "GROUP BY CALL_DATE, TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findAllByDayInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
 
         /**
          * 按日期:周(标签)
@@ -365,7 +384,7 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 ", SUM(FREQUENCY) AS FREQUENCY " +
                 ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
                 ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
-                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_DATE AS CALL_DATE " +
                 ", CALL_YEAR AS  CALL_YEAR " +
                 ", CALL_MONTH AS CALL_MONTH " +
                 ", CALL_DAY AS CALL_DAY " +
@@ -374,9 +393,16 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
                 "AND TAG_ID in (?4) " +
-                "GROUP BY CALL_WEEK,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllWeekInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
+                "GROUP BY CALL_WEEK, TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "AND TAG_ID in (?4) " +
+                "GROUP BY CALL_WEEK, TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findAllByWeekInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
 
         /**
          * 按日期:月(标签)
@@ -394,7 +420,7 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 ", SUM(FREQUENCY) AS FREQUENCY " +
                 ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
                 ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
-                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_DATE AS CALL_DATE " +
                 ", CALL_YEAR AS  CALL_YEAR " +
                 ", CALL_MONTH AS CALL_MONTH " +
                 ", CALL_DAY AS CALL_DAY " +
@@ -403,9 +429,16 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
                 "AND TAG_ID in (?4) " +
-                "GROUP BY CALL_YEAR+CALL_MONTH,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllMonthInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
+                "GROUP BY CALL_YEAR + CALL_MONTH, TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "AND TAG_ID in (?4) " +
+                "GROUP BY CALL_YEAR + CALL_MONTH, TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findAllByMonthInTagId(long channelId, LocalDate start, LocalDate end, Long[] tagIds, Pageable pageable);
 
         /**
          * 按日期:标签下钻(日)
@@ -423,7 +456,7 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 ", SUM(FREQUENCY) AS FREQUENCY " +
                 ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
                 ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
-                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_DATE AS CALL_DATE " +
                 ", CALL_YEAR AS  CALL_YEAR " +
                 ", CALL_MONTH AS CALL_MONTH " +
                 ", CALL_DAY AS CALL_DAY " +
@@ -432,9 +465,16 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
                 "AND PARENT_ID = ?4 " +
-                "GROUP BY CALL_DATE,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllDayByParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
+                "GROUP BY CALL_DATE, TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "AND PARENT_ID = ?4 " +
+                "GROUP BY CALL_DATE, TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findSubByDayAndParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
 
         /**
          * 按日期:标签下钻(日)
@@ -452,7 +492,7 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 ", SUM(FREQUENCY) AS FREQUENCY " +
                 ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
                 ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
-                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_DATE AS CALL_DATE " +
                 ", CALL_YEAR AS  CALL_YEAR " +
                 ", CALL_MONTH AS CALL_MONTH " +
                 ", CALL_DAY AS CALL_DAY " +
@@ -461,9 +501,16 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
                 "AND PARENT_ID = ?4 " +
-                "GROUP BY CALL_WEEK,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllWeekByParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
+                "GROUP BY CALL_WEEK, TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "AND PARENT_ID = ?4 " +
+                "GROUP BY CALL_WEEK, TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findSubByWeekAndParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
 
         /**
          * 按日期:标签下钻(日)
@@ -481,7 +528,7 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 ", SUM(FREQUENCY) AS FREQUENCY " +
                 ", SUM(TOTAL_FREQUENCY) AS TOTAL_FREQUENCY " +
                 ", (COUNT(DISTINCT CALL_NO)) AS CALL_NUM " +
-                ", CALL_DATE AS  CALL_DATE " +
+                ", CALL_DATE AS CALL_DATE " +
                 ", CALL_YEAR AS  CALL_YEAR " +
                 ", CALL_MONTH AS CALL_MONTH " +
                 ", CALL_DAY AS CALL_DAY " +
@@ -490,7 +537,14 @@ public interface TagCollectVirtualRespository extends JpaRepository<TagCollectVi
                 "CHANNEL_ID = ?1 " +
                 "AND CALL_DATE >= ?2 AND CALL_DATE<=?3 " +
                 "AND PARENT_ID = ?4 " +
-                "GROUP BY CALL_YEAR+CALL_MONTH,TAG_ID " +
-                "ORDER BY ?#{#pageable} ", nativeQuery = true)
-        List<TagCollectVirtualEntity> findAllMonthByParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
+                "GROUP BY CALL_YEAR+CALL_MONTH,TAG_ID ORDER BY ?#{#pageable}"
+                , countQuery="SELECT COUNT(TAG_ID) " +
+                "FROM tag_collect, (SELECT 1=1 ORDER BY ?#{#pageable}) NUL WHERE " +
+                "CHANNEL_ID = ?1 " +
+                "AND CALL_DATE >= ?2 " +
+                "AND CALL_DATE<=?3 " +
+                "AND PARENT_ID = ?4 " +
+                "GROUP BY CALL_YEAR+CALL_MONTH,TAG_ID"
+                , nativeQuery = true)
+        Page<TagCollectVirtualEntity> findSubByMonthAndParentId(long channelId, LocalDate start, LocalDate end, Long parentId, Pageable pageable);
 }

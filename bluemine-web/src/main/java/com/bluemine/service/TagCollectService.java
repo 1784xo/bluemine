@@ -182,22 +182,22 @@ public class TagCollectService {
             if (dateType.equals("day")) {
                 page = tagCollectVirtualRespository.findAllByDay(channelId, startDate, endDate, pageable);
             }
-//            if (dateType.equals("week")) {
-//                collect = tagCollectVirtualRespository.findAllWeek(channelId, startDate, endDate, pageable);
-//            }
-//            if (dateType.equals("month")) {
-//                collect = tagCollectVirtualRespository.findAllMonth(channelId, startDate, endDate, pageable);
-//            }
+            if (dateType.equals("week")) {
+                page = tagCollectVirtualRespository.findAllByWeek(channelId, startDate, endDate, pageable);
+            }
+            if (dateType.equals("month")) {
+                page = tagCollectVirtualRespository.findAllByMonth(channelId, startDate, endDate, pageable);
+            }
         } else {
-//            if (dateType.equals("day")) {
-//                collect = tagCollectVirtualRespository.findAllDayInTagId(channelId, startDate, endDate, tagIds, pageable);
-//            }
-//            if (dateType.equals("week")) {
-//                collect = tagCollectVirtualRespository.findAllWeekInTagId(channelId, startDate, endDate, tagIds, pageable);
-//            }
-//            if (dateType.equals("month")) {
-//                collect = tagCollectVirtualRespository.findAllMonthInTagId(channelId, startDate, endDate, tagIds, pageable);
-//            }
+            if (dateType.equals("day")) {
+                page = tagCollectVirtualRespository.findAllByDayInTagId(channelId, startDate, endDate, tagIds, pageable);
+            }
+            if (dateType.equals("week")) {
+                page = tagCollectVirtualRespository.findAllByWeekInTagId(channelId, startDate, endDate, tagIds, pageable);
+            }
+            if (dateType.equals("month")) {
+                page = tagCollectVirtualRespository.findAllByMonthInTagId(channelId, startDate, endDate, tagIds, pageable);
+            }
         }
 
         List<TagCollectVirtualEntity> content = page.getContent();
@@ -209,10 +209,16 @@ public class TagCollectService {
         return new PageImpl<TagCollectResponse>(responses, pageable, page.getTotalElements());
     }
 
-    public List<TagCollectResponse> findAllParent(RestfulPageRequest<TagCollectRequest, TagCollectSort> request) {
-        TagCollectRequest data = request.getData();
+    public Page<TagCollectResponse> findSub(RestfulPageRequest<TagCollectRequest, TagCollectSort> request) {
 
-        //AssertUtils.isTrue(data.daterangeSize() == 2, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+        TagCollectRequest data = request.getData();
+        AssertUtils.isTrue(data.daterangeSize() == 2, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        LocalDate startDate = data.getStartDate();
+        AssertUtils.notNull(startDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
+
+        LocalDate endDate = data.getEndDate();
+        AssertUtils.notNull(endDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
         Long channelId = data.getChannelId();
         AssertUtils.notNull(channelId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
@@ -223,37 +229,27 @@ public class TagCollectService {
         Long parentId = data.getParentId();
         AssertUtils.notNull(parentId, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
 
-        LocalDate startDate = data.getStartDate();
-        AssertUtils.notNull(startDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
-
-        LocalDate endDate = data.getEndDate();
-        AssertUtils.notNull(endDate, ExceptionMessageEnum.ILLEGAL_ARGUMENT);
-
-        String callType = data.getCallType();
-        String roleType = data.getRoleType();
-
         //分页
-        int pageSize = request.getPaging().getSize();
-        int pageNumber = request.getPaging().getPage();
-        Pageable pageable = new PageRequest(pageNumber, pageSize);
+        PageRequest pageable = request.getPageRequest();
 
-        List<TagCollectVirtualEntity> collect = null;
-
+        Page<TagCollectVirtualEntity> page = null;
         if (dateType.equals("day")) {
-            collect = tagCollectVirtualRespository.findAllDayByParentId(channelId, startDate, endDate, parentId, pageable);
+            page = tagCollectVirtualRespository.findSubByDayAndParentId(channelId, startDate, endDate, parentId, pageable);
         }
         if (dateType.equals("week")) {
-            collect = tagCollectVirtualRespository.findAllWeekByParentId(channelId, startDate, endDate, parentId, pageable);
+            page = tagCollectVirtualRespository.findSubByWeekAndParentId(channelId, startDate, endDate, parentId, pageable);
         }
         if (dateType.equals("month")) {
-            collect = tagCollectVirtualRespository.findAllMonthByParentId(channelId, startDate, endDate, parentId, pageable);
+            page = tagCollectVirtualRespository.findSubByMonthAndParentId(channelId, startDate, endDate, parentId, pageable);
         }
 
+        List<TagCollectVirtualEntity> content = page.getContent();
         List<TagCollectResponse> responses = new LinkedList<>();
-        for (TagCollectVirtualEntity entity : collect) {
+        for (TagCollectVirtualEntity entity : content) {
             responses.add(WebEntityUtils.toResponse(entity));
         }
 
-        return responses;
+        return new PageImpl<TagCollectResponse>(responses, pageable, page.getTotalElements());
     }
+
 }

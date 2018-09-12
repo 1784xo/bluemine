@@ -310,18 +310,18 @@ var bulemine = (function () {
             }
             params = $.extend(params, {
                 data: opts.params,
-                callback: function (status, data, msg) {
+                callback: function (status, data, msg, da) {
                     if (!!params.mask) {
                         params.mask.fadeTo(500, 0, function () {
                             params.mask = null;
                             $(this).remove();
                         });
                     }
-                    opts.callback(status == 'success', data, msg, params);
+                    opts.callback(status == 'success', data, msg, da, params);
                 },
                 success: function (data, status, jqXHR) {
                     if (data.status == '200') {
-                        params.callback(status, data.result, data.message);
+                        params.callback(status, data.result, data.message, data);
                     } else {
                         params.error(jqXHR, 'error', data.message);
                     }

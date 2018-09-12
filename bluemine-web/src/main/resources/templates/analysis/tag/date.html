@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="tags-datagrid">
-            <table id="tagtab" class="easyui-datagrid" style="width:100%;min-height:389px" data-options="fitColumns:true,singleSelect:true">
+            <table id="tagtab" class="easyui-datagrid" style="width:100%;min-height: 389px;" data-options="singleSelect:true">
                 <thead>
                 <tr>
                     <th data-options="field:'callDate',width:'15%',align:'center'"><b>日期</b></th>
@@ -77,6 +77,7 @@
     </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
+
     //    <![CDATA[
     $(function () {
         var channelId = [[${token}]];
@@ -87,7 +88,8 @@
         var daterange = $('#daterange');
         var tagIds = $('#tagIds');
         var sort = [];
-
+        var pageSize = 10;
+        var pageList = [10, 20, 30];
 
         dType.combotree({
             label: '',
@@ -135,37 +137,7 @@
             cascadeCheck: false,
             data: TAGTREE_DATA
         });
-
-        //分页功能
-        function pagerFilter(data){
-            if (typeof data.length == 'number' && typeof data.splice == 'function'){
-                data = {
-                    total: data.length,
-                    rows: data
-                }
-            }
-            var dg = $(this);
-            var opts = dg.datagrid('options');
-            var pager = dg.datagrid('getPager');
-            pager.pagination({
-                onSelectPage:function(pageNum, pageSize){
-                    opts.pageNumber = pageNum;
-                    opts.pageSize = pageSize;
-                    pager.pagination('refresh',{
-                        pageNumber:pageNum,
-                        pageSize:pageSize
-                    });
-                    dg.datagrid('loadData',data);
-                }
-            });
-            if (!data.originalRows) {
-                data.originalRows = (data.rows);
-            }
-            var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
-            var end = start + parseInt(opts.pageSize);
-            data.rows = (data.originalRows.slice(start, end));
-            return data;
-        }
+        var allTag = $('#tagIds').combotree('tree').tree('getRoots');
         function appendZero(obj) {
             if (obj < 10) return "0" + "" + obj;
             else return obj;
@@ -186,10 +158,28 @@
             }
         }
 
+        function existChild(tags, pid) {
+            haschild = false;
+            for (var i = 0; i < tags.length; i++) {
+                if (!haschild) {
+                    var child = tags[i].children;
+                    if (tags[i].id == pid) {
+                        if (child.length > 0) {
+                            haschild = true;
+                            return true;
+                        } else {
+                            return false;
+                        }
+                        break;
+                    } else {
+                        existChild(child, pid);
+                    }
+                }
+            }
+        }
+
         function reload(pid) {
             if (pid != "") {
-                var allTag = $('#tagIds').combotree('tree').tree('getRoots');
-                valueList = [];
                 checkTree(allTag, pid);
                 $("#tagIds").combotree('setValue', valueList);
             }
@@ -201,7 +191,7 @@
 
             var url = "/service/tag/collect/findAll";
             if (pid != "") {
-                url = "/service/tag/collect/findAllParent";
+                url = "/service/tag/collect/findSub";
             }
 
             $('#tagtab').datagrid({
@@ -209,9 +199,8 @@
                 fitColumns: true,
                 pagination: true,
                 remoteSort: true,
-                pageSize: ($(".pagination-page-list").val()==undefined?10:$(".pagination-page-list").val()),
-                pageList: [10, 20, 30],
-                pageNumber: 1,
+                pageSize: ($(".pagination-page-list").val() == undefined ? pageSize : $(".pagination-page-list").val()),
+                pageList: pageList,
                 sortable: true,
                 onSortColumn: function (s, o) {
                     if (s == "totalFrequency") {
@@ -222,58 +211,53 @@
                     }
                     sort = [{
                         property: s,
-                        direction: o
+                        direction: o.toUpperCase()
                     }]
-                    reload("");
+                    reload(pid);
                 },
-                loader: function (param, success, error) {
-                    var cpageSize = $(".pagination-page-list").val();
-                    var cpage = $(".pagination-num").val();
-
+                loader: function(param,success,error){
+                    var params = {
+                        data: {
+                            channelId: channelId,
+                            dateType: dateType,
+                            daterange: dates,
+                            tagIds: ids,
+                            parentId: pid
+                        },
+                        paging: {
+                            size: $(".pagination-page-list").val(),
+                            page: $(".pagination-num").val() != 0?($(".pagination-num").val()-1):$(".pagination-num").val(),
+                            sort: sort
+                        }
+                    }
                     bulemine.ajaxJson({
                         url: url,
                         masking: true,
-                        params: {
-                            data: {
-                                channelId: channelId,
-                                dateType: dateType,
-                                daterange: dates,
-                                tagIds: ids,
-                                parentId: pid
-                            },
-                            paging: {
-                                size: cpageSize,
-                                page: cpage,
-                                sort: sort
-                            }
-                        },
-                        callback: function (ok, data, msg, opts) {
+                        params: params,
+                        callback: function (ok, data, msg, da, opts) {
                             if (ok) {
-                                if (pid != "") {
-                                    for (k in data) {
-                                        if (dateType == "week") {
-                                            var wk = data[k].callWeek.toString();
-                                            data[k].callDate = wk.substring(0, 4) + "年第" + wk.substring(wk.length - 2) + "周";
-                                        }
-                                        if (dateType == "month") {
-                                            data[k].callDate = data[k].callYear + "-" + appendZero(data[k].callMonth);
-                                        }
+                                for (k in data) {
+                                    if (dateType == "week") {
+                                        var wk = data[k].callWeek.toString();
+                                        data[k].callDate = wk.substring(0, 4) + "年第" + wk.substring(wk.length - 2) + "周";
+                                    }
+                                    if (dateType == "month") {
+                                        data[k].callDate = data[k].callYear + "-" + appendZero(data[k].callMonth);
+                                    }
+
+                                    existChild(allTag, data[k].tagId);
+                                    if (haschild) {
                                         data[k].tagText = "<a href='javascript:void(0);' class='tagrow' data='" + data[k].tagId + "'>" + data[k].tagText + "</a>";
+                                    } else {
+                                        data[k].tagText = data[k].tagText;
                                     }
-                                    success(data);
-                                } else {
-                                    for (k in data.rows) {
-                                        if (dateType == "week") {
-                                            var wk = data.rows[k].callWeek.toString();
-                                            data.rows[k].callDate = wk.substring(0, 4) + "年第" + wk.substring(wk.length - 2) + "周";
-                                        }
-                                        if (dateType == "month") {
-                                            data.rows[k].callDate = data.rows[k].callYear + "-" + appendZero(data.rows[k].callMonth);
-                                        }
-                                        data.rows[k].tagText = "<a href='javascript:void(0);' class='tagrow' data='" + data.rows[k].tagId + "'>" + data.rows[k].tagText + "</a>";
-                                    }
-                                    success(data);
+
                                 }
+                                var griddata = {
+                                    total: da.total,
+                                    rows: data
+                                }
+                                success(griddata);
                             } else {
                                 alert('[ERROR]' + msg);
                             }
