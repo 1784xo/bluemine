@@ -36,7 +36,7 @@ public class CallTriggerController extends AbstractController {
         LocalDateTime businessTime = restfulRequest.getBusinessTime();
 
         callBatchService.writeTrigger(restfulRequest.getData(), businessTime);
-        callBatchService.schedule(businessTime.plusSeconds(10), businessTime, restfulRequest.getContext());
+        callBatchService.schedule(businessTime.plusSeconds(10), restfulRequest.getContext());
 
         if (log.isDebugEnabled())
             log.debug("<<<REST Response call batch. {}", restfulResponse);

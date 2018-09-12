@@ -57,6 +57,15 @@ public class CallBatchService {
     /**
      * 创建一个新跑批触发时间的调度
      * @param triggerTime 调度触发时间
+     * @param context
+     */
+    public void schedule(LocalDateTime triggerTime, final RequestContext context) {
+        schedule(triggerTime, LocalDateTime.MAX, context);
+    }
+
+    /**
+     * 创建一个新跑批触发时间的调度
+     * @param triggerTime 调度触发时间
      * @param businessTime 交易查询时间
      * @param context
      */
