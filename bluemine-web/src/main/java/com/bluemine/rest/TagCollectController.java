@@ -1,7 +1,6 @@
 package com.bluemine.rest;
 
 import com.bluemine.common.*;
-import com.bluemine.domain.entity.Tagresult;
 import com.bluemine.service.TagCollectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -48,7 +48,7 @@ public class ServerApplicationContext {
     }
 
     public String getMessage(String code, Locale locale) {
-        return parent.getMessage(code, null, locale);
+        return getMessage(code, null, locale);
     }
 
     public String getMessage(String code, Object[] args, String defaultMessage, Locale locale) {
@@ -56,15 +56,15 @@ public class ServerApplicationContext {
     }
 
     public String getMessage(String code, Object[] args, String defaultMessage) {
-        return parent.getMessage(code, args, defaultMessage, Locale.getDefault());
+        return getMessage(code, args, defaultMessage, Locale.getDefault());
     }
 
     public String getMessage(String code, Object[] args, Locale locale) {
-        return parent.getMessage(code, args, locale);
+        return getMessage(code, args, code, locale);
     }
 
     public String getMessage(String code, Object[] args) {
-        return parent.getMessage(code, args, Locale.getDefault());
+        return getMessage(code, args, code);
     }
 
     public String getMessage(String code) {

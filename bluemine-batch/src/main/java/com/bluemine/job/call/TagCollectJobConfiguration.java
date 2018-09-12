@@ -89,7 +89,7 @@ public class TagCollectJobConfiguration implements ItemProcessor<TagCollectItem,
     public ItemReader<TagCollectItem> tagCollectReader(Long channelId, String callNo, String callDate, String seatNo) throws Exception {
 
         SeatEntity seatEntity = seatRepository.findOneByChannelIdAndSeatNo(channelId, seatNo);
-        AssertUtils.notNull(seatEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+        AssertUtils.notNull(seatEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "seat", channelId+", "+seatNo);
 
         TagCollectItem item = new TagCollectItem();
         item.setChannelId(channelId);

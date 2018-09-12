@@ -58,7 +58,7 @@ spring:
         serialization.indent_output: true
 
     messages:
-        basename: i18n/messages
+        basename: i18n/messages, com.bluemine.i18n.messages
 
 #    resources:
 #        add-mappings: true

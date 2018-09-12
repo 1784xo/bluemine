@@ -23,45 +23,23 @@ public class TagController extends AbstractController {
     private TabService tabService;
 
     @ResponseBody
-    @RequestMapping(value = "test/{channelId}")
-    public ResponseEntity test(@PathVariable("channelId") Long channelId) {
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
-        List<TagResponse> responses = tabService.findTreeWithRule(channelId);
-        restfulResponse.setResult(responses);
-        new Integer(null);
-        return ResponseEntity.ok(restfulResponse);
-    }
-
-    @ResponseBody
     @RequestMapping(value = "findAll/{channelId}")
     public ResponseEntity findAll(@PathVariable("channelId") Long channelId) {
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
         List<TagResponse> responses = tabService.findTreeWithRule(channelId);
-        restfulResponse.setResult(responses);
-        return ResponseEntity.ok(restfulResponse);
+        return ResponseEntity.ok(createRestfulResponse(responses));
     }
 
     @ResponseBody
     @PostMapping("create")
     public ResponseEntity create(@RequestBody RestfulRequest<TagRequest> restfulRequest) {
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
         TagResponse response = tabService.create(restfulRequest);
-        restfulResponse.setResult(response);
-
-        return ResponseEntity.ok(restfulResponse);
+        return ResponseEntity.ok(createRestfulResponse(response));
     }
 
     @ResponseBody
     @PostMapping("update")
     public ResponseEntity update(@RequestBody RestfulRequest<TagRequest> restfulRequest) {
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
         TagResponse response = tabService.update(restfulRequest);
-        restfulResponse.setResult(response);
-
-        return ResponseEntity.ok(restfulResponse);
+        return ResponseEntity.ok(createRestfulResponse().result(response));
     }
 }

@@ -49,40 +49,38 @@ public class CallBatchService {
     private CallBatchScheduler callBatchScheduler;
 
 
-    public void check(){
+    public void check() {
         AssertUtils.isTrue(callBatchScheduler.getCompletedTaskCount() == callBatchScheduler.getTaskCount()
                 , ExceptionMessageEnum.LOGIC_EXCEPTION, "调度存在未执行完的任务，不能完成本次操作，请稍后重试。");
-    }
-    /**
-     * 写入跑批元数据并加入调度
-     * @param requests
-     * @param businessTime
-     * @param context
-     */
-    public void writeAndSchedule(CallBatchRequest[] requests, LocalDateTime businessTime, RequestContext context) {
-        check();
-        writeTrigger(requests, businessTime);
-        schedule(LocalDateTime.now(), context);
     }
 
     /**
      * 创建一个新跑批触发时间的调度
-     * @param triggerDate
+     * @param triggerTime 调度触发时间
      * @param context
      */
-    public void schedule(final LocalDateTime triggerDate, final RequestContext context) {
+    public void schedule(LocalDateTime triggerTime, final RequestContext context) {
+        schedule(triggerTime, LocalDateTime.MAX, context);
+    }
+
+    /**
+     * 创建一个新跑批触发时间的调度
+     * @param triggerTime 调度触发时间
+     * @param businessTime 交易查询时间
+     * @param context
+     */
+    public void schedule(LocalDateTime triggerTime, final LocalDateTime businessTime, final RequestContext context) {
         check();
         final CallBatchService me = this;
         final int number = callBatchExecutor.getCorePoolSize();
-        LocalDateTime dateTime = triggerDate.plusSeconds(10);
-        ZonedDateTime zdt = dateTime.atZone(ZoneId.systemDefault());
+        ZonedDateTime zdt = triggerTime.atZone(ZoneId.systemDefault());
         Date date = Date.from(zdt.toInstant());
         if (log.isInfoEnabled())
-            log.info(">>>add trigger task to scheduler. number: {}; trigger: {}", number, triggerDate);
+            log.info(">>>add trigger task to scheduler. number: {}; trigger: {}", number, triggerTime);
         callBatchScheduler.addTriggerTask(new Runnable() {
             @Override
             public void run() {
-                me.execute(number, triggerDate, context);
+                me.execute(number, businessTime, context);
             }
         }, date);
     }
@@ -114,6 +112,12 @@ public class CallBatchService {
         }
     }
 
+    /**
+     * 写入跑批元数据并加入调度
+     *
+     * @param requests
+     * @param businessTime
+     */
     @Transactional(rollbackFor = Exception.class)
     public void writeTrigger(CallBatchRequest[] requests, LocalDateTime businessTime) {
         if (log.isDebugEnabled())
@@ -123,7 +127,7 @@ public class CallBatchService {
         CallBatchTriggerEntity trigger;
         for (CallBatchRequest request : requests) {
             channel = channelRepository.findOneByChannelNo(request.getChannelNo());
-            AssertUtils.notNull(channel, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+            AssertUtils.notNull(channel, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "channelNo", request.getChannelNo());
             trigger = createTrigger(channel, request, businessTime);
             trigger.setStatusCode(BatchTriggerStatus.WAIT);
             trigger.setPartitionKey(channel.getPartitionKey());

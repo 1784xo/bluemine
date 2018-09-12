@@ -117,7 +117,7 @@ public class TabService {
         String tagText = data.getTagText();
 
         TagEntity tagEntity = tagRepository.findOneByChannelIdAndTagId(channelId, tagId);
-        AssertUtils.notNull(tagEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+        AssertUtils.notNull(tagEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "tag", channelId+", "+tagId);
 
         if (tagText != null) {
             tagEntity.setTagText(tagText);

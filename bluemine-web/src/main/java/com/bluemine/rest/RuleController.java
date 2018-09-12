@@ -23,33 +23,21 @@ public class RuleController extends AbstractController {
     @ResponseBody
     @PostMapping("create")
     public ResponseEntity create(@RequestBody HttpRestfulRequest<RuleRequest> restfulRequest){
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
         RuleResponse response = ruleService.create(restfulRequest);
-        restfulResponse.setResult(response);
-
-        return ResponseEntity.ok().body(restfulResponse);
+        return ResponseEntity.ok().body(createRestfulResponse().result(response));
     }
 
     @ResponseBody
     @PostMapping("delete")
     public ResponseEntity delete(@RequestBody HttpRestfulRequest<RuleRequest> restfulRequest){
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
         int num = ruleService.delete(restfulRequest);
-        restfulResponse.setResult(num);
-
-        return ResponseEntity.ok().body(restfulResponse);
+        return ResponseEntity.ok().body(createRestfulResponse().result(num));
     }
 
     @ResponseBody
     @PostMapping("update")
     public ResponseEntity update(@RequestBody HttpRestfulRequest<RuleRequest> restfulRequest){
-        HttpRestfulResponse restfulResponse = createRestfulResponse();
-
-        RuleResponse response = ruleService.update(restfulRequest);
-        restfulResponse.setResult(response);
-
-        return ResponseEntity.ok().body(restfulResponse);
+        RuleResponse  response = ruleService.update(restfulRequest);
+        return ResponseEntity.ok().body(createRestfulResponse(response));
     }
 }

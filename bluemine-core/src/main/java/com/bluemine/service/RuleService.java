@@ -56,13 +56,13 @@ public class RuleService {
         String ruleExps = data.getRuleExps();
 
         ChannelEntity channelEntity = channelRepository.findOne(data.getChannelId());
-        AssertUtils.notNull(channelEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+        AssertUtils.notNull(channelEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "channelId", data.getChannelId());
 
         CodeProfileEntity callTypeProfile = entityService.findCodeProfileWithCache(channelId, CodeEnum.CALT, callType, repository);
-        AssertUtils.notNull(callTypeProfile, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+        AssertUtils.notNull(callTypeProfile, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "callType", channelId+",  "+CodeEnum.CALT+", "+callType);
 
         CodeProfileEntity roleTypeProfile = entityService.findCodeProfileWithCache(channelId, CodeEnum.ROLE, roleType, repository);
-        AssertUtils.notNull(roleTypeProfile, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+        AssertUtils.notNull(roleTypeProfile, ExceptionMessageEnum.DB_NO_SUCH_RESULT,  "roleType",  channelId+",  "+CodeEnum.ROLE+", "+roleType);
 
         RuleEntity ruleEntity = new RuleEntity()
                 .ruleId(idWorker.nextId())
@@ -96,7 +96,7 @@ public class RuleService {
         Long ruleId = data.getRuleId();
         Long channelId = data.getChannelId();
         RuleEntity ruleEntity = ruleRepository.findOne(ruleId);
-        AssertUtils.notNull(ruleEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+        AssertUtils.notNull(ruleEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "ruleId", ruleId);
         AssertUtils.isTrue(ruleEntity.getChannelId().compareTo(channelId) == 0, ExceptionMessageEnum.DB_UNAUTHORIZED_UNMATCH);
 
         String callType = data.getCallType();
