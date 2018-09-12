@@ -61,9 +61,10 @@ public class CallBatchExecutor {
     private RuleRepository ruleRepository;
 
     private void updateStatus(CallBatchTriggerId triggerId, BatchTriggerStatus current, BatchTriggerStatus target, String descText) {
-        int count = callBatchTriggerRepository.updateStatus(triggerId.getChannelId(), triggerId.getCallNo(), triggerId.getCallDate(), triggerId.getSeatNo(), current
-                , target, descText);
-        AssertUtils.isTrue(count == 1, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+        int count = callBatchTriggerRepository.updateStatus(triggerId.getChannelId(), triggerId.getCallNo(), triggerId.getCallDate()
+                , triggerId.getSeatNo(), current, target, descText);
+        AssertUtils.isTrue(count == 1, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "trigger"
+                , triggerId.getChannelId() + ", " + triggerId.getCallNo() + ", " + triggerId.getCallDate() + ", " + triggerId.getSeatNo());
     }
 
     public OperateBuilder prepare(CallBatchTriggerId triggerId, SessionContext context) {

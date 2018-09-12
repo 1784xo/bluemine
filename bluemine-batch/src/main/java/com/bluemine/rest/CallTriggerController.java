@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 
 /**
  * Created by hechao on 2018/9/3.
@@ -32,7 +33,10 @@ public class CallTriggerController extends AbstractController {
 
         HttpRestfulResponse restfulResponse = createRestfulResponse();
 
-        callBatchService.writeAndSchedule(restfulRequest.getData(), restfulRequest.getBusinessTime(), restfulRequest.getContext());
+        LocalDateTime businessTime = restfulRequest.getBusinessTime();
+
+        callBatchService.writeTrigger(restfulRequest.getData(), businessTime);
+        callBatchService.schedule(businessTime.plusSeconds(10), businessTime, restfulRequest.getContext());
 
         if (log.isDebugEnabled())
             log.debug("<<<REST Response call batch. {}", restfulResponse);
