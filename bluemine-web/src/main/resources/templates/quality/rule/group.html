@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>智能质检 - 质检规则配置</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="/theme/jquery/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery/jquery-easyui/jquery-easyui-1.5.5.7.min.js"></script>
+    <script src="/theme/jquery/jquery-easyui-extend/jquery-easyui-extend.js"></script>
+    <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="/theme/jquery/bulemine-core.js"></script>
+    <script th:src="@{'/service/qualityrule/findAll/'+${token}+'?callback=loadTagTree'}"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/jquery-easyui-reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/style.css"/>
+    <style>
+
+        .datagrid-row{
+            cursor: pointer;
+        }
+
+        .datagrid-row-selected
+        , .datagrid-row-over{
+            background-color: transparent;
+        }
+
+        .datagrid-row-editing {
+            background: #e6f0fa;
+        }
+
+        .datagrid-row-editing .datagrid-link {
+            color: #666666;
+            margin: 0 0 0 4px;
+        }
+
+        .datagrid-row-editing .datagrid-link:hover {
+            color: #006FFF;
+        }
+
+        .datagrid-header {
+            background-color: #F9F9F9;
+        }
+
+        .datagrid-header-row td
+        , .datagrid .datagrid-row td{
+            height: 40px;
+        }
+
+        .groups-datagrid .datagrid-cell {
+            margin: 0 10px;
+        }
+
+        .groups-datagrid .tree-icon {
+            display: none;
+        }
+
+        .groups-datagrid .easyui-linkbutton .l-btn-text {
+            font-size: 12px;
+        }
+
+        .groups-datagrid .datagrid-body .l-btn {
+            color: #006FFF;
+            border: 0px;
+        }
+
+        .groups-datagrid .datagrid-body .l-btn:hover {
+            background-color: transparent;
+        }
+        
+        .group-dialog .switchbutton-on, .datagrid .switchbutton-off, .datagrid .switchbutton-handle {
+    		font-size: 12px;
+		}
+		
+		.group-dialog .switchbutton-on {
+		    background: #2A9BF9;
+		    color: #FFFFFF;
+		}
+		
+		.group-dialog .switchbutton-off {
+		    background: #EDEDED;
+		    color: #999999;
+		}
+		
+		.group-dialog .switchbutton-handle {
+		    box-shadow: 1px 1px 2px #888888;
+		}
+    </style>
+</head>
+<body>
+<div th:replace="common/header::header"></div>
+<div th:replace="common/main-west::main-west(1, 106)"></div>
+
+<div title="质检组编辑" id="group-dialog" class="group-dialog">
+    <form>
+        <table width="100%" cellpadding="0" cellspacing="10" border="0">
+            <tbody>
+            <tr>
+                <td style="width: 80px; text-align: right;">质检组</td>
+                <td><input name="groupname" style="width: 100px" class="easyui-validatebox" data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/></td>
+                <td style="width: 80px; text-align: right;">状态</td>
+                <td><input id ="groupactived" name="groupactived" class="easyui-switchbutton" data-options="width:50, height:24, onText:'启用', offText:'停用'"/></td>
+            </tr>
+            <tr>
+                <td style="width: 80px;text-align: right;">说明</td>
+                <td colspan="3"><input name="groupdesc" style="width: 80%" class="easyui-validatebox" data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<div class="main-center">
+    <div class="main-center-box">
+        <div class="main-center-row">
+            <h2>质检规则管理</h2>
+        </div>
+        <div class="main-center-row control-group">
+            <div class="tab-box">
+                <div class="tab-item tab-item-selected"><a href="group">质检组</a></div>
+                <div class="tab-item"><a href="row">质检项</a></div>
+            </div>
+            <div class="tab-panel">
+                <div class="control-group">
+                    <form id="search-form">
+                        <ul class="main-center-filter">
+                            <li>
+                                <span class="l-btn-left l-btn-icon-left"><span class="l-btn-text" onclick="event_handle.onGroupAddDialog(this);">添加规则</span><span class="l-btn-icon icon-create-rule">&nbsp;</span></span>
+                            </li>
+                            <li>
+                                <span style="font-size: 14px;">状态</span>
+                            </li>
+                            <li>
+                                <input id="gactived" name="gactived" class="easyui-combobox" data-options="panelHeight: 'auto',
+																				                            editable: false,
+																				                            textField: 'text',
+																				                            valueField: 'value',
+																				                            data: [{
+																				                                text: '全部',
+																				                                value: 'ALL',
+																				                                selected:true
+																				                            }, {
+																				                                text: '已启用',
+																				                                value: 'Y'
+																				                            }, {
+																				                                text: '已停用',
+																				                                value: 'N'
+																				                            }]"/>
+                            </li>
+                            <li>
+                                <button class="btn-search" type="button" onclick="event_handle.onGroupSearchForm()">查询</button>
+                            </li>
+                        </ul>
+                    </form>
+                 </div>   
+            </div>
+            <div class="groups-datagrid">
+                <table class="easyui-datagrid" width="100%">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    //<![CDATA[
+
+    var event_handle = {};
+    $(function () {
+        var channelId = [[${token}]];
+        var groupgrid = $('.groups-datagrid .easyui-datagrid');
+
+        function refreshTree() {
+            $.parser.parse(groupgrid.datagrid('getPanel').find('.datagrid-row'));
+        }
+
+        var groupdialog = $('#group-dialog');
+        var groupform = groupdialog.find('form');
+        
+        event_handle.onGroupSearchForm = function (val) {
+            var pactived = $('#gactived').combobox('getValue');
+            bulemine.ajaxJson({
+                url: "/service/qualityrule/search",
+                masking: true,
+                params: {
+                	data: {
+                	 	channelId: channelId,                     
+                      	status: pactived
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+                    	initDataGird(groupgrid,data);
+                    	refreshTree();
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        };
+        
+        event_handle.onGroupActivated = function (val) {
+            var id = $(this).data('id');
+            var index = groupgrid.datagrid('getRowIndex', id);
+            var row = groupgrid.datagrid("getRows")[index];
+            bulemine.ajaxJson({
+                url: "/service/qualityrule/update",
+                masking: true,
+                params: {
+                    data: {
+                        channelId: row.channelId,
+                        id: row.id,                        
+                        activated: val
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        };
+
+        event_handle.onGroupEditDialog = function (el) {
+            var id = $(el).data('group-id');
+            var index = groupgrid.datagrid('getRowIndex', id);
+            var row = groupgrid.datagrid("getRows")[index];
+            groupdialog.find('[name="groupname"]').val(row.name);
+            groupdialog.find('[name="groupdesc"]').val(row.text);
+            if(row.activated){            	
+            	groupform.find("[switchbuttonName='groupactived']").switchbutton("check");
+            }else{
+            	groupform.find("[switchbuttonName='groupactived']").switchbutton("uncheck");
+            }
+            groupdialog.data('binding', row).dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(groupdialog).height()/2)});
+        }
+
+        event_handle.onGroupAddDialog = function (el) {
+        	groupdialog.find('[name="groupname"]').val('');
+            groupdialog.find('[name="groupdesc"]').val('');
+            groupdialog.dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(groupdialog).height()/2)});
+        }
+        
+        initDataGird(groupgrid,TAGTREE_DATA);
+        
+        groupdialog.dialog({
+            modal: true,
+            resizable: false,
+            width: 500,
+            closed: true,
+            buttons: [{
+                width: 100,
+                height: 30,
+                text: '确定',
+                handler: function (e) {
+                    if (groupform.form('validate')) {
+                        var group = groupdialog.data('binding');                       
+                        if (!!group) {
+                        	var index = groupgrid.datagrid('getRowIndex', group.id);
+                            bulemine.ajaxJson({
+                                url: "/service/qualityrule/update",
+                                masking: true,
+                                params: {
+                                    data: {
+                                    	id:group.id,
+                                        channelId: group.channelId,
+                                        activated: groupform.find("[switchbuttonName='groupactived']").switchbutton("options").checked,
+                                        name: groupform.find('input[name="groupname"]').val(),
+                                        text: groupform.find('input[name="groupdesc"]').val()
+                                    }
+                                },
+                                callback: function (ok, data, msg, opts) {
+                                    if (ok) {
+                                        groupform.form('clear');
+                                        groupdialog.dialog('close').data('binding', null);
+                                        groupgrid.datagrid('updateRow', {
+                                            index: index,
+                                            row:data
+                                        });
+                                        refreshTree();
+                                    } else {
+                                        alert('[ERROR]' + msg);
+                                    }
+                                }
+                            });
+                        } else {
+                        	 bulemine.ajaxJson({
+                                 url: "/service/qualityrule/create",
+                                 masking: true,
+                                 params: {
+                                     data: {
+                                         channelId: channelId,
+                                         activated: groupform.find("[switchbuttonName='groupactived']").switchbutton("options").checked,
+                                         name: groupform.find('input[name="groupname"]').val(),
+                                         text: groupform.find('input[name="groupdesc"]').val()
+                                     }
+                                 },
+                                 callback: function (ok, data, msg, opts) {
+                                     if (ok) {
+                                         groupform.form('clear');
+                                         groupdialog.dialog('close').data('binding', null);
+                                         groupgrid.datagrid('insertRow', {
+                                            row:data
+                                         });
+                                         refreshTree();
+                                     } else {
+                                         alert('[ERROR]' + msg);
+                                     }
+                                 }
+                             });
+                        }
+                    }
+                }
+            }, {
+                width: 100,
+                height: 30,
+                text: '取消',
+                handler: function (e) {
+                    groupform.form('clear');
+                    groupdialog.dialog('close').data('binding', null);
+                }
+            }]
+        });
+        refreshTree();
+    });
+    
+    function initDataGird(groupgrid,data){
+    	groupgrid.datagrid({
+            data: data,
+            idField: 'id',
+            fitColumns: true,
+            columns: [[
+                {
+                    field: 'name',
+                    title: '质检组',
+                    width: 100,
+                    editor: {
+                        type: 'validatebox',
+                        options: {
+                            validateOnCreate: false,
+                            validateOnBlur: true,
+                            required: true,
+                            validType: 'length[1,10]'
+                        }
+                    }
+                }, {
+                    field: 'rows',
+                    title: '质检项数量',
+                    width: 20,
+                    editor: false,
+                    formatter: function (value, row, index) {
+                        return value.length;
+                    }
+                }, {
+                    title: '状态',
+                    field: 'activated',
+                    width: 60,
+                    editor: false,
+                    formatter: function (value, row, index) {
+                        return '<input data-id="' + row.id + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
+                                + ' data-options="onChange:event_handle.onGroupActivated, width:50, height:24, onText:\'启用\', offText:\'停用\'"/>';
+                    }
+                }, {
+                    title: '操作',
+                    field: 'id',
+                    editor: false,
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:;" class="datagrid-link" onclick="event_handle.onGroupEditDialog(this);" data-group-id="' + value + '">编辑</a>';
+                    }
+                }
+            ]]
+        });   	
+    }
+    //]]>
+</script>
+</body>
+</html>

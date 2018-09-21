@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>智能质检 - 质检规则配置</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="/theme/jquery/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery/jquery-easyui/jquery-easyui-1.5.5.7.min.js"></script>
+    <script src="/theme/jquery/jquery-easyui-extend/jquery-easyui-extend.js"></script>
+    <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="/theme/jquery/bulemine-core.js"></script>
+    <script th:src="@{'/service/qualityrow/findAll/'+${token}+'?callback=loadTagTree'}"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/jquery-easyui-reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/style.css"/>
+    <style>
+
+        .datagrid-row{
+            cursor: pointer;
+        }
+
+        .datagrid-row-selected
+        , .datagrid-row-over{
+            background-color: transparent;
+        }
+
+        .datagrid-row-editing {
+            background: #e6f0fa;
+        }
+
+        .datagrid-row-editing .datagrid-link {
+            color: #666666;
+            margin: 0 0 0 4px;
+        }
+
+        .datagrid-row-editing .datagrid-link:hover {
+            color: #006FFF;
+        }
+
+        .datagrid-header {
+            background-color: #F9F9F9;
+        }
+
+        .datagrid-header-row td
+        , .datagrid .datagrid-row td{
+            height: 40px;
+        }
+
+        .groups-datagrid .datagrid-cell {
+            margin: 0 10px;
+        }
+
+        .groups-datagrid .tree-icon {
+            display: none;
+        }
+
+        .groups-datagrid .easyui-linkbutton .l-btn-text {
+            font-size: 12px;
+        }
+
+        .groups-datagrid .datagrid-body .l-btn {
+            color: #006FFF;
+            border: 0px;
+        }
+
+        .groups-datagrid .datagrid-body .l-btn:hover {
+            background-color: transparent;
+        }
+        
+        .group-dialog .switchbutton-on, .datagrid .switchbutton-off, .datagrid .switchbutton-handle {
+    		font-size: 12px;
+		}
+		
+		.group-dialog .switchbutton-on {
+		    background: #2A9BF9;
+		    color: #FFFFFF;
+		}
+		
+		.group-dialog .switchbutton-off {
+		    background: #EDEDED;
+		    color: #999999;
+		}
+		
+		.group-dialog .switchbutton-handle {
+		    box-shadow: 1px 1px 2px #888888;
+		}
+    </style>
+</head>
+<body>
+<div th:replace="common/header::header"></div>
+<div th:replace="common/main-west::main-west(1, 106)"></div>
+
+<div title="质检项编辑" id="group-dialog" class="group-dialog">
+    <form id="rowForm">
+        <table width="100%" cellpadding="0" cellspacing="10" style="border: 1px solid #151515">
+            <tbody>
+            <tr>
+                <td style="width: 80px;text-align: left;">质检项</td>
+                <td align="right"><div id="rowbuttonDiv"><a href="#" name="rowsave" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="event_handle.onGroupRowSaveDialog(this)">保存</a>
+                	<a href="#" name="rowcancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                	<table width="100%" cellpadding="0" cellspacing="10" style="border: 1px solid #151515">
+			            <tr>
+			                <td style="width: 80px; text-align: right;">质检项</td>
+			                <td><input name="row_name" style="width: 100px" class="easyui-validatebox" data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/></td>
+			                <td style="width: 80px; text-align: right;">类型</td>
+			                <td><input name="row_type" id="row_type" style="width: 100px" class="easyui-combobox" data-options="panelHeight: 'auto',
+																				                            editable: false,
+																				                            textField: 'text',
+																				                            valueField: 'value',
+																				                            data: [{
+																				                                text: '时长',
+																				                                value: 'LOT',
+																				                                selected:true
+																				                            }, {
+																				                                text: '话术',
+																				                                value: 'ST'
+																				                            }, {
+																				                                text: '静音',
+																				                                value: 'MUTE'
+																				                            }, {
+																				                                text: '闲聊',
+																				                                value: 'CHAT'
+																				                            }, {
+																				                                text: '情绪',
+																				                                value: 'MOOD'
+																				                            }, {
+																				                                text: '语速',
+																				                                value: 'SOL'
+																				                            }]" /></td>
+			                <td style="width: 80px; text-align: right;">状态</td>
+			                <td><input id ="row_actived" name="row_actived" class="easyui-switchbutton" data-options="width:50, height:24, onText:'启用', offText:'停用'"/></td>
+			            </tr>
+			            <tr>
+			                <td style="width: 80px; text-align: right;">质检组</td>
+			                <td><input id="group_name" name="group_name" style="width: 100px" class="easyui-combobox" data-options="required:true"/></td>
+			                <td style="width: 80px; text-align: right;">说明</td>
+			                <td colspan="3"><input name="row_desc" style="width: 100%" class="easyui-validatebox" data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/></td>
+			            </tr>
+	            	</table>
+                </td>
+            </tr>
+	            
+            </tbody>
+        </table>
+    </form>   
+    <div id="rowItemDiv">
+	    <form id="itemForm">
+	        <table width="100%" cellpadding="0" cellspacing="10" style="border: 1px solid #151515">
+	            <tbody>
+	            <tr>
+	                <td style="width: 80px;text-align: left;">质检规则</td>
+	                <td align="right"><div id="rowitembuttonDiv"><a href="#" name="rowsave" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+	                	<a href="#" name="rowcancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a></div>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td colspan="2" >
+	                	 <div id ="groupitem-datagrid" >
+		                     <table  class="items-datagrid" width="100%">
+								<!-- <tr>
+								    <td align="center"><a href="#" name="rowsave" class="easyui-linkbutton" data-options="iconCls:'icon-add'" /><a href="#" name="rowsave" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" /></td>
+								    <td>规则</td>
+								    <td><input name="item_desc" style="width: 100%" class="easyui-validatebox" data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/></td>
+								</tr>
+								<tr>
+								    <td align="center"><a href="#" name="rowsave" class="easyui-linkbutton" data-options="iconCls:'icon-add'" /><a href="#" name="rowsave" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" /></td>
+								    <td>规则</td>
+								    <td><input name="item_desc" style="width: 100%" class="easyui-validatebox" data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/></td>
+								</tr> -->			
+	                	 	</table>
+                	     </div>
+	                </td>
+	            </tr>
+
+	            </tbody>
+	        </table>
+	    </form>
+    </div>
+</div>
+
+<div class="main-center">
+    <div class="main-center-box">
+        <div class="main-center-row">
+            <h2>质检规则管理</h2>
+        </div>
+        <div class="main-center-row control-group">
+            <div class="tab-box">
+                <div class="tab-item"><a href="group">质检组</a></div>
+                <div class="tab-item tab-item-selected"><a href="row">质检项</a></div>
+            </div>
+            <div class="tab-panel">
+                <div class="control-group">
+                    <form id="search-form">
+                        <ul class="main-center-filter">
+                            <li>
+                                <span class="l-btn-left l-btn-icon-left"><span class="l-btn-text" onclick="event_handle.onGroupAddDialog(this);">添加质检项</span><span class="l-btn-icon icon-create-rule">&nbsp;</span></span>
+                            </li>
+                            <li>
+                                <span style="font-size: 14px;">质检组</span>
+                            </li>
+                            <li>
+                                <input id="search_grouprow" name="search_grouprow" class="easyui-combobox" />
+                            </li>
+                            <li>
+                                <span style="font-size: 14px;">状态</span>
+                            </li>
+                            <li>
+                                <input id="gactived" name="gactived" class="easyui-combobox" data-options="panelHeight: 'auto',
+																				                            editable: false,
+																				                            textField: 'text',
+																				                            valueField: 'value',
+																				                            data: [{
+																				                                text: '全部',
+																				                                value: 'ALL',
+																				                                selected:true
+																				                            }, {
+																				                                text: '已启用',
+																				                                value: 'Y'
+																				                            }, {
+																				                                text: '已停用',
+																				                                value: 'N'
+																				                            }]"/>
+                            </li>
+                            <li>
+                                <span style="font-size: 14px;"><input id="sgroupdesc" name="sgroupdesc" style="width: 80%" class="easyui-validatebox" value="请输入质检项" 
+                                onfocus="if(this.value=='请输入质检项'){this.value='';}" onblur="if(this.value==''){this.value='请输入质检项';}"/></span>
+                            </li>
+                            <li>
+                                <button class="btn-search" type="button" onclick="event_handle.onGroupSearchForm()">查询</button>
+                            </li>
+                        </ul>
+                    </form>
+                 </div>   
+            </div>
+            <div class="groups-datagrid">
+                <table class="easyui-datagrid" width="100%">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    //<![CDATA[
+    var event_handle = {};    
+    var channelId = [[${token}]];
+    var qualitygroupList=[];
+    $(function () {
+    	
+        var groupgrid = $('.groups-datagrid .easyui-datagrid');
+
+        function refreshTree() {
+            $.parser.parse(groupgrid.datagrid('getPanel').find('.datagrid-row'));
+        }
+
+        var groupdialog = $('#group-dialog');
+        var groupform = $("#rowForm");
+        
+        var itemdialog = $('#groupitem-datagrid');
+        var itemgrid = itemdialog.find('.items-datagrid');
+        
+        event_handle.onGroupSearchForm = function (val) {
+            var pactived = $('#gactived').combobox('getValue');
+            var sgrouprow = $("#search_grouprow").combobox("getValue");
+            var sname =  $("#search-form").find('input[name="sgroupdesc"]').val();
+            bulemine.ajaxJson({
+                url: "/service/qualityrow/search",
+                masking: true,
+                params: {
+                	data: {
+                	 	channelId: channelId,                     
+                      	status: pactived,
+                      	groupId:sgrouprow,
+                      	name:sname
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+                    	initDataGird(groupgrid,data);
+                    	refreshTree();
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        };
+        
+        event_handle.onGroupActivated = function (val) {
+            var id = $(this).data('id');
+            var index = groupgrid.datagrid('getRowIndex', id);
+            var row = groupgrid.datagrid("getRows")[index];
+            bulemine.ajaxJson({
+                url: "/service/qualityrow/update",
+                masking: true,
+                params: {
+                    data: {
+                        channelId: row.channelId,
+                        id: row.id,                        
+                        activated: val
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        };
+
+        event_handle.onGroupEditDialog = function (el) {
+            var id = $(el).data('group-id');
+            var index = groupgrid.datagrid('getRowIndex', id);
+            var row = groupgrid.datagrid("getRows")[index];
+            groupdialog.find('[name="row_name"]').val(row.name).attr("readonly", false);
+            groupdialog.find('[name="row_desc"]').val(row.text).attr("readonly", false);
+            groupform.find("[switchbuttonName='row_actived']").switchbutton({disabled: false});
+            if(row.activated){            	;
+            	groupform.find("[switchbuttonName='row_actived']").switchbutton("check");
+            }else{
+            	groupform.find("[switchbuttonName='row_actived']").switchbutton("uncheck");
+            }           
+            $('#group_name').combobox({ 
+            	data:qualitygroupList, 
+            	valueField:'id', 
+            	textField:'name',
+            	editable:false
+            	});  
+             
+            $("#group_name").combobox({disabled: false});
+            $('#group_name').combobox('setValue', row.groupId);
+            $("#row_type").combobox({disabled: false});
+            $('#row_type').combobox('setValue', row.rowType);                       
+            $("#rowItemDiv").hide();
+            $("#rowbuttonDiv").show();
+            groupdialog.data('binding', row).dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(groupdialog).height()/2)});
+        }
+
+        event_handle.onGroupItemDialog = function (el) {
+            var id = $(el).data('group-id');
+            var index = groupgrid.datagrid('getRowIndex', id);
+            var row = groupgrid.datagrid("getRows")[index];
+            groupdialog.find('[name="row_name"]').val(row.name).attr("readonly", true);
+            groupdialog.find('[name="row_desc"]').val(row.text).attr("readonly", true);
+            groupform.find("[switchbuttonName='row_actived']").switchbutton({disabled: true});
+            if(row.activated){            	;
+            	groupform.find("[switchbuttonName='row_actived']").switchbutton("check");
+            }else{
+            	groupform.find("[switchbuttonName='row_actived']").switchbutton("uncheck");
+            }
+            $('#group_name').combobox({ 
+            	data:qualitygroupList, 
+            	valueField:'id', 
+            	textField:'name',
+            	editable:false
+            	});  
+            $('#group_name').combobox({disabled: true}); 
+            $('#group_name').combobox('setValue', row.groupId);
+            $("#row_type").combobox({disabled: true}); 
+            $('#row_type').combobox('setValue', row.rowType);           
+            $("#rowItemDiv").show();
+            $("#rowbuttonDiv").hide();
+            groupdialog.data('binding', row).dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(groupdialog).height()/2)});
+            console.log(row)
+            if(row.rowType=='ST'){
+            	 $("#rowitembuttonDiv").hide();
+            	 initItemSTGird(itemgrid);
+	            itemgrid.datagrid('loadData', {
+	                total: row.items.length,
+	                rows: row.items
+	            });
+            }else if(row.rowType=='MUTE'){
+            	$("#rowitembuttonDiv").show();
+				initItemMUTEGird(itemgrid,row.items);
+	            refreshTree();
+            }else{
+            	
+            }
+        }
+
+        event_handle.onGroupAddDialog = function (el) {
+        	groupdialog.find('[name="row_name"]').val('').attr("readonly", false);
+            groupdialog.find('[name="row_desc"]').val('').attr("readonly", false);          
+            $('#group_name').combobox({ 
+            	data:qualitygroupList, 
+            	valueField:'id', 
+            	textField:'name',
+            	editable:false
+            	});
+            groupform.find("[switchbuttonName='row_actived']").switchbutton({disabled: false});
+            groupform.find("[switchbuttonName='row_actived']").switchbutton("check");
+            $("#group_name").combobox({disabled: false}); 
+            $("#row_type").combobox({disabled: false}); 
+            $("#rowItemDiv").hide();
+            $("#rowbuttonDiv").show();
+            groupdialog.dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(groupdialog).height()/2)});
+        }
+        
+        event_handle.onDeleteItem = function (el) {
+            var itemId = $(el).data('item-id');
+            var index = itemgrid.datagrid('getRowIndex', itemId);
+            var row = itemgrid.datagrid("getRows")[index];
+            bulemine.ajaxJson({
+                url: "/service/qualityitem/delete",
+                masking: true,
+                params: {
+                    data: {
+                        channelId: row.channelId,
+                        id: itemId
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+                    	itemgrid.datagrid("deleteRow", index);
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        }
+        
+        event_handle.onGroupRowSaveDialog= function (el) {
+            if (groupform.form('validate')) {
+                var group = groupdialog.data('binding');                       
+                if (!!group) {
+                	var index = groupgrid.datagrid('getRowIndex', group.id);
+                    bulemine.ajaxJson({
+                        url: "/service/qualityrow/update",
+                        masking: true,
+                        params: {
+                            data: {
+                            	id:group.id,
+                                channelId: group.channelId,
+                                activated: groupform.find("[switchbuttonName='row_actived']").switchbutton("options").checked,
+                                name: groupform.find('input[name="row_name"]').val(),
+                                text: groupform.find('input[name="row_desc"]').val(),
+                                groupId:$("#group_name").combobox("getValue"),
+                                rowType:$('#row_type').combobox('getValue')
+                            }
+                        },
+                        callback: function (ok, data, msg, opts) {
+                            if (ok) {
+                                groupform.form('clear');
+                                groupdialog.dialog('close').data('binding', null);
+                                groupgrid.datagrid('updateRow', {
+                                    index: index,
+                                    row:data
+                                });
+                                refreshTree();
+                            } else {
+                                alert('[ERROR]' + msg);
+                            }
+                        }
+                    });
+                } else {
+                	 bulemine.ajaxJson({
+                         url: "/service/qualityrow/create",
+                         masking: true,
+                         params: {
+                             data: {
+                                 channelId: channelId,
+                                 activated: groupform.find("[switchbuttonName='row_actived']").switchbutton("options").checked,
+                                 name: groupform.find('input[name="row_name"]').val(),
+                                 text: groupform.find('input[name="row_desc"]').val(),
+                                 groupId:$("#group_name").combobox("getValue"),
+                                 rowType:$('#row_type').combobox('getValue')
+                             }
+                         },
+                         callback: function (ok, data, msg, opts) {
+                             if (ok) {
+                                 groupform.form('clear');
+                                 groupdialog.dialog('close').data('binding', null);
+                                 groupgrid.datagrid('insertRow', {
+                                    row:data
+                                 });
+                                 refreshTree();
+                             } else {
+                                 alert('[ERROR]' + msg);
+                             }
+                         }
+                     });
+                }
+            }
+        }
+        
+        initDataGird(groupgrid,TAGTREE_DATA);
+        groupdialog.dialog({
+            modal: true,
+            resizable: false,
+            width: 500,
+            closed: true,
+            buttons: [{
+                width: 100,
+                height: 30,
+                text: '关闭',
+                handler: function (e) {
+                    var tag = groupdialog.data('binding');
+                    if (!!tag) {
+                    	groupdialog.data('binding', null).dialog('close');
+                        refreshTree();
+                    }else{
+	                    groupdialog.dialog('close');
+	                    refreshTree();
+                    } 
+                }
+            }]
+        });      
+        refreshTree();
+    });
+    
+    getQualityGroup(channelId);
+    initGroupRowName('search_grouprow',qualitygroupList,null);
+    function getQualityGroup(channelId){
+    	var datagroup =null;
+        bulemine.ajaxJson({
+            url: "/service/qualityrule/search",
+            masking: true,
+            async:false,
+            params: {
+            	data: {
+            	 	channelId: channelId,                     
+                  	status: 'Y'
+                }
+            },
+            callback: function (ok, data, msg, opts) {
+                if (ok) {
+                	qualitygroupList =data;
+                } else {
+                    alert('[ERROR]' + msg);
+                }
+            }
+		});   
+        return datagroup;
+    }
+ 
+    function initDataGird(groupgrid,data){
+    	groupgrid.datagrid({
+            data: data,
+            idField: 'id',
+            fitColumns: true,
+            columns: [[
+                {
+                    field: 'name',
+                    title: '质检项',
+                    width: 30,
+                    editor: {
+                        type: 'validatebox',
+                        options: {
+                            validateOnCreate: false,
+                            validateOnBlur: true,
+                            required: true,
+                            validType: 'length[1,10]'
+                        }
+                    }
+                }, {
+                	field: 'groupId',
+                    title: '质检组',
+                    width: 30,
+                    formatter: function (value, row, index) {
+                        return $.easyui.formatter.combobox(value, this.editor);
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            panelHeight: 'auto',
+                            editable: false,
+                            textField: 'name',
+                            valueField: 'id',
+                            data:qualitygroupList
+                        }
+                    }
+                }, {
+                    field: 'rowType',
+                    title: '类型',
+                    width: 20,
+                    formatter: function (value, row, index) {
+                        return $.easyui.formatter.combobox(value, this.editor);
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            panelHeight: 'auto',
+                            editable: false,
+                            textField: 'text',
+                            valueField: 'value',
+                            data: [{
+                                text: '时长',
+                                value: 'LOT'
+                            }, {
+                                text: '话术',
+                                value: 'ST'
+                            }, {
+                                text: '静音',
+                                value: 'MUTE'
+                            }, {
+                                text: '闲聊',
+                                value: 'CHAT'
+                            }, {
+                                text: '情绪',
+                                value: 'MOOD'
+                            }, {
+                                text: '语速',
+                                value: 'SOL'
+                            }]
+                        }
+                    }
+                }, {
+                    title: '状态',
+                    field: 'activated',
+                    width: 60,
+                    editor: false,
+                    formatter: function (value, row, index) {
+                        return '<input data-id="' + row.id + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
+                                + ' data-options="onChange:event_handle.onGroupActivated, width:50, height:24, onText:\'启用\', offText:\'停用\'"/>';
+                    }
+                }, {
+                    title: '操作',
+                    field: 'id',
+                    editor: false,
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:;" class="datagrid-link" onclick="event_handle.onGroupEditDialog(this);" data-group-id="' + value + '">编辑</a>'+
+                        	   '<a href="javascript:;" class="datagrid-link" onclick="event_handle.onGroupItemDialog(this);" data-group-id="' + value + '">添加规则</a>'	;
+                    }
+                }
+            ]]
+        });   	
+    }
+    
+    function initGroupRowName(name,list,sel){
+    	$('#'+name).combobox({ 
+        	data:list, 
+        	valueField:'id', 
+        	textField:'name',
+        	editable:false
+        	});
+    	if(sel!=null){
+    		 $('#'+name).combobox('setValue', sel);
+    	}
+    }
+
+    function initItemSTGird(itemgrid){
+        itemgrid.datagrid({
+            idField: 'id',
+            fitColumns: true,
+            singleSelect: true,
+            autoRowHeight: false,
+            onEndEdit: function (index, row, changes) {
+                var me = $(this);
+                var item = groupdialog.data('binding');
+                if (!!row.newest) {                    
+                    bulemine.ajaxJson({
+                        url: '/service/qualityitem/create',
+                        masking: true,
+                        params: {
+                            data: {
+                                rowId: item.id,
+                                channelId: item.channelId,
+                                logicvalue: item.items[index].logicvalue,
+                                logicsort:index
+                            }
+                        },
+                        callback: function (ok, data, msg, opts) {
+                            if (ok) {
+                            	itemgrid.datagrid('updateRow', {
+                                    index: index,
+                                    row: $.extend(data, {
+                                        newest: null
+                                    })
+                                });
+                            } else {
+                                alert('[ERROR]' + msg);
+                            }
+                        }
+                    });
+                } else {
+                    if (!$.isEmptyObject(changes)) {
+                        bulemine.ajaxJson({
+                            url: '/service/qualityitem/update',
+                            masking: true,
+                            params: {
+                                data: {
+                                	id:item.items[index].id,
+                                	rowId: item.id,
+                                    channelId: item.channelId,
+                                    logicvalue: item.items[index].logicvalue,
+                                    logicsort:index
+                                }
+                            },
+                            callback: function (ok, data, msg, opts) {
+                                if (ok) {
+
+                                } else {
+                                    alert('[ERROR]' + msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            },
+            onDblClickRow: function (index, row) {
+                var me = $(this);
+                me.datagrid('beginEdit', index);
+            },
+            toolbar: [{
+                text: '添加规则',
+                iconCls: 'icon-create-rule',
+                handler: function () {
+                	itemgrid.datagrid('appendRow', {
+                        id: $.uuid(),
+                        newest: true
+                    }).datagrid('beginEdit', itemgrid.datagrid('getRows').length - 1);
+                }
+            }],
+            columns: [[
+                 {
+                    field: 'logicvalue',
+                    title: '规则',
+                    width: 500,
+                    editor: {
+                        type: 'validatebox',
+                        options: {
+                            validateOnCreate: false,
+                            validateOnBlur: true,
+                            required: true,
+                            validType: 'length[1,200]'
+                        }
+                    }
+                }, {
+                    field: 'id',
+                    title: '操作',
+                    width: 100,
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:;" onclick="event_handle.onDeleteItem(this)"' +
+                                ' class="datagrid-link" data-item-id="' + row.id + '">删除</a>';
+                    },
+                    editor: {
+                        type: 'linkbutton',
+                        options: {
+                            button: [{
+                                text: '确定',
+                                handler: function (val, c, el, e, i) {
+                                    var index = itemgrid.datagrid('getRowIndex', val);
+                                    var row = itemgrid.datagrid('getRows')[index];
+                                    itemgrid.datagrid('endEdit', index);
+                                }
+                            }, {
+                                text: '取消',
+                                handler: function (val, c, el, e, i) {
+                                    var index = itemgrid.datagrid('getRowIndex', val);                                   
+                                    var row = itemgrid.datagrid('getRows')[index];
+                                    itemgrid.datagrid('cancelEdit', index);
+                                    if (!!row.newest) {
+                                    	itemgrid.datagrid('deleteRow', index);
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                }
+            ]]
+        });
+    }
+    
+    function initItemMUTEGird(itemgrid,data){
+        itemgrid.datagrid({
+        	data: data,
+            idField: 'id',            
+            fitColumns: true,
+            singleSelect: true,
+            autoRowHeight: false,
+            onEndEdit: function (index, row, changes) {
+                var me = $(this);
+                var item = groupdialog.data('binding');
+                if (!!row.newest) {                    
+                    bulemine.ajaxJson({
+                        url: '/service/qualityitem/create',
+                        masking: true,
+                        params: {
+                            data: {
+                                rowId: item.id,
+                                channelId: item.channelId,
+                                logicvalue: item.items[index].logicvalue,
+                                logicsort:index
+                            }
+                        },
+                        callback: function (ok, data, msg, opts) {
+                            if (ok) {
+                            	itemgrid.datagrid('updateRow', {
+                                    index: index,
+                                    row: $.extend(data, {
+                                        newest: null
+                                    })
+                                });
+                            } else {
+                                alert('[ERROR]' + msg);
+                            }
+                        }
+                    });
+                } else {
+                    if (!$.isEmptyObject(changes)) {
+                        bulemine.ajaxJson({
+                            url: '/service/qualityitem/update',
+                            masking: true,
+                            params: {
+                                data: {
+                                	id:item.items[index].id,
+                                	rowId: item.id,
+                                    channelId: item.channelId,
+                                    logicvalue: item.items[index].logicvalue,
+                                    logicsort:index
+                                }
+                            },
+                            callback: function (ok, data, msg, opts) {
+                                if (ok) {
+
+                                } else {
+                                    alert('[ERROR]' + msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            },
+            onDblClickRow: function (index, row) {
+                var me = $(this);
+                me.datagrid('beginEdit', index);
+            },
+            columns: [[
+                 {
+                    field: 'logicrelation',
+                    title: '关系',
+                    width: 50,
+                    formatter: function (value, row, index) {
+                        return $.easyui.formatter.combobox(value, this.editor);
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            panelHeight: 'auto',
+                            editable: false,
+                            textField: 'text',
+                            valueField: 'value',
+                            data: [{
+                                text: '与',
+                                value: '0'
+                            }, {
+                                text: '或',
+                                value: '1'
+                            }, {
+                                text: '非',
+                                value: '2'
+                            }]
+                        }
+                    }
+                },{
+                	title: '状态',
+                    field: 'activated',
+                    width: 200,
+                    editor: false,
+                    formatter: function (value, row, index) {
+                        return '<input class="easyui-switchbutton" data-options="width:50, height:24, onText:\'启用\', offText:\'停用\'"/>';
+                    }
+                },{
+                    field: 'text',
+                    title: '逻辑描叙',
+                    width: 100,
+                    editor: false
+                },{
+                	title: '逻辑条件',
+                    field: 'logicif',
+                    width: 50,
+                    formatter: function (value, row, index) {
+                        return $.easyui.formatter.combobox(value, this.editor);
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            panelHeight: 'auto',
+                            editable: false,
+                            textField: 'text',
+                            valueField: 'value',
+                            data: [{
+                                text: '大于',
+                                value: '0'
+                            }, {
+                                text: '小于',
+                                value: '1'
+                            }]
+                        }
+                    }
+                }, {
+                    field: 'logicvalue',
+                    title: '逻辑值',
+                    width: 100,
+                    editor: {
+                        type: 'validatebox',
+                        options: {
+                            validateOnCreate: false,
+                            validateOnBlur: true,
+                            required: true,
+                            validType: 'length[1,10]'
+                        }
+                    }
+                },{
+                	title: '逻辑单位',
+                    field: 'logicunit',
+                    width: 50,
+                    formatter: function (value, row, index) {
+                        return $.easyui.formatter.combobox(value, this.editor);
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            panelHeight: 'auto',
+                            editable: false,
+                            textField: 'text',
+                            valueField: 'value',
+                            data: [{
+                                text: '秒',
+                                value: '0'
+                            }, {
+                                text: '字／分钟',
+                                value: '1'
+                            }, {
+                                text: '分钟',
+                                value: '2'
+                            }, {
+                                text: '%',
+                                value: '3'
+                            }]
+                        }
+                    }
+                },{
+                    field: 'id',
+                    title: '操作',
+                    width: 80,
+                    formatter: function (value, row, index) {
+                        return '';
+                    },
+                    editor: {
+                        type: 'linkbutton',
+                        options: {
+                            button: [{
+                                text: '确定',
+                                handler: function (val, c, el, e, i) {
+                                    var index = itemgrid.datagrid('getRowIndex', val);
+                                    var row = itemgrid.datagrid('getRows')[index];
+                                    itemgrid.datagrid('endEdit', index);
+                                }
+                            }, {
+                                text: '取消',
+                                handler: function (val, c, el, e, i) {
+                                    var index = itemgrid.datagrid('getRowIndex', val);                                   
+                                    var row = itemgrid.datagrid('getRows')[index];
+                                    itemgrid.datagrid('cancelEdit', index);
+                                    if (!!row.newest) {
+                                    	itemgrid.datagrid('deleteRow', index);
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                }
+            ]]
+        });
+    }
+    //]]>
+</script>
+</body>
+</html>

@@ -1,10 +1,21 @@
 package com.bluemine.domain.util;
 
-import com.bluemine.common.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.bluemine.common.QualityGroupResponse;
+import com.bluemine.common.QualityItemResponse;
+import com.bluemine.common.QualityRowResponse;
+import com.bluemine.common.RuleResponse;
+import com.bluemine.common.TagResponse;
+import com.bluemine.domain.entity.QualityGroupEntity;
+import com.bluemine.domain.entity.QualityItemEntity;
+import com.bluemine.domain.entity.QualityRowEntity;
 import com.bluemine.domain.entity.RuleEntity;
 import com.bluemine.domain.entity.TagEntity;
-
-import java.util.*;
 
 /**
  * Created by hechao on 2018/6/29.
@@ -66,6 +77,30 @@ public abstract class EntityUtils {
         return toTagTree(tags, null);
     }
 
+    public static List<QualityRowResponse> toAddItem(List<QualityRowEntity> qres, List<QualityItemEntity> items) {
+        ArrayList<QualityRowResponse> responses = new ArrayList<QualityRowResponse>();
+        HashMap<Long, QualityRowResponse> temp = new HashMap<Long, QualityRowResponse>();
+
+        QualityRowResponse response;
+        if(qres!=null){
+	        for (QualityRowEntity qre : qres) {
+	            response = toResponse(qre);
+	            temp.put(response.getId(), response);
+	            responses.add(response);
+	        }
+        }
+        if (items != null) {
+            for (QualityItemEntity item : items) {
+                response = temp.get(item.getRowId());
+                if (response != null) {
+                    response.addItems(toResponse(item));
+                }
+            }
+        }
+
+        return responses;
+    }
+    
     public static TagResponse toResponse(TagEntity tag) {
         TagResponse response = new TagResponse();
         response.setActivated(tag.getActivated());
@@ -90,7 +125,69 @@ public abstract class EntityUtils {
         return response;
     }
 
+    public static QualityGroupResponse toResponse(QualityGroupEntity qua) {
+    	QualityGroupResponse response = new QualityGroupResponse();
+        response.setActivated(qua.getActivated());
+        response.setId(qua.getGroupId());
+        response.setChannelId(qua.getChannelId());
+        response.setName(qua.getGroupName());
+        response.setText(qua.getDescText());
+        return response;
+    }
 
+    public static QualityRowResponse toResponse(QualityRowEntity qua) {
+    	QualityRowResponse response = new QualityRowResponse();
+        response.setActivated(qua.getActivated());
+        response.setId(qua.getRowId());
+        response.setGroupId(qua.getGroupId());
+        response.setChannelId(qua.getChannelId());
+        response.setName(qua.getRowName());
+        response.setRowType(qua.getRowType());
+        response.setText(qua.getDescText());
+        response.setWeight(qua.getWeight());
+        response.setPoint(qua.getPoint());
+        return response;
+    }
+    
+    public static QualityItemResponse toResponse(QualityItemEntity qua) {
+    	QualityItemResponse response = new QualityItemResponse();
+        response.setActivated(qua.getActivated());
+        response.setId(qua.getItemId());
+        response.setRowId(qua.getRowId());
+        response.setChannelId(qua.getChannelId());
+        response.setText(qua.getDescText());
+        response.setLogicrelation(qua!=null?qua.getLogicrelation():0);
+        response.setLogicif(qua!=null?qua.getLogicif():0);      
+        response.setLogicsort(qua!=null?qua.getLogicsort():0);
+        response.setLogicunit(qua!=null?qua.getLogicunit():0);
+        response.setLogicvalue(qua!=null?qua.getLogicvalue():"");
+        return response;
+    }
+    
+	public static List<QualityGroupResponse> toResponse(List<QualityGroupEntity> qua) {
+		ArrayList<QualityGroupResponse> responses = new ArrayList<QualityGroupResponse>();
+		 	for (QualityGroupEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+
+	public static List<QualityRowResponse> toRowResponse(List<QualityRowEntity> qua) {
+		ArrayList<QualityRowResponse> responses = new ArrayList<QualityRowResponse>();
+		 	for (QualityRowEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+	
+	public static List<QualityItemResponse> toItemResponse(List<QualityItemEntity> qua) {
+		ArrayList<QualityItemResponse> responses = new ArrayList<QualityItemResponse>();
+		 	for (QualityItemEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+	
 //    public static List<TagCollectResponse> toDateCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
 //
 //        List<TagCollectResponse> responses = new ArrayList<>();
