@@ -375,7 +375,11 @@
 	                total: row.items.length,
 	                rows: row.items
 	            });
+	            refreshTree();
             }else if(row.rowType=='MUTE'){
+            	itemgrid.datagrid({
+            		toolbar: ''
+            	});
             	$("#rowitembuttonDiv").show();
 				initItemMUTEGird(itemgrid,row.items);
 	            refreshTree();
@@ -503,6 +507,7 @@
                     var tag = groupdialog.data('binding');
                     if (!!tag) {
                     	groupdialog.data('binding', null).dialog('close');
+                    	itemgrid.datagrid('refresh', tag.id);
                         refreshTree();
                     }else{
 	                    groupdialog.dialog('close');
@@ -773,7 +778,6 @@
             idField: 'id',            
             fitColumns: true,
             singleSelect: true,
-            autoRowHeight: false,
             onEndEdit: function (index, row, changes) {
                 var me = $(this);
                 var item = groupdialog.data('binding');
@@ -861,11 +865,13 @@
                 },{
                 	title: '状态',
                     field: 'activated',
-                    width: 200,
+                    width: 60,
                     editor: false,
                     formatter: function (value, row, index) {
-                        return '<input class="easyui-switchbutton" data-options="width:50, height:24, onText:\'启用\', offText:\'停用\'"/>';
+                    	return '<input data-id="' + row.id + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
+                        + ' data-options="onChange:event_handle.onGroupActivated, width:50, height:24, onText:\'启用\', offText:\'停用\'"/>';
                     }
+                
                 },{
                     field: 'text',
                     title: '逻辑描叙',
@@ -952,6 +958,7 @@
                                     var index = itemgrid.datagrid('getRowIndex', val);
                                     var row = itemgrid.datagrid('getRows')[index];
                                     itemgrid.datagrid('endEdit', index);
+                                    itemgrid.datagrid('getPanel').find('.easyui-switchbutton').switchbutton();
                                 }
                             }, {
                                 text: '取消',
@@ -962,6 +969,7 @@
                                     if (!!row.newest) {
                                     	itemgrid.datagrid('deleteRow', index);
                                     }
+                                    itemgrid.datagrid('getPanel').find('.easyui-switchbutton').switchbutton();
                                 }
                             }]
                         }
@@ -969,6 +977,7 @@
                 }
             ]]
         });
+        itemgrid.datagrid('getPanel').find('.easyui-switchbutton').switchbutton();
     }
     //]]>
 </script>
