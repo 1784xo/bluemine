@@ -65,7 +65,7 @@ public class QualityGroupResponse implements Serializable {
     }
 
 
-    public void addRow(QualityRowResponse rule){
+    public void addRows(QualityRowResponse rule){
         this.rows.add(rule);
     }
 

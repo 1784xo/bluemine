@@ -47,7 +47,8 @@ public class QualityRuleService {
 
     public List<QualityGroupResponse> findAll(long channelId) {
         List<QualityGroupEntity> qua = quaRepository.findAll(channelId);
-        return EntityUtils.toResponse(qua);
+        List<QualityRowEntity> quar = quarRepository.findAll(channelId);
+        return EntityUtils.toAddRow(qua, quar);
     }
     
     public List<QualityRowResponse> findRowAll(long channelId) {

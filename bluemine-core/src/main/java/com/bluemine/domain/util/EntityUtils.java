@@ -105,6 +105,30 @@ public abstract class EntityUtils {
         return responses;
     }
     
+    public static List<QualityGroupResponse> toAddRow(List<QualityGroupEntity> qres, List<QualityRowEntity> items) {
+        ArrayList<QualityGroupResponse> responses = new ArrayList<QualityGroupResponse>();
+        HashMap<Long, QualityGroupResponse> temp = new HashMap<Long, QualityGroupResponse>();
+
+        QualityGroupResponse response;
+        if(qres!=null){
+	        for (QualityGroupEntity qre : qres) {
+	            response = toResponse(qre);
+	            temp.put(response.getId(), response);
+	            responses.add(response);
+	        }
+        }
+        if (items != null) {
+            for (QualityRowEntity item : items) {
+                response = temp.get(item.getGroupId());
+                if (response != null) {
+                    response.addRows(toResponse(item));
+                }
+            }
+        }
+
+        return responses;
+    }
+    
     public static TagResponse toResponse(TagEntity tag) {
         TagResponse response = new TagResponse();
         response.setActivated(tag.getActivated());
