@@ -154,7 +154,7 @@
 	            <tbody>
 	            <tr>
 	                <td style="width: 80px;text-align: left;">质检规则</td>
-	                <td align="right"><div id="rowitembuttonDiv"><a href="#" name="rowsave" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+	                <td align="right"><div id="rowitembuttonDiv"><a href="#" name="rowsave" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="event_handle.onSaveItem(this)">保存</a>
 	                	<a href="#" name="rowcancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a></div>
 	                </td>
 	            </tr>
@@ -367,21 +367,43 @@
             $("#rowItemDiv").show();
             $("#rowbuttonDiv").hide();
             groupdialog.data('binding', row).dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(groupdialog).height()/2)});
-            console.log(row)
             if(row.rowType=='ST'){
             	 $("#rowitembuttonDiv").hide();
-            	 initItemSTGird(itemgrid);
+            	 initItemSTGird(itemgrid,groupdialog);
 	            itemgrid.datagrid('loadData', {
 	                total: row.items.length,
 	                rows: row.items
 	            });
 	            refreshTree();
-            }else if(row.rowType=='MUTE'){
+            }else if(row.rowType=='MUTE'||row.rowType=='SOL'||row.rowType=='LOT'||row.rowType=='CHAT'||row.rowType=='MOOD'){
             	itemgrid.datagrid({
             		toolbar: ''
             	});
             	$("#rowitembuttonDiv").show();
-				initItemMUTEGird(itemgrid,row.items);
+            	if(row.items.length==0){
+            		var itemdata=[];
+            		if(row.rowType=='MUTE'){
+            			itemdata =[{activated:false,channelId:row.channelId,id:0,logicif:0,logicrelation:0,logicsort:0,logicunit:0,logicvalue:"",name:null,rowId:row.id,text:"单次静音时长"},
+            		               {activated:false,channelId:row.channelId,id:1,logicif:0,logicrelation:0,logicsort:1,logicunit:0,logicvalue:"",name:null,rowId:row.id,text:"累积静音时长"}];
+            		}else if(row.rowType=='SOL'){           			
+            			itemdata =[{activated:false,channelId:row.channelId,id:0,logicif:0,logicrelation:0,logicsort:0,logicunit:1,logicvalue:"",name:null,rowId:row.id,text:"平均语速"},
+            		               {activated:false,channelId:row.channelId,id:1,logicif:0,logicrelation:0,logicsort:1,logicunit:1,logicvalue:"",name:null,rowId:row.id,text:"平均语速"}];
+            		}else if(row.rowType=='LOT'){           			
+            			itemdata =[{activated:false,channelId:row.channelId,id:0,logicif:0,logicrelation:0,logicsort:0,logicunit:2,logicvalue:"",name:null,rowId:row.id,text:"通话时长"},
+            		               {activated:false,channelId:row.channelId,id:1,logicif:0,logicrelation:0,logicsort:1,logicunit:2,logicvalue:"",name:null,rowId:row.id,text:"通话时长"}];
+            		}else if(row.rowType=='CHAT'){           			
+            			itemdata =[{activated:false,channelId:row.channelId,id:0,logicif:1,logicrelation:0,logicsort:0,logicunit:3,logicvalue:"",name:null,rowId:row.id,text:"业务词比例"}];
+            		}else if(row.rowType=='MOOD'){           			
+            			itemdata =[{activated:false,channelId:row.channelId,id:0,logicif:0,logicrelation:0,logicsort:0,logicunit:3,logicvalue:"",name:null,rowId:row.id,text:"语速变化"},
+            			           {activated:false,channelId:row.channelId,id:1,logicif:0,logicrelation:0,logicsort:0,logicunit:3,logicvalue:"",name:null,rowId:row.id,text:"音量变化"},
+            			           {activated:false,channelId:row.channelId,id:2,logicif:-1,logicrelation:0,logicsort:0,logicunit:-1,logicvalue:"",name:null,rowId:row.id,text:"禁忌话术"}];
+            		}
+            		row.items = itemdata;
+            		initItemMUTEGird(itemgrid,groupdialog,itemdata);
+            		groupdialog.data('binding', row);
+            	}else{
+					initItemMUTEGird(itemgrid,groupdialog,row.items);
+				}
 	            refreshTree();
             }else{
             	
@@ -422,6 +444,65 @@
                 callback: function (ok, data, msg, opts) {
                     if (ok) {
                     	itemgrid.datagrid("deleteRow", index);
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        }
+        
+        event_handle.onRowItemActivated = function (val) {
+            var id = $(this).data('id');
+            if(id<10){
+            	var item = groupdialog.data('binding'); 
+            	var index = itemgrid.datagrid('getRowIndex', id);
+           	    item.items[index].activated=val;
+           	    groupdialog.data('binding', item);
+            }else{
+            	var index = itemgrid.datagrid('getRowIndex', id);
+                var row = itemgrid.datagrid("getRows")[index];
+                bulemine.ajaxJson({
+                    url: "/service/qualityitem/update",
+                    masking: true,
+                    params: {
+                        data: {
+                            channelId: row.channelId,
+                            id: row.id,                        
+                            activated: val
+                        }
+                    },
+                    callback: function (ok, data, msg, opts) {
+                        if (ok) {
+                        	 var item = groupdialog.data('binding'); 
+                        	 item.items[index].activated=val;
+                        	 groupdialog.data('binding', item);
+                        } else {
+                            alert('[ERROR]' + msg);
+                        }
+                    }
+                });
+            }           
+        };
+        
+        event_handle.onSaveItem = function (el) {
+            var rows = itemgrid.datagrid("getRows");
+            bulemine.ajaxJson({
+                url: "/service/qualityitem/saveAll",
+                masking: true,
+                params: {
+                    data: {
+                        status: JSON.stringify(rows)
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+                     var item = groupdialog.data('binding'); 
+                   	 item.items=rows;
+                   	 groupdialog.data('binding', item);
+                   	 console.log(rows);
+                   	 console.log(data);
+                   	 initItemMUTEGird(itemgrid,groupdialog,data);
+                     alert('[SUCCESS]');
                     } else {
                         alert('[ERROR]' + msg);
                     }
@@ -507,7 +588,7 @@
                     var tag = groupdialog.data('binding');
                     if (!!tag) {
                     	groupdialog.data('binding', null).dialog('close');
-                    	itemgrid.datagrid('refresh', tag.id);
+                    	//itemgrid.datagrid('refresh', tag.id);
                         refreshTree();
                     }else{
 	                    groupdialog.dialog('close');
@@ -649,7 +730,7 @@
     	}
     }
 
-    function initItemSTGird(itemgrid){
+    function initItemSTGird(itemgrid,groupdialog){
         itemgrid.datagrid({
             idField: 'id',
             fitColumns: true,
@@ -772,7 +853,7 @@
         });
     }
     
-    function initItemMUTEGird(itemgrid,data){
+    function initItemMUTEGird(itemgrid,groupdialog,data){
         itemgrid.datagrid({
         	data: data,
             idField: 'id',            
@@ -781,54 +862,15 @@
             onEndEdit: function (index, row, changes) {
                 var me = $(this);
                 var item = groupdialog.data('binding');
-                if (!!row.newest) {                    
-                    bulemine.ajaxJson({
-                        url: '/service/qualityitem/create',
-                        masking: true,
-                        params: {
-                            data: {
-                                rowId: item.id,
-                                channelId: item.channelId,
-                                logicvalue: item.items[index].logicvalue,
-                                logicsort:index
-                            }
-                        },
-                        callback: function (ok, data, msg, opts) {
-                            if (ok) {
-                            	itemgrid.datagrid('updateRow', {
-                                    index: index,
-                                    row: $.extend(data, {
-                                        newest: null
-                                    })
-                                });
-                            } else {
-                                alert('[ERROR]' + msg);
-                            }
-                        }
+                if (!!row.newest) {
+                	itemgrid.datagrid('updateRow', {
+                        index: index,
+                        row: $.extend(data, {
+                            newest: null
+                        })
                     });
                 } else {
-                    if (!$.isEmptyObject(changes)) {
-                        bulemine.ajaxJson({
-                            url: '/service/qualityitem/update',
-                            masking: true,
-                            params: {
-                                data: {
-                                	id:item.items[index].id,
-                                	rowId: item.id,
-                                    channelId: item.channelId,
-                                    logicvalue: item.items[index].logicvalue,
-                                    logicsort:index
-                                }
-                            },
-                            callback: function (ok, data, msg, opts) {
-                                if (ok) {
-
-                                } else {
-                                    alert('[ERROR]' + msg);
-                                }
-                            }
-                        });
-                    }
+                    
                 }
             },
             onDblClickRow: function (index, row) {
@@ -839,7 +881,7 @@
                  {
                     field: 'logicrelation',
                     title: '关系',
-                    width: 50,
+                    width: 60,
                     formatter: function (value, row, index) {
                         return $.easyui.formatter.combobox(value, this.editor);
                     },
@@ -865,22 +907,22 @@
                 },{
                 	title: '状态',
                     field: 'activated',
-                    width: 60,
+                    width: 70,
                     editor: false,
                     formatter: function (value, row, index) {
                     	return '<input data-id="' + row.id + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
-                        + ' data-options="onChange:event_handle.onGroupActivated, width:50, height:24, onText:\'启用\', offText:\'停用\'"/>';
+                        + ' data-options="onChange:event_handle.onRowItemActivated, width:50, height:24, onText:\'启用\', offText:\'停用\'"/>';
                     }
                 
                 },{
                     field: 'text',
                     title: '逻辑描叙',
-                    width: 100,
+                    width: 120,
                     editor: false
                 },{
                 	title: '逻辑条件',
                     field: 'logicif',
-                    width: 50,
+                    width: 80,
                     formatter: function (value, row, index) {
                         return $.easyui.formatter.combobox(value, this.editor);
                     },
@@ -897,6 +939,9 @@
                             }, {
                                 text: '小于',
                                 value: '1'
+                            },{
+                                text: '',
+                                value: '-1'
                             }]
                         }
                     }
@@ -916,7 +961,7 @@
                 },{
                 	title: '逻辑单位',
                     field: 'logicunit',
-                    width: 50,
+                    width: 80,
                     formatter: function (value, row, index) {
                         return $.easyui.formatter.combobox(value, this.editor);
                     },
@@ -939,6 +984,9 @@
                             }, {
                                 text: '%',
                                 value: '3'
+                            },{
+                                text: '',
+                                value: '-1'
                             }]
                         }
                     }

@@ -38,6 +38,13 @@ public class QualityItemController extends AbstractController {
     }    
     
     @ResponseBody
+    @PostMapping("saveAll")
+    public ResponseEntity saveAll(@RequestBody RestfulRequest<QualityItemRequest> restfulRequest) {
+    	List<QualityItemResponse> response = quaService.saveAll(restfulRequest);
+           return ResponseEntity.ok(createRestfulResponse(response));
+    }
+    
+    @ResponseBody
     @PostMapping("search")
     public ResponseEntity search(@RequestBody RestfulRequest<QualityItemRequest> restfulRequest) {
         List<QualityItemResponse> response = quaService.findItemAllByRowID(restfulRequest);

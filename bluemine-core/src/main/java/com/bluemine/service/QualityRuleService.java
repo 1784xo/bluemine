@@ -248,6 +248,7 @@ public class QualityRuleService {
     	Integer logicsort =data.getLogicsort();
     	Integer logicrelation =data.getLogicrelation();
     	Integer logicunit=data.getLogicunit();
+    	Boolean activated = data.getActivated();
     	QualityItemEntity quaEntity = quaiRepository.findOne(itemId);
         AssertUtils.notNull(quaEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
     	if(logicvalue!=null){
@@ -256,6 +257,9 @@ public class QualityRuleService {
     	if(logicsort!=null){
     		quaEntity.setLogicsort(logicsort);
     	}
+    	if (activated != null) {
+        	quaEntity.setActivated(activated);
+        }   	
     	if(logicrelation!=null){
     		quaEntity.setLogicrelation(logicrelation);
     	}
@@ -266,6 +270,71 @@ public class QualityRuleService {
 
     	QualityItemResponse response = EntityUtils.toResponse(quaEntity);
         return response;
+    }
+    
+    @Transactional(rollbackOn = Exception.class)
+    public List<QualityItemResponse> saveAll(RestfulRequest<QualityItemRequest> request) {
+    	QualityItemRequest data = request.getData();  	
+    	List<QualityItemResponse> qirlist = EntityUtils.jsonToList(data.getStatus(), QualityItemResponse.class);
+    	for(QualityItemResponse qir:qirlist){
+    		if(qir.getId()<10L){
+    			String logicvalue =qir.getLogicvalue();
+    	    	Long rowId = qir.getRowId();
+    	    	Long channelId =qir.getChannelId();
+    	    	Integer logicsort =qir.getLogicsort();
+    	    	Integer logicrelation =qir.getLogicrelation();
+    	    	Integer logicunit=qir.getLogicunit();
+    	    	Integer logicif=qir.getLogicif();
+    	    	Boolean activated = qir.getActivated();
+    	    	String descText = qir.getText();
+    	    	RequestContext<QualityItemRequest> context = request.getContext();
+    	        RepositoryProxy repository = context.getRepository();
+    	        IdWorker idWorker = context.getIdWorker();
+    	    	QualityItemEntity quaEntity = new QualityItemEntity()
+    	        		.itemId(idWorker.nextId())
+    	        		.rowId(rowId)
+    	        		.channelId(channelId)
+    	        		.activated(activated)
+    	        		.logicsort(logicsort)
+    	        		.logicrelation(logicrelation)
+    	        		.logicif(logicif)
+    	        		.logicunit(logicunit)
+    	        		.descText(descText)
+    	                .logicvalue(logicvalue);
+    	        repository.commit(quaEntity);   
+    	        qir.setId(quaEntity.getItemId());
+    		}else{    			
+    			Long itemId= qir.getId();
+    	    	String logicvalue =qir.getLogicvalue();
+    	    	Integer logicsort =qir.getLogicsort();
+    	    	Integer logicrelation =qir.getLogicrelation();
+    	    	Integer logicunit=qir.getLogicunit();
+    	    	Integer logicif=qir.getLogicif();
+    	    	Boolean activated = qir.getActivated();
+    	    	QualityItemEntity quaEntity = quaiRepository.findOne(itemId);
+    	        AssertUtils.notNull(quaEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT);
+    	    	if(logicvalue!=null){
+    	    		quaEntity.setLogicvalue(logicvalue);
+    	    	}
+    	    	if(logicsort!=null){
+    	    		quaEntity.setLogicsort(logicsort);
+    	    	}
+    	    	if (activated != null) {
+    	        	quaEntity.setActivated(activated);
+    	        }   	
+    	    	if(logicrelation!=null){
+    	    		quaEntity.setLogicrelation(logicrelation);
+    	    	}
+    	    	if(logicunit!=null){
+    	    		quaEntity.setLogicunit(logicunit);
+    	    	}
+    	    	if(logicif!=null){
+    	    		quaEntity.setLogicif(logicif);
+    	    	}
+    	    	quaiRepository.save(quaEntity);
+    		}
+    	}
+        return qirlist;
     }
     
     @Transactional(rollbackOn = Exception.class)

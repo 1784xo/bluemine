@@ -50,7 +50,7 @@ public class QualityItemResponse implements Serializable {
 		this.rowId = rowId;
 	}
 
-	public boolean isActivated() {
+	public boolean getActivated() {
 		return activated;
 	}
 

@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
 import com.bluemine.common.QualityGroupResponse;
 import com.bluemine.common.QualityItemResponse;
 import com.bluemine.common.QualityRowResponse;
@@ -16,6 +18,8 @@ import com.bluemine.domain.entity.QualityItemEntity;
 import com.bluemine.domain.entity.QualityRowEntity;
 import com.bluemine.domain.entity.RuleEntity;
 import com.bluemine.domain.entity.TagEntity;
+
+import net.sf.json.JSONArray;
 
 /**
  * Created by hechao on 2018/6/29.
@@ -188,6 +192,16 @@ public abstract class EntityUtils {
 	    return responses;
 	}
 	
+	/**
+     * json 转 List<T>
+     */
+    public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+    	@SuppressWarnings("rawtypes")
+		List list = JSONArray.toList(JSONArray.fromObject(jsonString),clazz);
+        return list;
+    }
+
+ 
 //    public static List<TagCollectResponse> toDateCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
 //
 //        List<TagCollectResponse> responses = new ArrayList<>();
