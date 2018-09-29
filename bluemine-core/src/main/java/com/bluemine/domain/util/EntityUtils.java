@@ -6,13 +6,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
+import com.bluemine.common.DeptResponse;
+import com.bluemine.common.EmployeeResponse;
 import com.bluemine.common.QualityGroupResponse;
 import com.bluemine.common.QualityItemResponse;
 import com.bluemine.common.QualityRowResponse;
 import com.bluemine.common.RuleResponse;
 import com.bluemine.common.TagResponse;
+import com.bluemine.domain.entity.DeptEntity;
+import com.bluemine.domain.entity.EmployeeEntity;
 import com.bluemine.domain.entity.QualityGroupEntity;
 import com.bluemine.domain.entity.QualityItemEntity;
 import com.bluemine.domain.entity.QualityRowEntity;
@@ -45,6 +47,24 @@ public abstract class EntityUtils {
         return map;
     }
 
+    public static Map<Long, DeptResponse> mergeToDeptMap(List<DeptEntity> deps, List<EmployeeEntity> emps) {
+        Map<Long, DeptResponse> map = new LinkedHashMap<>();
+        DeptResponse deptResponse;
+        for (DeptEntity dep : deps) {
+        	deptResponse = toResponse(dep);
+            map.put(deptResponse.getId(), deptResponse);
+        }
+
+        for (EmployeeEntity emp : emps) {
+        	deptResponse = map.get(emp.getDeptId());
+            if (deptResponse != null) {
+            	deptResponse.addUsers(toResponse(emp));
+            }
+        }
+
+        return map;
+    }
+    
     public static List<TagResponse> toTagTree(List<TagEntity> tags, List<RuleEntity> rules) {
         HashMap<Long, TagResponse> temp = new HashMap<Long, TagResponse>();
         ArrayList<TagResponse> responses = new ArrayList<TagResponse>();
@@ -81,6 +101,42 @@ public abstract class EntityUtils {
         return toTagTree(tags, null);
     }
 
+    public static List<DeptResponse> toDeptTree(List<DeptEntity> deps, List<EmployeeEntity> emps) {
+        HashMap<Long, DeptResponse> temp = new HashMap<Long, DeptResponse>();
+        ArrayList<DeptResponse> responses = new ArrayList<DeptResponse>();
+
+        DeptResponse parent;
+        DeptResponse response;
+
+        for (DeptEntity dep : deps) {
+            response = toResponse(dep);
+            temp.put(response.getId(), response);
+            if (response.getParentId() == 0) {
+                responses.add(response);
+            } else {
+                parent = temp.get(response.getParentId());
+                if (parent != null) {
+                    parent.addChildren(response);
+                }
+            }
+        }
+
+        if (emps != null) {
+            for (EmployeeEntity emp : emps) {
+                response = temp.get(emp.getDeptId());
+                if (response != null) {
+                    response.addUsers(toResponse(emp));
+                }
+            }
+        }
+
+        return responses;
+    }
+
+    public static List<DeptResponse> toDeptTree(List<DeptEntity> deps) {
+        return toDeptTree(deps, null);
+    }
+    
     public static List<QualityRowResponse> toAddItem(List<QualityRowEntity> qres, List<QualityItemEntity> items) {
         ArrayList<QualityRowResponse> responses = new ArrayList<QualityRowResponse>();
         HashMap<Long, QualityRowResponse> temp = new HashMap<Long, QualityRowResponse>();
@@ -140,7 +196,35 @@ public abstract class EntityUtils {
         response.setText(tag.getTagText());
         return response;
     }
+    
+    public static DeptResponse toResponse(DeptEntity dep) {
+    	DeptResponse response = new DeptResponse();
+        response.setActivated(dep.getActivated());
+        response.setChannelId(dep.getChannelId());
+        response.setParentId(dep.getParentId());
+        response.setCustomizable(dep.getCustomizable());
+        response.setDeptNo(dep.getDeptNo());
+        response.setId(dep.getDeptId());
+        response.setText(dep.getDeptText());
+        response.setDescText(dep.getDescText());
+        return response;
+    }
 
+    public static EmployeeResponse toResponse(EmployeeEntity emp) {
+    	EmployeeResponse response = new EmployeeResponse();
+        response.setActivated(emp.getActivated());
+        response.setChannelId(emp.getChannelId());
+        response.setId(emp.getEmployeeId());
+        response.setDeptId(emp.getDeptId());
+        response.setEmail(emp.getEmail());
+        response.setEmployeeName(emp.getEmployeeName());
+        response.setEmployeeNo(emp.getEmployeeNo());
+        response.setGroupId(emp.getGroupId());
+        response.setMac(emp.getMac());
+        response.setUserName(emp.getUserName());
+        return response;
+    }
+    
     public static RuleResponse toResponse(RuleEntity rule) {
         RuleResponse response = new RuleResponse();
         response.setRuleId(rule.getRuleId());
@@ -216,6 +300,21 @@ public abstract class EntityUtils {
 	    return responses;
 	}
 	
+	public static List<EmployeeResponse> toEmpResponse(List<EmployeeEntity> qua) {
+		ArrayList<EmployeeResponse> responses = new ArrayList<EmployeeResponse>();
+		 	for (EmployeeEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+	
+	public static List<DeptResponse> toDeptResponse(List<DeptEntity> qua) {
+		ArrayList<DeptResponse> responses = new ArrayList<DeptResponse>();
+		 	for (DeptEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
 	/**
      * json 转 List<T>
      */

@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,17 +25,21 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
     @Column(name = "EMPLOYEE_NO", nullable = false, length = 11)
     private String employeeNo;
 
-    @Column(name = "ROLE_ID", nullable = false)
+    @Type(type = "yes_no")
+    @Column(name = "ACTIVATED", nullable = false, length = 1)
+    private Boolean activated;
+    
+    @Column(name = "ROLE_ID", nullable = true)
     private Long roleId;
 
-    @Column(name = "LEAD_ID", nullable = false)
+    @Column(name = "LEAD_ID", nullable = true)
     private Long leadId;
 
-    @Column(name = "CHANNEL_TYPE", nullable = false, length = 4)
-    private String channelType;
+    @Column(name = "CHANNEL_ID", updatable = false, nullable = false)
+    private Long channelId;
 
-    @Column(name = "CHANNEL_CODE", nullable = false, length = 4)
-    private String channelCode;
+    @Column(name = "USER_NAME", nullable = false, length = 32)
+    private String userName;
 
     @Column(name = "EMPLOYEE_NAME", nullable = false, length = 32)
     private String employeeName;
@@ -42,7 +49,16 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
 
     @Column(name = "EMAIL", nullable = true, length = 64)
     private String email;
-
+    
+    @Column(name = "MAC", nullable = true, length = 20)
+    private String mac;
+    
+    @Column(name = "DEPT_ID", nullable = true)
+    private Long deptId;
+    
+    @Column(name = "GROUP_ID", nullable = true)
+    private Long groupId;
+    
     public Long getEmployeeId() {
         return employeeId;
     }
@@ -75,22 +91,6 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
         this.leadId = leadId;
     }
 
-    public String getChannelType() {
-        return channelType;
-    }
-
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
-    }
-
-    public String getChannelCode() {
-        return channelCode;
-    }
-
-    public void setChannelCode(String channelCode) {
-        this.channelCode = channelCode;
-    }
-
     public String getEmployeeName() {
         return employeeName;
     }
@@ -115,7 +115,55 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
         this.email = email;
     }
 
-    @Override
+	public String getMac() {
+		return mac;
+	}
+
+	public void setMac(String mac) {
+		this.mac = mac;
+	}
+
+	public Long getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(Long deptId) {
+		this.deptId = deptId;
+	}
+
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
+	}
+
+	public Boolean getActivated() {
+		return activated;
+	}
+
+	public void setActivated(Boolean activated) {
+		this.activated = activated;
+	}
+
+	public Long getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(Long channelId) {
+		this.channelId = channelId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	@Override
     public Object primaryKey() {
         return employeeId;
     }
@@ -133,22 +181,16 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
         return Objects.hash(employeeId);
     }
 
-    @Override
-    public String toString() {
-        return "EmployeeEntity{" +
-                "channelCode='" + channelCode + '\'' +
-                ", channelType='" + channelType + '\'' +
-                ", email='" + email + '\'' +
-                ", employeeId=" + employeeId +
-                ", employeeName='" + employeeName + '\'' +
-                ", employeeNo='" + employeeNo + '\'' +
-                ", leadId=" + leadId +
-                ", roleId=" + roleId +
-                ", seatId=" + seatId +
-                "} " + super.toString();
-    }
 
-    //flunet
+	@Override
+	public String toString() {
+		return "EmployeeEntity {employeeId=" + employeeId + ", employeeNo=" + employeeNo + ", activated=" + activated
+				+ ", roleId=" + roleId + ", leadId=" + leadId + ", channelId=" + channelId + ", userName=" + userName
+				+ ", employeeName=" + employeeName + ", seatId=" + seatId + ", email=" + email + ", mac=" + mac
+				+ ", deptId=" + deptId + ", groupId=" + groupId + "}"+super.toString();
+	}
+
+	//flunet
     public EmployeeEntity employeeId(Long employeeId) {
         this.employeeId = employeeId;
         return this;
@@ -169,13 +211,13 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
         return this;
     }
 
-    public EmployeeEntity channelType(String channelType) {
-        this.channelType = channelType;
+    public EmployeeEntity activated(Boolean activated) {
+        this.activated = activated;
         return this;
     }
 
-    public EmployeeEntity channelCode(String channelCode) {
-        this.channelCode = channelCode;
+    public EmployeeEntity userName(String userName) {
+        this.userName = userName;
         return this;
     }
 
@@ -189,8 +231,28 @@ public class EmployeeEntity extends PartitionEntity implements Serializable{
         return this;
     }
 
+    public EmployeeEntity channelId(Long channelId) {
+        this.channelId = channelId;
+        return this;
+    }
+    
     public EmployeeEntity email(String email) {
         this.email = email;
+        return this;
+    }
+    
+    public EmployeeEntity mac(String mac) {
+        this.mac = mac;
+        return this;
+    }
+    
+    public EmployeeEntity deptId(Long deptId) {
+        this.deptId = deptId;
+        return this;
+    }
+    
+    public EmployeeEntity groupId(Long groupId) {
+        this.groupId = groupId;
         return this;
     }
 }
