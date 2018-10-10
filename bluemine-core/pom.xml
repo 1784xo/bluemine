@@ -46,16 +46,22 @@
 
         <!--apache-->
         <dependency>
-        	<groupId>net.sf.json-lib</groupId>
-        	<artifactId>json-lib</artifactId>
-        	<version>2.4</version>
-        	<classifier>jdk15</classifier>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${commons-net.version}</version>
+            <classifier>ftp</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+
         <dependency>
         	<groupId>commons-beanutils</groupId>
         	<artifactId>commons-beanutils</artifactId>
@@ -76,13 +82,24 @@
         	<artifactId>ezmorph</artifactId>
         	<version>1.0.6</version>
         </dependency>
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${commons-net.version}</version>
+            <classifier>ftp</classifier>
+        </dependency>
 
         <!--spring-boot-->
         <dependency>

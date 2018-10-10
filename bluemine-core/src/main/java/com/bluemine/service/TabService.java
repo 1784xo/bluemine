@@ -36,7 +36,7 @@ public class TabService {
     @Inject
     private RuleService ruleService;
 
-    private static Comparator TAG_DESC = new Comparator<TagEntity>() {
+    private static final Comparator TAG_DESC = new Comparator<TagEntity>() {
         @Override
         public int compare(TagEntity o1, TagEntity o2) {
             return o2.getTagNo().compareTo(o1.getTagNo());

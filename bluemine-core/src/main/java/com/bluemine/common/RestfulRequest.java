@@ -12,7 +12,7 @@ public class RestfulRequest<T> {
 
     private RequestContext<T> context;
 
-    protected RestfulGenericRequest generic;
+    protected RestfulGenericRequest generic = new RestfulGenericRequest();
 
     protected T data;
 

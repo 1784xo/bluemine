@@ -13,21 +13,19 @@ import com.bluemine.common.QualityItemResponse;
 import com.bluemine.common.QualityRowResponse;
 import com.bluemine.common.RuleResponse;
 import com.bluemine.common.TagResponse;
-import com.bluemine.domain.entity.DeptEntity;
-import com.bluemine.domain.entity.EmployeeEntity;
-import com.bluemine.domain.entity.QualityGroupEntity;
-import com.bluemine.domain.entity.QualityItemEntity;
-import com.bluemine.domain.entity.QualityRowEntity;
-import com.bluemine.domain.entity.RuleEntity;
-import com.bluemine.domain.entity.TagEntity;
+import com.bluemine.domain.entity.*;
 
 import net.sf.json.JSONArray;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by hechao on 2018/6/29.
  */
 public abstract class EntityUtils {
 
+    public static void describe(DescriptionEntity target, String additional){
+        target.setDescText("[" + additional + "]" + StringUtils.defaultString(target.getDescText(), ""));
+    }
 
     public static Map<Long, TagResponse> mergeToMap(List<TagEntity> tags, List<RuleEntity> rules) {
         Map<Long, TagResponse> map = new LinkedHashMap<>();

@@ -9,10 +9,6 @@ public class RestfulPageRequest<D, S extends SortRequest>extends RestfulRequest<
 
     protected PageRequest<S> paging;
 
-    public PageRequest<S> getPaging() {
-        return paging;
-    }
-
     public void setPaging(PageRequest<S> paging) {
         this.paging = paging;
     }

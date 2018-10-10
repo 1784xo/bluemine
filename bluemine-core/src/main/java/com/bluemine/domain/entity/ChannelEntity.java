@@ -31,6 +31,10 @@ public class ChannelEntity extends PartitionEntity implements Serializable {
     @Column(name = "ACTIVATED_FLAG", nullable = false, length = 1)
     private Boolean activatedFlag;
 
+    @Type(type = "yes_no")
+    @Column(name = "ALONE_CALL_FLAG", nullable = false, length = 1)
+    private Boolean aloneCallFlag;
+
     public Long getChannelId() {
         return channelId;
     }
@@ -71,6 +75,14 @@ public class ChannelEntity extends PartitionEntity implements Serializable {
         this.activatedFlag = activatedFlag;
     }
 
+    public Boolean getAloneCallFlag() {
+        return aloneCallFlag;
+    }
+
+    public void setAloneCallFlag(Boolean aloneCallFlag) {
+        this.aloneCallFlag = aloneCallFlag;
+    }
+
     @Override
     public Object primaryKey() {
         return channelId;
@@ -79,11 +91,12 @@ public class ChannelEntity extends PartitionEntity implements Serializable {
     @Override
     public String toString() {
         return "ChannelEntity{" +
-                "activated=" + activatedFlag +
+                "activatedFlag=" + activatedFlag +
                 ", channelCode='" + channelCode + '\'' +
                 ", channelId=" + channelId +
-                ", channelId='" + channelNo + '\'' +
+                ", channelNo='" + channelNo + '\'' +
                 ", channelType='" + channelType + '\'' +
+                ", aloneCallFlag=" + aloneCallFlag +
                 "} " + super.toString();
     }
 
@@ -110,6 +123,11 @@ public class ChannelEntity extends PartitionEntity implements Serializable {
 
     public ChannelEntity activatedFlag(Boolean activatedFlag) {
         this.activatedFlag = activatedFlag;
+        return this;
+    }
+
+    public ChannelEntity aloneCallFlag(Boolean aloneCallFlag) {
+        this.aloneCallFlag = aloneCallFlag;
         return this;
     }
 }

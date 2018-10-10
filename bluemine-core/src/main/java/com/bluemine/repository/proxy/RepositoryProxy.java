@@ -8,6 +8,7 @@ import com.google.common.collect.Tables;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,6 +68,16 @@ public abstract class RepositoryProxy<T extends BaseEntity>{
     public abstract Object commitAndFlush(T entity);
 
     public abstract void commit(T entity);
+
+    public void commit(Iterable<T> iterable){
+        commit(iterable.iterator());
+    }
+
+    public void commit(Iterator<T> iterator) {
+        while (iterator.hasNext()){
+            commit(iterator.next());
+        }
+    }
 
     public abstract JpaRepository getRepository(Class cls);
 

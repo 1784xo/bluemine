@@ -3,8 +3,11 @@ package com.bluemine.struct;
 /**
  * Created by hechao on 2018/9/4.
  */
-public enum BatchTriggerStatus {
-    WAIT,
+public enum CallTriggerStatus {
+    WAITING,
+    SYNCING,
+    SYNCHRONIZED,
+
     COMPLETED,
     STARTING,
     STARTED,
