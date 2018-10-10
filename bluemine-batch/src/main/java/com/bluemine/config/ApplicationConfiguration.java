@@ -20,7 +20,7 @@ public class ApplicationConfiguration extends BootConfiguration {
 
     private FTPClientConfiguration callSync;
 
-    private GuavaCacheConfiguration tagCache;
+    private GuavaCacheConfiguration localCache;
 
     private String token;
 
@@ -40,12 +40,12 @@ public class ApplicationConfiguration extends BootConfiguration {
         this.callBatch = callBatch;
     }
 
-    public GuavaCacheConfiguration getTagCache() {
-        return tagCache;
+    public GuavaCacheConfiguration getLocalCache() {
+        return localCache;
     }
 
-    public void setTagCache(GuavaCacheConfiguration tagCache) {
-        this.tagCache = tagCache;
+    public void setLocalCache(GuavaCacheConfiguration localCache) {
+        this.localCache = localCache;
     }
 
     public FTPClientConfiguration getCallSync() {
@@ -57,9 +57,9 @@ public class ApplicationConfiguration extends BootConfiguration {
     }
 
     @Bean
-    public GuavaCache tagCache() {
-        GuavaCache cache = new GuavaCache("tag cache", CacheBuilder.newBuilder()
-                .expireAfterAccess(tagCache.getExpire(), TimeUnit.SECONDS).build());
+    public GuavaCache localCache() {
+        GuavaCache cache = new GuavaCache("local guava cache", CacheBuilder.newBuilder()
+                .expireAfterAccess(localCache.getExpire(), TimeUnit.SECONDS).build());
         return cache;
     }
 

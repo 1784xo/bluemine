@@ -23,7 +23,7 @@ spring:
 bluemine:
     token: 49252889384718336
     version: 1.0.0
-    tag-cache:
+    local-cache:
         expire: 1800
     scheduler:
         threadNamePrefix: task-scheduler-
