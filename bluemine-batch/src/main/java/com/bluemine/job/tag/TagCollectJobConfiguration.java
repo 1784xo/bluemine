@@ -4,14 +4,11 @@ import com.bluemine.ExceptionMessageEnum;
 import com.bluemine.common.RuleResponse;
 import com.bluemine.common.TagResponse;
 import com.bluemine.context.SessionContext;
-import com.bluemine.domain.entity.RuleEntity;
-import com.bluemine.domain.entity.SeatEntity;
-import com.bluemine.domain.entity.TagCollectEntity;
-import com.bluemine.domain.entity.TagEntity;
+import com.bluemine.domain.entity.*;
 import com.bluemine.domain.util.EntityUtils;
 import com.bluemine.job.CallFieldSetMapper;
 import com.bluemine.job.CallItem;
-import com.bluemine.job.call.TagCollectItem;
+import com.bluemine.repository.ChannelRepository;
 import com.bluemine.repository.RuleRepository;
 import com.bluemine.repository.SeatRepository;
 import com.bluemine.repository.TagRepository;
@@ -27,7 +24,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,6 +67,9 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
     @Inject
     private SeatRepository seatRepository;
 
+    @Inject
+    private ChannelRepository channelRepository;
+
     @Bean
     public Job tagCollectJob(Step tagCollectStep) throws Exception {
         return jobBuilderFactory.get("tagCollectJob")
@@ -85,27 +84,31 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
             , @Value("#{jobParameters[callDate]}") Date callDate
             , @Value("#{jobParameters[resource]}") String file) throws Exception {
 
+        ChannelEntity channelEntity = channelRepository.findOne(channelId);
+        AssertUtils.notNull(channelEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "channel", channelId);
+        CallFieldSetMapper fieldSetMapper = new CallFieldSetMapper(channelEntity, callDate);
+
         List<TagEntity> tagList = tagRepository.findAll(channelId, true, TagRepository.ORDER_TAG_NO_ASC);
         List<RuleEntity> ruleList = ruleRepository.findAllByChannelId(channelId);
-        Map<Long, TagResponse>  tagMap = EntityUtils.mergeToMap(tagList, ruleList);
+        Map<Long, TagResponse> tagMap = EntityUtils.mergeToMap(tagList, ruleList);
         tagCache.put(channelId, tagMap);
 
         return stepBuilderFactory.get("tagCollectStep")
                 .chunk(1)
-                .reader(callItemReader(channelId, callDate, file))
+                .reader(callItemReader(fieldSetMapper, file))
                 .processor((ItemProcessor) this)
                 .writer((ItemWriter) this)
                 .build();
     }
 
-    public ItemReader<CallItem> callItemReader(Long channelId, Date callDate, String file) throws Exception {
+    public ItemReader<CallItem> callItemReader(CallFieldSetMapper fieldSetMapper, String file) throws Exception {
+
         DefaultLineMapper lineMapper = new DefaultLineMapper();
+        lineMapper.setFieldSetMapper(fieldSetMapper);
+
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         lineTokenizer.setNames(new String[]{"callNo", "seatNo"});
         lineMapper.setLineTokenizer(lineTokenizer);
-
-        CallFieldSetMapper fieldSetMapper = new CallFieldSetMapper(channelId, callDate);
-        lineMapper.setFieldSetMapper(fieldSetMapper);
 
         FlatFileItemReader<CallItem> reader = new FlatFileItemReader<>();
         reader.setResource(new FileSystemResource(file));
@@ -116,14 +119,15 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
 
     @Override
     public SessionContext process(CallItem item) throws Exception {
+        ChannelEntity channel = item.getChannel();
+        long channelId = channel.getChannelId();
 
-        long channelId = item.getChannelId();
         Map<Long, TagResponse> tagMap = tagCache.get(channelId, Map.class);
         Collection<TagResponse> collection = tagMap.values();
 
         String seatNo = item.getSeatNo();
         SeatEntity seatEntity = seatRepository.findOneByChannelIdAndSeatNo(channelId, seatNo);
-        AssertUtils.notNull(seatEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "seat", channelId+", "+seatNo);
+        AssertUtils.notNull(seatEntity, ExceptionMessageEnum.DB_NO_SUCH_RESULT, "seat", channelId + ", " + seatNo);
 
         int frequency;
         List<RuleResponse> rules;
@@ -177,9 +181,12 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
     }
 
     private static TagCollectEntity createTabCollect(TagResponse tag, CallItem item, SeatEntity seat, SessionContext context) {
-        long channelId = item.getChannelId();
+
         String callNo = item.getCallNo();
-        LocalDate callDate = LocalDate.from(item.getCallDate().toInstant());
+        LocalDate callDate = item.getCallLocalDate();
+
+        ChannelEntity channel = item.getChannel();
+        long channelId = channel.getChannelId();
 
         IdWorker idWorker = context.getIdWorker();
         TagCollectEntity entity = (TagCollectEntity) new TagCollectEntity()

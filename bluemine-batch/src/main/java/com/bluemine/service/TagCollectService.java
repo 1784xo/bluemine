@@ -37,8 +37,8 @@ public class TagCollectService extends BaseService {
     private TabService tabService;
 
     public void collect(CallItem callItem, SessionContext context) {
-        long channelId = callItem.getChannelId();
-        ChannelEntity channel = findOneChannel(channelId);
+        ChannelEntity channel = callItem.getChannel();
+        long channelId = channel.getChannelId();
 
         Set<TagCollectEntity> collects = new HashSet<>();
         Map<Long, TagResponse> tagMap = tabService.findAllWithRule(channelId);

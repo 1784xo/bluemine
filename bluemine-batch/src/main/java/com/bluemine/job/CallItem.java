@@ -1,26 +1,35 @@
 package com.bluemine.job;
 
+import com.bluemine.domain.entity.ChannelEntity;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 /**
  * Created by hechao on 2018/10/8.
  */
 public class CallItem {
-    private long channelId;
+    private ChannelEntity channel;
     private Date callDate;
     private String callNo;
     private String seatNo;
 
-    public long getChannelId() {
-        return channelId;
+    public ChannelEntity getChannel() {
+        return channel;
     }
 
-    public void setChannelId(long channelId) {
-        this.channelId = channelId;
+    public void setChannel(ChannelEntity channel) {
+        this.channel = channel;
     }
 
     public Date getCallDate() {
         return callDate;
+    }
+
+    public LocalDate getCallLocalDate(){
+        return callDate.toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public void setCallDate(Date callDate) {
@@ -48,7 +57,7 @@ public class CallItem {
         return "CallItem{" +
                 "callDate=" + callDate +
                 ", callNo='" + callNo + '\'' +
-                ", channelId=" + channelId +
+                ", channel=" + channel +
                 ", seatNo='" + seatNo + '\'' +
                 '}';
     }

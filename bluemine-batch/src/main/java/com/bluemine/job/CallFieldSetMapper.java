@@ -1,5 +1,6 @@
 package com.bluemine.job;
 
+import com.bluemine.domain.entity.ChannelEntity;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
@@ -11,21 +12,21 @@ import java.util.Date;
  */
 public class CallFieldSetMapper implements FieldSetMapper<CallItem>{
 
-    private long channelId;
+    private ChannelEntity channel;
 
     private Date callDate;
 
-    public CallFieldSetMapper(long channelId, Date callDate) {
-        this.channelId = channelId;
+    public CallFieldSetMapper(ChannelEntity channel, Date callDate) {
+        this.channel = channel;
         this.callDate = callDate;
     }
 
-    public long getChannelId() {
-        return channelId;
+    public ChannelEntity getChannel() {
+        return channel;
     }
 
-    public void setChannelId(long channelId) {
-        this.channelId = channelId;
+    public void setChannel(ChannelEntity channel) {
+        this.channel = channel;
     }
 
     public Date getCallDate() {
@@ -39,7 +40,7 @@ public class CallFieldSetMapper implements FieldSetMapper<CallItem>{
     @Override
     public CallItem mapFieldSet(FieldSet fieldSet) throws BindException {
         CallItem callItem = new CallItem();
-        callItem.setChannelId(channelId);
+        callItem.setChannel(channel);
         callItem.setCallDate(callDate);
         callItem.setCallNo(fieldSet.readString(0));
         callItem.setSeatNo(fieldSet.readString(1));
