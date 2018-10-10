@@ -1,10 +1,27 @@
 package com.bluemine.domain.util;
 
-import com.bluemine.common.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.bluemine.common.DeptResponse;
+import com.bluemine.common.EmployeeResponse;
+import com.bluemine.common.QualityGroupResponse;
+import com.bluemine.common.QualityItemResponse;
+import com.bluemine.common.QualityRowResponse;
+import com.bluemine.common.RuleResponse;
+import com.bluemine.common.TagResponse;
+import com.bluemine.domain.entity.DeptEntity;
+import com.bluemine.domain.entity.EmployeeEntity;
+import com.bluemine.domain.entity.QualityGroupEntity;
+import com.bluemine.domain.entity.QualityItemEntity;
+import com.bluemine.domain.entity.QualityRowEntity;
 import com.bluemine.domain.entity.RuleEntity;
 import com.bluemine.domain.entity.TagEntity;
 
-import java.util.*;
+import net.sf.json.JSONArray;
 
 /**
  * Created by hechao on 2018/6/29.
@@ -30,6 +47,24 @@ public abstract class EntityUtils {
         return map;
     }
 
+    public static Map<Long, DeptResponse> mergeToDeptMap(List<DeptEntity> deps, List<EmployeeEntity> emps) {
+        Map<Long, DeptResponse> map = new LinkedHashMap<>();
+        DeptResponse deptResponse;
+        for (DeptEntity dep : deps) {
+        	deptResponse = toResponse(dep);
+            map.put(deptResponse.getId(), deptResponse);
+        }
+
+        for (EmployeeEntity emp : emps) {
+        	deptResponse = map.get(emp.getDeptId());
+            if (deptResponse != null) {
+            	deptResponse.addUsers(toResponse(emp));
+            }
+        }
+
+        return map;
+    }
+    
     public static List<TagResponse> toTagTree(List<TagEntity> tags, List<RuleEntity> rules) {
         HashMap<Long, TagResponse> temp = new HashMap<Long, TagResponse>();
         ArrayList<TagResponse> responses = new ArrayList<TagResponse>();
@@ -66,6 +101,90 @@ public abstract class EntityUtils {
         return toTagTree(tags, null);
     }
 
+    public static List<DeptResponse> toDeptTree(List<DeptEntity> deps, List<EmployeeEntity> emps) {
+        HashMap<Long, DeptResponse> temp = new HashMap<Long, DeptResponse>();
+        ArrayList<DeptResponse> responses = new ArrayList<DeptResponse>();
+
+        DeptResponse parent;
+        DeptResponse response;
+
+        for (DeptEntity dep : deps) {
+            response = toResponse(dep);
+            temp.put(response.getId(), response);
+            if (response.getParentId() == 0) {
+                responses.add(response);
+            } else {
+                parent = temp.get(response.getParentId());
+                if (parent != null) {
+                    parent.addChildren(response);
+                }
+            }
+        }
+
+        if (emps != null) {
+            for (EmployeeEntity emp : emps) {
+                response = temp.get(emp.getDeptId());
+                if (response != null) {
+                    response.addUsers(toResponse(emp));
+                }
+            }
+        }
+
+        return responses;
+    }
+
+    public static List<DeptResponse> toDeptTree(List<DeptEntity> deps) {
+        return toDeptTree(deps, null);
+    }
+    
+    public static List<QualityRowResponse> toAddItem(List<QualityRowEntity> qres, List<QualityItemEntity> items) {
+        ArrayList<QualityRowResponse> responses = new ArrayList<QualityRowResponse>();
+        HashMap<Long, QualityRowResponse> temp = new HashMap<Long, QualityRowResponse>();
+
+        QualityRowResponse response;
+        if(qres!=null){
+	        for (QualityRowEntity qre : qres) {
+	            response = toResponse(qre);
+	            temp.put(response.getId(), response);
+	            responses.add(response);
+	        }
+        }
+        if (items != null) {
+            for (QualityItemEntity item : items) {
+                response = temp.get(item.getRowId());
+                if (response != null) {
+                    response.addItems(toResponse(item));
+                }
+            }
+        }
+
+        return responses;
+    }
+    
+    public static List<QualityGroupResponse> toAddRow(List<QualityGroupEntity> qres, List<QualityRowEntity> items) {
+        ArrayList<QualityGroupResponse> responses = new ArrayList<QualityGroupResponse>();
+        HashMap<Long, QualityGroupResponse> temp = new HashMap<Long, QualityGroupResponse>();
+
+        QualityGroupResponse response;
+        if(qres!=null){
+	        for (QualityGroupEntity qre : qres) {
+	            response = toResponse(qre);
+	            temp.put(response.getId(), response);
+	            responses.add(response);
+	        }
+        }
+        if (items != null) {
+            for (QualityRowEntity item : items) {
+                response = temp.get(item.getGroupId());
+                if (response != null) {
+                    response.addRows(toResponse(item));
+                }
+            }
+        }
+
+        return responses;
+    }
+    
     public static TagResponse toResponse(TagEntity tag) {
         TagResponse response = new TagResponse();
         response.setActivated(tag.getActivated());
@@ -77,7 +196,35 @@ public abstract class EntityUtils {
         response.setText(tag.getTagText());
         return response;
     }
+    
+    public static DeptResponse toResponse(DeptEntity dep) {
+    	DeptResponse response = new DeptResponse();
+        response.setActivated(dep.getActivated());
+        response.setChannelId(dep.getChannelId());
+        response.setParentId(dep.getParentId());
+        response.setCustomizable(dep.getCustomizable());
+        response.setDeptNo(dep.getDeptNo());
+        response.setId(dep.getDeptId());
+        response.setText(dep.getDeptText());
+        response.setDescText(dep.getDescText());
+        return response;
+    }
 
+    public static EmployeeResponse toResponse(EmployeeEntity emp) {
+    	EmployeeResponse response = new EmployeeResponse();
+        response.setActivated(emp.getActivated());
+        response.setChannelId(emp.getChannelId());
+        response.setId(emp.getEmployeeId());
+        response.setDeptId(emp.getDeptId());
+        response.setEmail(emp.getEmail());
+        response.setEmployeeName(emp.getEmployeeName());
+        response.setEmployeeNo(emp.getEmployeeNo());
+        response.setGroupId(emp.getGroupId());
+        response.setMac(emp.getMac());
+        response.setUserName(emp.getUserName());
+        return response;
+    }
+    
     public static RuleResponse toResponse(RuleEntity rule) {
         RuleResponse response = new RuleResponse();
         response.setRuleId(rule.getRuleId());
@@ -90,7 +237,94 @@ public abstract class EntityUtils {
         return response;
     }
 
+    public static QualityGroupResponse toResponse(QualityGroupEntity qua) {
+    	QualityGroupResponse response = new QualityGroupResponse();
+        response.setActivated(qua.getActivated());
+        response.setId(qua.getGroupId());
+        response.setChannelId(qua.getChannelId());
+        response.setName(qua.getGroupName());
+        response.setText(qua.getDescText());
+        return response;
+    }
 
+    public static QualityRowResponse toResponse(QualityRowEntity qua) {
+    	QualityRowResponse response = new QualityRowResponse();
+        response.setActivated(qua.getActivated());
+        response.setId(qua.getRowId());
+        response.setGroupId(qua.getGroupId());
+        response.setChannelId(qua.getChannelId());
+        response.setName(qua.getRowName());
+        response.setRowType(qua.getRowType());
+        response.setText(qua.getDescText());
+        response.setWeight(qua.getWeight());
+        response.setPoint(qua.getPoint());
+        return response;
+    }
+    
+    public static QualityItemResponse toResponse(QualityItemEntity qua) {
+    	QualityItemResponse response = new QualityItemResponse();
+        response.setActivated(qua.getActivated());
+        response.setId(qua.getItemId());
+        response.setRowId(qua.getRowId());
+        response.setChannelId(qua.getChannelId());
+        response.setText(qua.getDescText());
+        response.setLogicrelation(qua!=null?qua.getLogicrelation():0);
+        response.setLogicif(qua!=null?qua.getLogicif():0);      
+        response.setLogicsort(qua!=null?qua.getLogicsort():0);
+        response.setLogicunit(qua!=null?qua.getLogicunit():0);
+        response.setLogicvalue(qua!=null?qua.getLogicvalue():"");
+        return response;
+    }
+    
+	public static List<QualityGroupResponse> toResponse(List<QualityGroupEntity> qua) {
+		ArrayList<QualityGroupResponse> responses = new ArrayList<QualityGroupResponse>();
+		 	for (QualityGroupEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+
+	public static List<QualityRowResponse> toRowResponse(List<QualityRowEntity> qua) {
+		ArrayList<QualityRowResponse> responses = new ArrayList<QualityRowResponse>();
+		 	for (QualityRowEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+	
+	public static List<QualityItemResponse> toItemResponse(List<QualityItemEntity> qua) {
+		ArrayList<QualityItemResponse> responses = new ArrayList<QualityItemResponse>();
+		 	for (QualityItemEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+	
+	public static List<EmployeeResponse> toEmpResponse(List<EmployeeEntity> qua) {
+		ArrayList<EmployeeResponse> responses = new ArrayList<EmployeeResponse>();
+		 	for (EmployeeEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+	
+	public static List<DeptResponse> toDeptResponse(List<DeptEntity> qua) {
+		ArrayList<DeptResponse> responses = new ArrayList<DeptResponse>();
+		 	for (DeptEntity quas : qua) {
+	             responses.add(toResponse(quas));           
+	        }
+	    return responses;
+	}
+	/**
+     * json 转 List<T>
+     */
+    public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+    	@SuppressWarnings("rawtypes")
+		List list = JSONArray.toList(JSONArray.fromObject(jsonString),clazz);
+        return list;
+    }
+
+ 
 //    public static List<TagCollectResponse> toDateCollect(List<TagCollectEntity> tags, List<TagEntity> listTag) {
 //
 //        List<TagCollectResponse> responses = new ArrayList<>();

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>组织架构管理 - 组织管理</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="/theme/jquery/jquery-2.2.4.js"></script>
+    <script src="/theme/jquery/jquery-easyui/jquery-easyui-1.5.5.7.min.js"></script>
+    <script src="/theme/jquery/jquery-easyui-extend/jquery-easyui-extend.js"></script>
+    <script src="/theme/jquery/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="/theme/jquery/bulemine-core.js"></script>
+    <script th:src="@{'/service/dept/findAll/'+${token}+'?callback=loadTagTree'}"></script>
+    <link rel="stylesheet" type="text/css" href="/theme/jquery/jquery-easyui/css/jquery-easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/jquery-easyui-reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/theme/default/style.css"/>
+    <style>
+
+        .datagrid-row{
+            cursor: pointer;
+        }
+
+        .datagrid-row-selected
+        , .datagrid-row-over{
+            background-color: transparent;
+        }
+
+        .datagrid-row-editing {
+            background: #e6f0fa;
+        }
+
+        .datagrid-row-editing .datagrid-link {
+            color: #666666;
+            margin: 0 0 0 4px;
+        }
+
+        .datagrid-row-editing .datagrid-link:hover {
+            color: #006FFF;
+        }
+
+        .datagrid-header {
+            background-color: #F9F9F9;
+        }
+
+        .datagrid-header-row td
+        , .datagrid .datagrid-row td{
+            height: 40px;
+        }
+
+        .deps-datagrid .datagrid-cell {
+            margin: 0 10px;
+        }
+
+        .deps-datagrid .tree-icon {
+            display: none;
+        }
+
+        .deps-datagrid .easyui-linkbutton .l-btn-text {
+            font-size: 12px;
+        }
+
+        .deps-datagrid .datagrid-body .l-btn {
+            color: #006FFF;
+            border: 0px;
+        }
+
+        .deps-datagrid .datagrid-body .l-btn:hover {
+            background-color: transparent;
+        }
+        
+        .dept-dialog .switchbutton-on, .datagrid .switchbutton-off, .datagrid .switchbutton-handle {
+    		font-size: 12px;
+		}
+		
+		.dept-dialog .switchbutton-on {
+		    background: #2A9BF9;
+		    color: #FFFFFF;
+		}
+		
+		.dept-dialog .switchbutton-off {
+		    background: #EDEDED;
+		    color: #999999;
+		}
+		
+		.dept-dialog .switchbutton-handle {
+		    box-shadow: 1px 1px 2px #888888;
+		}
+		.combo-panel .tree-icon {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="common/header::header"></div>
+<div th:replace="common/main-west::main-west(1, 107)"></div>
+
+<div title="编辑组织信息" id="dept-dialog" class="dept-dialog">
+    <form>
+        <table width="100%" cellpadding="0" cellspacing="10" border="0">
+            <tbody>
+            <tr>
+                <td style="width: 80px; text-align: right;">组织名称</td>
+                <td><input name="deptname" style="width: 100px" class="easyui-validatebox" data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/></td>
+                <td style="width: 80px; text-align: right;">上级组织</td>
+                <td><input id="deptIds" name="deptIds" class="easyui-combotree"/></td>
+                
+            </tr>
+            <tr>
+                <td style="width: 80px; text-align: right;">状态</td>
+                <td colspan="3"><input id ="deptactived" name="deptactived" class="easyui-switchbutton" data-options="width:50, height:24, onText:'启用', offText:'停用'"/></td>
+            </tr>
+            <tr>
+				<td style="width: 80px;text-align: right;">说明</td>
+                <td colspan="3"><input name="deptdesc" style="width: 90%" class="easyui-validatebox" data-options="validateOnCreate:false, validateOnBlur:true, required:true, validType:'length[1,10]'"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<div class="main-center">
+    <div class="main-center-box">
+        <div class="main-center-row">
+            <h2>组织架构管理</h2>
+        </div>
+        <div class="main-center-row control-group">
+            <div class="tab-box">
+                <div class="tab-item tab-item-selected"><a href="dept">组织管理</a></div>
+                <div class="tab-item"><a href="emp">人员管理</a></div>
+            </div>
+            <div class="tab-panel">
+                <div class="control-group">
+                    <form id="search-form">
+                        <ul class="main-center-filter">
+                            <li>
+                                <span class="l-btn-left l-btn-icon-left"><span class="l-btn-text" onclick="event_handle.onDeptAddDialog(this);">添加组织</span><span class="l-btn-icon icon-create-rule">&nbsp;</span></span>
+                            </li>
+                        </ul>
+                    </form>
+                 </div>   
+            </div>
+            <div class="deps-datagrid">
+                <table class="easyui-treegrid" width="100%">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    //<![CDATA[
+
+    var event_handle = {};
+    $(function () {
+        var channelId = [[${token}]];
+        var deptgrid = $('.deps-datagrid .easyui-treegrid');
+
+        function refreshTree() {
+            $.parser.parse(deptgrid.treegrid('getPanel').find('.datagrid-row'));
+        }
+
+        var deptdialog = $('#dept-dialog');
+        var deptform = deptdialog.find('form');
+        var deptIds = $('#deptIds');
+        deptIds.combotree({
+            label: '',
+            labelPosition: 'left',
+            labelWidth: 0,
+            labelAlign: 'right',
+            width: 200,
+//          multiple:true,
+//          checkbox:false,
+            cascadeCheck: false,
+            data: [{
+                id:0,
+                text:'根级组织',
+                children:TAGTREE_DATA
+            }]
+        });
+
+        event_handle.onDeptActivated = function (val) {
+            var id = $(this).data('id');
+            var row = deptgrid.treegrid('find', id);
+            bulemine.ajaxJson({
+                url: "/service/dept/update",
+                masking: true,
+                params: {
+                    data: {
+                        channelId: row.channelId,
+                        deptId: row.id,                        
+                        activated: val
+                    }
+                },
+                callback: function (ok, data, msg, opts) {
+                    if (ok) {
+
+                    } else {
+                        alert('[ERROR]' + msg);
+                    }
+                }
+            });
+        };
+
+        event_handle.onDeptEditDialog = function (el) {
+            var id = $(el).data('dept-id');
+            var row = deptgrid.treegrid('find', id);
+            deptdialog.find('[name="deptname"]').val(row.text);
+            deptdialog.find('[name="deptdesc"]').val(row.descText);
+            if(row.activated){            	
+            	deptform.find("[switchbuttonName='deptactived']").switchbutton("check");
+            }else{
+            	deptform.find("[switchbuttonName='deptactived']").switchbutton("uncheck");
+            }            
+            deptIds.combotree({ disabled: true });
+            deptIds.combotree('setValue',row.parentId);
+            deptdialog.data('binding', row).dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(deptdialog).height()/2)});
+        }
+
+        event_handle.onDeptAddDialog = function (el) {
+        	deptdialog.find('[name="deptname"]').val('');
+            deptdialog.find('[name="deptdesc"]').val('');
+            deptdialog.dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(deptdialog).height()/2)});
+        }
+        
+        event_handle.onDeptAddNextDialog = function (el) {
+        	var id = $(el).data('dept-id');
+            var row = deptgrid.treegrid('find', id);
+            deptIds.combotree({ disabled: true });
+            deptIds.combotree('setValue',row.parentId);
+        	deptdialog.find('[name="deptname"]').val('');
+            deptdialog.find('[name="deptdesc"]').val('');
+            deptdialog.dialog('open').dialog("resize", {top:$(document).scrollTop() + ($(window).height()/2-$(deptdialog).height()/2)});
+        }
+        
+        deptgrid.treegrid({
+            data: TAGTREE_DATA,
+            idField: 'id',
+            treeField: 'text',
+            fitColumns: true,
+            onEndEdit: function (row, changes) {
+                if (!!changes.text) {
+                    bulemine.ajaxJson({
+                        url: "/service/dept/update",
+                        masking: true,
+                        params: {
+                            data: {
+                                channelId: row.channelId,
+                                deptId: row.id,
+                                deptText:changes.text
+                            }
+                        },
+                        callback: function (ok, data, msg, opts) {
+                            if (ok) {
+
+                            } else {
+                                alert('[ERROR]' + msg);
+                            }
+                        }
+                    });
+                }
+            },
+            onAfterEdit: function (row, change) {
+                var me = $(this);
+                me.treegrid('acceptChanges');
+                refreshTree();
+            },
+            onCancelEdit: function (row) {
+            	 refreshTree();
+            },
+            onDblClickRow: function (row) {
+                var me = $(this);
+                console.log(me.treegrid('options').idField);
+                var editingId = row[me.treegrid('options').idField];
+                if (!row.customizable) {
+                    return;
+                }
+                me.treegrid('beginEdit', editingId);
+            },
+            columns: [[
+                {
+                    field: 'text',
+                    title: '组织',
+                    width: 700,
+                    editor: {
+                        type: 'validatebox',
+                        options: {
+                            validateOnCreate: false,
+                            validateOnBlur: true,
+                            required: true,
+                            validType: 'length[1,10]'
+                        }
+                    }
+                }, {
+                    field: 'users',
+                    title: '人员数',
+                    width: 70,
+                    editor: false,
+                    formatter: function (value, row, index) {
+                        return value.length;
+                    }
+                }, {
+                    title: '有效',
+                    field: 'activated',
+                    width: 70,
+                    editor: false,
+                    formatter: function (value, row, index) {
+                        return '<input data-id="' + row.id + '" class="easyui-switchbutton"' + (value ? ' checked ' : '')
+                                + ' data-options="onChange:event_handle.onDeptActivated, width:50, height:24, onText:\'是\', offText:\'否\'"/>';
+                    }
+                }, {
+                    title: '操作',
+                    field: 'id',
+//                    width: 120,
+                    editor: {
+                        type: 'linkbutton',
+                        options: {
+                            button: [{
+                                text: '确定',
+                                handler: function (val, c, el, e, i) {
+                                	deptgrid.treegrid('endEdit', val);
+                                }
+                            }, {
+                                text: '取消',
+                                handler: function (val, c, el, e, i) {
+                                	deptgrid.treegrid('cancelEdit', val);
+                                }
+                            }]
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:;" class="datagrid-link" onclick="event_handle.onDeptEditDialog(this);" data-dept-id="' + value + '">编辑</a>' +
+                                '<a href="javascript:;" class="datagrid-link" onclick="event_handle.onDeptAddNextDialog(this)" data-dept-id="' + value + '">添加下级</a>';
+                    }
+                }
+            ]]
+        }); 
+        
+        deptdialog.dialog({
+            modal: true,
+            resizable: false,
+            width: 500,
+            closed: true,
+            buttons: [{
+                width: 100,
+                height: 30,
+                text: '确定',
+                handler: function (e) {
+                    if (deptform.form('validate')) {
+                        var dept = deptdialog.data('binding');                       
+                        if (!!dept) {
+                            bulemine.ajaxJson({
+                                url: "/service/dept/update",
+                                masking: true,
+                                params: {
+                                    data: {
+                                    	deptId:dept.id,
+                                        channelId: dept.channelId,
+                                        activated: deptform.find("[switchbuttonName='deptactived']").switchbutton("options").checked,
+                                        deptText: deptform.find('input[name="deptname"]').val(),
+                                        descText: deptform.find('input[name="deptdesc"]').val(),
+                                        parentId: deptIds.combotree('getValue')
+                                    }
+                                },
+                                callback: function (ok, data, msg, opts) {
+                                    if (ok) {
+                                        deptform.form('clear');
+                                        deptdialog.dialog('close').data('binding', null);
+                                        deptgrid.treegrid('update', {
+                                            parent: dept.id,
+                                            data: [data]
+                                        });
+                                        refreshTree();
+                                    } else {
+                                        alert('[ERROR]' + msg);
+                                    }
+                                }
+                            });
+                        } else {
+                        	var parentId =deptIds.combotree('getValue');
+                        	 bulemine.ajaxJson({
+                                 url: "/service/dept/create",
+                                 masking: true,
+                                 params: {
+                                     data: {
+                                         channelId: channelId,
+                                         activated: deptform.find("[switchbuttonName='deptactived']").switchbutton("options").checked,
+                                         deptText: deptform.find('input[name="deptname"]').val(),
+                                         descText: deptform.find('input[name="deptdesc"]').val(),
+                                         parentId: parentId
+                                     }
+                                 },
+                                 callback: function (ok, data, msg, opts) {
+                                     if (ok) {
+                                         deptform.form('clear');
+                                         deptdialog.dialog('close').data('binding', null);
+                                         deptgrid.treegrid('append', {
+                                             parent: parentId,
+                                             data: [data]
+                                         });
+                                         refreshTree();
+                                     } else {
+                                         alert('[ERROR]' + msg);
+                                     }
+                                 }
+                             });
+                        }
+                    }
+                }
+            }, {
+                width: 100,
+                height: 30,
+                text: '取消',
+                handler: function (e) {
+                    deptform.form('clear');
+                    deptdialog.dialog('close').data('binding', null);
+                }
+            }]
+        });
+        refreshTree();
+    });
+    //]]>
+</script>
+</body>
+</html>
