@@ -45,7 +45,8 @@ public class SolrRestConfiguration {
     }
 
     public void setTagCollectUrl(String tagCollectUrl) {
-        this.tagCollectUrl = tagCollectUrl.replace("{sessionId}", "{1}").replace("{expression}", "{2}");
+//        this.tagCollectUrl = tagCollectUrl.replace("{keyword}", "{1}").replace("{expression}", "{2}");
+        this.tagCollectUrl = tagCollectUrl;
     }
 
     public int getRequestRetry() {

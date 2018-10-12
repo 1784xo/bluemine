@@ -1,6 +1,7 @@
 package com.bluemine.job.tag;
 
 import com.bluemine.ExceptionMessageEnum;
+import com.bluemine.ServerConstants;
 import com.bluemine.common.RuleResponse;
 import com.bluemine.common.SolrResponse;
 import com.bluemine.common.TagResponse;
@@ -37,6 +38,7 @@ import org.springframework.core.io.FileSystemResource;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
@@ -128,9 +130,24 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
 
         String callNo = item.getCallNo();
         LocalDate callDate = item.getCallLocalDate();
+        LocalDateTime callTime = callDate.atStartOfDay();
 
         ChannelEntity channel = item.getChannel();
         long channelId = channel.getChannelId();
+        Boolean alone = channel.getAloneCallFlag();
+
+        StringBuilder keyBuilder = new StringBuilder();
+        if (alone) {
+            keyBuilder.append("SessionID:").append(callNo);
+        } else {
+            keyBuilder.append("StartTime:").append('[')
+                    .append(callTime.format(ServerConstants.ISO_LOCAL_DATE_TIME_FORMATTER))
+                    .append(" TO ")
+                    .append(callTime.plusDays(1).minusSeconds(1).format(ServerConstants.ISO_LOCAL_DATE_TIME_FORMATTER))
+                    .append(']');
+        }
+
+        String keyword = keyBuilder.toString();
 
         Map<Long, TagResponse> tagMap = localCache.get(channelId, Map.class);
         Collection<TagResponse> collection = tagMap.values();
@@ -149,7 +166,7 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
             if ((venation != null) && (venation.size() > 0)) {
                 rules = tag.getRules();
                 for (RuleResponse rule : rules) {
-                    SolrResponse solrResponse = solrHttpClient.getTagCollect(callNo, RuleResolver.resolve(rule.getRuleExps()));
+                    SolrResponse solrResponse = solrHttpClient.getTagCollect(keyword, RuleResolver.resolve(rule.getRuleExps()));
                     frequency = solrResponse.getResponse().getNumFound();
                     if (frequency > 0) {
                         collects.addAll(collect(tag, venation, rule, frequency));

@@ -2,15 +2,10 @@ package com.bluemine.job;
 
 import com.bluemine.ExceptionMessageEnum;
 import com.bluemine.ServerConstants;
-import com.bluemine.SysintrException;
-import com.bluemine.common.TagResponse;
-import com.bluemine.context.SessionContext;
 import com.bluemine.domain.entity.*;
 import com.bluemine.domain.util.EntityUtils;
 import com.bluemine.job.tag.TagCollectJobConfiguration;
 import com.bluemine.repository.CallSyncTriggerRepository;
-import com.bluemine.repository.RuleRepository;
-import com.bluemine.repository.TagRepository;
 import com.bluemine.service.ResourceSyncObserver;
 import com.bluemine.service.TabService;
 import com.bluemine.struct.CallTriggerStatus;
@@ -31,8 +26,6 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -67,7 +60,7 @@ public class CallBatchExecutor implements ResourceSyncObserver {
 
     public void run(long channelId, LocalDate date, String file) {
         //TODO:later change thread run
-        run(channelId, date.format(ServerConstants.YYYY_MM_DD_FORMATTER), file);
+        run(channelId, date.format(ServerConstants.LOCAL_DATE_FORMATTER), file);
     }
 
     public void run(long channelId, String date, String file) {
