@@ -1,4 +1,4 @@
-package com.bluemine.job.call;
+package com.bluemine.job.tag;
 
 import com.bluemine.domain.entity.ChannelEntity;
 import com.bluemine.domain.entity.SeatEntity;
