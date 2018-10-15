@@ -13,38 +13,11 @@
 		"cd638e75-e0a0-4c54-8c9f-a2c0e57c9a85",
 		"5e56bec8-557d-4ba5-93de-e39dbcb6df04",
 		"3fd0fe9d-3f1e-455e-bbf6-597282db3d71",
-		"0159c30d-78ee-4099-955f-fd1c033043a5",
-		"7f8e0af9-a588-44fe-a9ce-a37c58d23ceb",
-		"a8336e4f-e610-4618-a5c9-75e0f81ba8f5"
+		"2b601ac6-bc0e-4ae3-a4d5-fe86ff896ba7"
 	],
 	"folders_order": [],
 	"folders": [],
 	"requests": [
-		{
-			"id": "0159c30d-78ee-4099-955f-fd1c033043a5",
-			"name": " 跑批触发接口",
-			"url": "http://batch.bluemine.com:8091/service/call/trigger/batch",
-			"description": "",
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json;charset=UTF-8",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"method": "POST",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": null,
-			"events": [],
-			"folder": null,
-			"rawModeData": "{\n\t\"data\":[{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"c4a9649b-fb9d-4409-b3d3-de31a701cf30\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"4550b739-ec3c-4b8e-9394-c44abc3a707d\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"2d197154-34b1-43b0-9947-054655d0fb96\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"8674b37f-9987-4fe8-b873-24869a7ef3dc\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t},{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callNo\":\"a412d19c-313d-4330-82d9-500379af75e4\",\n\t\t\"callDate\":\"2018-08-27\",\n\t\t\"seatNo\":\"1\"\n\t}]\n}",
-			"headers": "Content-Type: application/json;charset=UTF-8\n",
-			"pathVariables": {}
-		},
 		{
 			"id": "1c3e431c-1812-4d21-803f-d5c0083c2108",
 			"name": "删除规则",
@@ -71,9 +44,9 @@
 			"pathVariables": {}
 		},
 		{
-			"id": "3fd0fe9d-3f1e-455e-bbf6-597282db3d71",
-			"name": "搜索接口",
-			"url": "http://140.143.19.85:8983/solr/blueminecore/select?q=SessionID:c1cb67f5-9e5a-4134-b0cc-50d7ae7d0f35",
+			"id": "2b601ac6-bc0e-4ae3-a4d5-fe86ff896ba7",
+			"name": "跑批申请接口",
+			"url": "http://batch.bluemine.com:8091/service/call/sync",
 			"description": "",
 			"data": [],
 			"dataMode": "raw",
@@ -87,19 +60,50 @@
 			],
 			"method": "POST",
 			"pathVariableData": [],
-			"queryParams": [
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelNo\":\"100001\",\n\t\t\"callDate\":\"2018-08-30\",\n\t\t\"resourcePath\":\"100001-20180830.log\"\n\t}\n}",
+			"headers": "Content-Type: application/json;charset=UTF-8\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "3fd0fe9d-3f1e-455e-bbf6-597282db3d71",
+			"name": "搜索接口",
+			"url": "http://140.143.19.85:8983/solr/blueminecore/select",
+			"description": "",
+			"data": [
 				{
 					"key": "q",
-					"value": "SessionID:c1cb67f5-9e5a-4134-b0cc-50d7ae7d0f35",
-					"equals": true,
+					"value": "SessionID:c1cb67f5-9e5a-4134-b0cc-50d7ae7d0f35 AND StartTime:[2018-08-30T00:00:00Z TO 2018-08-30T23:59:00Z] AND AgentIp:192.168.26.31",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "",
+					"value": "",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json;charset=UTF-8",
 					"description": "",
 					"enabled": true
 				}
 			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
 			"auth": null,
 			"events": [],
 			"folder": null,
-			"rawModeData": "",
 			"headers": "Content-Type: application/json;charset=UTF-8\n",
 			"pathVariables": {}
 		},
@@ -179,37 +183,6 @@
 			"pathVariables": {}
 		},
 		{
-			"id": "7f8e0af9-a588-44fe-a9ce-a37c58d23ceb",
-			"name": "跑批监控",
-			"url": "http://batch.bluemine.com:8091/service/monitor/batch",
-			"description": "",
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json;charset=UTF-8",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Cache-Control",
-					"value": "no-cache",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"method": "POST",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": null,
-			"events": [],
-			"folder": null,
-			"rawModeData": "",
-			"headers": "Content-Type: application/json;charset=UTF-8\nCache-Control: no-cache\n",
-			"pathVariables": {}
-		},
-		{
 			"id": "8871a33a-f250-4248-927d-16b15261e964",
 			"name": "创建规则",
 			"url": "http://www.bluemine.com:8080/service/rule/create",
@@ -232,45 +205,6 @@
 			"folder": null,
 			"rawModeData": "{\n\t\"data\":{\n\t\t\"channelId\":49252889384718336,\n\t\t\"tagId\":198819304509149184,\n\t\t\"callType\":\"AUD\",\n\t\t\"roleType\":\"ALL\",\n\t\t\"priorityNo\":0,\n\t\t\"ruleExps\":\"试听|(感觉&不错)|(怎么&报名)\"\n\t}\n}",
 			"headers": "Content-Type: application/json;charset=UTF-8\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "a8336e4f-e610-4618-a5c9-75e0f81ba8f5",
-			"name": "会话去重查询",
-			"url": "http://140.143.19.85:8983/solr/blueminecore/select?q=*:*&group=true&group.field=SessionID",
-			"description": "",
-			"data": null,
-			"dataMode": "params",
-			"headerData": [],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "q",
-					"value": "*:*",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "group",
-					"value": "true",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "group.field",
-					"value": "SessionID",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
-			"auth": null,
-			"events": [],
-			"folder": null,
-			"headers": "",
 			"pathVariables": {}
 		},
 		{
