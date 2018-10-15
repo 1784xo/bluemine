@@ -136,11 +136,16 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
         long channelId = channel.getChannelId();
         Boolean alone = channel.getAloneCallFlag();
 
+        String seatNo = item.getSeatNo();
+        SeatEntity seat = findSeat(channelId, seatNo, SeatEntity.class);
+        AssertUtils.notNull(seat, ExceptionMessageEnum.DB_NO_SUCH_RESULT,  "seat", String.valueOf(channelId)+", "+seatNo);
+
         StringBuilder keyBuilder = new StringBuilder();
         if (alone) {
             keyBuilder.append("SessionID:").append(callNo);
         } else {
-            keyBuilder.append("StartTime:").append('[')
+            keyBuilder.append("AgentIp:").append(seat.getSeatIp())
+                    .append(" AND StartTime:[")
                     .append(callTime.format(ServerConstants.ISO_LOCAL_DATE_TIME_FORMATTER))
                     .append(" TO ")
                     .append(callTime.plusDays(1).minusSeconds(1).format(ServerConstants.ISO_LOCAL_DATE_TIME_FORMATTER))
@@ -151,9 +156,6 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
 
         Map<Long, TagResponse> tagMap = localCache.get(channelId, Map.class);
         Collection<TagResponse> collection = tagMap.values();
-
-        String seatNo = item.getSeatNo();
-        SeatEntity seat = findSeat(channelId, seatNo, SeatEntity.class);
 
         int frequency;
         List<RuleResponse> rules;
