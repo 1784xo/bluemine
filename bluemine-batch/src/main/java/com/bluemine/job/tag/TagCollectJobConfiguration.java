@@ -2,6 +2,7 @@ package com.bluemine.job.tag;
 
 import com.bluemine.ExceptionMessageEnum;
 import com.bluemine.ServerConstants;
+import com.bluemine.ServerRuntimeException;
 import com.bluemine.common.RuleResponse;
 import com.bluemine.common.SolrResponse;
 import com.bluemine.common.TagResponse;
@@ -106,6 +107,8 @@ public class TagCollectJobConfiguration implements ItemProcessor<CallItem, Sessi
                 .reader(callItemReader(fieldSetMapper, file))
                 .processor((ItemProcessor) this)
                 .writer((ItemWriter) this)
+//                .faultTolerant().skipLimit(Integer.MAX_VALUE)
+//                .skip(ServerRuntimeException.class)
                 .build();
     }
 
